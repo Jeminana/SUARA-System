@@ -2,9 +2,7 @@
 
 E6 is a proposed Phase 1 feasibility study. It asks whether a numerical voice representation stays consistent when the same person sings different melodies, while separating different singers performing the same melody. The experiment also checks whether results may be driven by melody, pitch, or microphone.
 
-The procedure and decision targets are a team proposal, not a published benchmark standard. The report says no experiments have been performed and makes no results claims. E6 is independent of E1 and E2 and is intended to provide evidence for E7 singer matching. Passing E6 does not establish similarity to artists or listener-perceived timbre similarity.
-
-See [`SUARA_E6_Voice_Embedding_Report.docx`](../../SUARA_E6_Voice_Embedding_Report.docx) for the full protocol and report template.
+The procedure and decision targets are a team proposal, not a published benchmark standard. No experiments have been performed and no results are claimed yet. E6 is independent of E1 and E2 and is intended to provide evidence for E7 singer matching. Passing E6 does not establish similarity to artists or listener-perceived timbre similarity.
 
 ## Methods
 
