@@ -7,7 +7,7 @@ Repository for the SUARA main pipeline and its nine experiments. The main pipeli
 - `main_pipeline/` — shared end-to-end pipeline (not implemented yet)
 - `experiments/E1/` through `experiments/E9/` — experiment-specific workspaces
 - `experiments/E6/` — E6 voice embedding implementation
-- `SUARA_E*_Report.docx` — experiment reports
+- `SUARA_E6_Voice_Embedding_Report.docx` — full E6 protocol and report template; E1 and E3 pilot procedures are summarized in their experiment READMEs
 
 Active experiments are E1 (pitch detection), E3 (song analysis), and E6 (voice embedding). Keep experiment code and notes in that experiment's folder.
 
