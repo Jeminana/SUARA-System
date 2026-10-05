@@ -1,0 +1,88 @@
+# SUARA SYSTEM E6 - Singing voice embedding feasibility
+# Workflow: `check` -> `dev` (M01 only, choose settings) -> set locked: true -> `test`.
+# Do not change anything below after locking; the test stage records a hash of this file.
+
+experiment: E6 singing voice embedding feasibility
+locked: false          # the test stage refuses to run until this is true
+seed: 1234
+
+paths:
+  manifest: data/manifest.csv
+  audio_root: data/raw           # manifest file_path values are relative to this folder
+  output_root: outputs
+  model_cache: pretrained_models/spkrec-ecapa-voxceleb
+
+consent:
+  accepted_values: ["yes"]       # rows with any other consent value are excluded and logged
+
+splits:
+  dev:                           # development choices only
+    melody: M01
+    takes: [T01, T02]
+    enroll_take: T01             # dev retrieval: T01 profiles, other dev takes as queries
+  enroll:                        # one profile per singer
+    melody: M02
+    takes: [T01]
+  same_melody:                   # separate same melody comparison
+    melody: M02
+    takes: [T02]
+  query:                         # held out cross melody queries
+    melody: M03
+    takes: [T01, T02]
+
+preprocessing:
+  target_sr: 16000               # ECAPA expects mono 16 kHz; encode_batch does not resample
+  resample_type: soxr_hq
+  trim_edges: true
+  trim_top_db: 40                # conservative: only edge audio 40 dB below the clip peak is removed
+  gain:
+    mode: peak                   # peak | rms | none - the same policy is applied to every clip
+    target_dbfs: -1.0
+  qc:                            # QC only flags clips; exclusions are decided by a person in the manifest
+    clip_threshold: 0.999
+    max_clip_fraction: 0.001
+    silence_top_db: 30
+    max_silence_fraction: 0.5
+    min_duration_s: 10.0
+    max_duration_s: 25.0
+
+activity:                        # used to accept or reject fixed windows
+  method: pyin                   # pyin (voicing flag) | energy (non-silent proxy)
+  pyin_fmin_note: C2
+  pyin_fmax_note: C6
+  energy_top_db: 30
+
+models:
+  ecapa:
+    enabled: true
+    source: speechbrain/spkrec-ecapa-voxceleb
+    revision: 0f99f2d0ebe89ac095bcc5903c4dd8f72b367286   # served on 2026-09-30; recheck before locking
+    device: auto                 # auto | cpu | cuda
+    segmentation: whole          # whole | windows
+    window_s: 5.0                # fixed non-overlapping windows
+    min_active_ratio: 0.6        # windows below this voiced ratio are rejected and logged
+  mfcc:
+    enabled: true
+    n_mfcc: 20
+    n_fft: 512                   # 32 ms at 16 kHz
+    hop_length: 160              # 10 ms
+    n_mels: 40
+    include_c0: false            # decide on dev clips only
+    scaling: zscore              # none | zscore (statistics fitted on dev clips only)
+
+evaluation:
+  top_k: [1, 3]
+  bootstrap_resamples: 2000      # participant-level resampling, reported as exploratory
+
+pilot_target:
+  min_top1_correct: 9
+  expected_queries: 12
+  require_positive_separation: true
+
+stress:
+  noise_snr_db: [20, 10, 5]      # white noise added to query clips only
+  crop_seconds: [10, 5, 3]       # centre crops of query clips only
+  include_manifest_variants: true  # e.g. second-device rows with condition != original
+
+runtime:
+  timing_repeats: 3

@@ -1,0 +1,12 @@
+# Tested versions (Python 3.12, Windows). Record `pip freeze > requirements.lock.txt` for each locked run.
+torch==2.11.0
+torchaudio==2.11.0
+speechbrain==1.1.1
+librosa==1.0.0
+soundfile==0.14.0
+scipy==1.18.1
+numpy==2.3.5
+pandas==3.0.5
+matplotlib==3.11.2
+huggingface_hub==1.18.0
+PyYAML==6.0.3

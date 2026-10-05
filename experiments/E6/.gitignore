@@ -1,0 +1,6 @@
+# Recordings and embeddings are restricted to the team - never commit them.
+data/
+outputs/
+pretrained_models/
+.venv*/
+__pycache__/
