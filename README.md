@@ -52,6 +52,7 @@ Each experiment should record its data, configuration, measured results, failure
 
 - `main_pipeline/` — reserved for the shared pipeline; implementation has not started
 - `experiments/E1/` through `experiments/E9/` — experiment workspaces and documentation
+- `experiments/E3/` — song and reference melody analysis implementation and its README
 - `experiments/E6/` — current voice embedding implementation and its README
 
 E1, E3, and E6 have report-based procedure summaries in their experiment READMEs. Other experiment folders are placeholders until work begins.

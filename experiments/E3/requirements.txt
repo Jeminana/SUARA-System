@@ -1,0 +1,19 @@
+# Tested versions (Python 3.11, Linux, CPU). Record `pip freeze > requirements.lock.txt` for each locked run.
+# Python 3.11 is required: basic-pitch 0.4.0 needs tensorflow<2.15.1, which has no wheels for 3.12+.
+# CPU-only torch: pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cpu
+basic-pitch==0.4.0
+tensorflow==2.15.0.post1
+demucs==4.1.0
+torch==2.14.1
+librosa==0.11.0
+soundfile==0.14.0
+numpy==1.26.4
+scipy==1.17.1
+pandas==3.0.6
+pretty_midi==0.2.11.post0
+mir_eval==0.8.2
+matplotlib==3.11.2
+huggingface_hub==2.1.1
+PyYAML==6.0.3
+# basic-pitch pins resampy<0.4.3, which imports pkg_resources (removed in setuptools 81)
+setuptools<81
