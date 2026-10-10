@@ -115,6 +115,16 @@ The lead-line rules (`lead_line`) drop short notes, keep the loudest note where 
 
 `catalog` writes `catalog/song_profiles.csv` (the handoff fields above plus `profile_version`), `melody_notes.csv`, `pitch_histogram.csv` (duration-weighted, one bin per semitone) and `song_profile_details.csv` (note names and interval statistics). Profiles come from the verified MIDI lead track, or from `verified_notes_path` when the catalog points at a reviewer-corrected transcription. Songs without a `verified_by` reviewer are flagged `unverified`.
 
+## Pilot data preparation
+
+```bash
+python tools/make_pilot_songs.py --out data        # five pilot MIDI songs + practice audio (G2-E4 singer)
+# record one isolated vocal per song as data/audio/M01.wav ... M05.wav
+python tools/prepare_pilot_data.py --data data      # synth melodies, mixes, annotation drafts, manifests
+```
+
+`prepare_pilot_data.py` aligns each MIDI melody to its recording with chroma-based dynamic time warping (none of the tested methods is involved). It renders the accompaniment on the singer's timing for the mix and writes annotation drafts with MIDI pitches on the singer's timing. Original recordings are never modified. Human recordings stay excluded as "awaiting verified annotation" until two reviewers have agreed a verified file; see [ANNOTATION_GUIDE.md](ANNOTATION_GUIDE.md). `tools/import_annotation.py` converts Sonic Visualiser exports into E3 note files.
+
 ## Synthetic smoke test
 
 ```bash

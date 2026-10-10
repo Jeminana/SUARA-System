@@ -162,7 +162,9 @@ def render(notes: list, length_s: float, sr: int, harmonics: int, tilt: float, g
     """Simple additive synthesis for a practice guide (not a recording)."""
     y = np.zeros(int(length_s * sr) + sr, dtype=np.float32)
     for n in notes:
-        a, b = int(n.start * sr), int(n.end * sr)
+        a, b = int(n.start * sr), min(int(n.end * sr), len(y))
+        if b - a < 2:  # warped or out-of-range notes can collapse
+            continue
         t = np.arange(b - a) / sr
         f = pretty_midi.note_number_to_hz(n.pitch)
         tone = sum(tilt ** (h - 1) * np.sin(2 * np.pi * f * h * t) for h in range(1, harmonics + 1) if f * h < sr / 2.2)
