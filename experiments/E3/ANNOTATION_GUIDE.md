@@ -6,14 +6,17 @@ You need no special music training: you listen, compare and drag notes. Expect r
 
 ## What you get
 
-For each song (M01 to M05):
+The E3 owner sends you `E3_reviewer_package.zip`. For each song (M01 to M05) it contains:
 
-- the recording: `data/audio/M0N.wav`
-- the draft: `data/annotations/drafts/P01_M0N_T01_draft_sonic_visualiser.csv`
+- the recording: `recordings/M0N.wav`
+- the draft: `drafts/M0N_draft.csv`
+- `review_log.csv`, for your minutes and uncertain notes
+
+(In the repository these are `data/audio/M0N.wav` and `data/annotations/drafts/P01_M0N_T01_draft_sonic_visualiser.csv`.)
 
 The draft is the written melody moved to the singer's timing. Most notes start close to the right place. Some have the wrong pitch or timing, because the singer did not sing exactly what was written.
 
-These files are private recordings and are not on GitHub. Get them from the E3 owner through the team's private storage, and delete your copies when the project ends.
+These files are private recordings and are not on GitHub. Share them only through the team's private storage, and delete your copies when the project ends.
 
 ## Setup (once)
 
@@ -35,8 +38,10 @@ Install **Sonic Visualiser** (free, Windows/Mac/Linux) from sonicvisualiser.org.
    - **Pitch:** the note the singer settles on and holds, not a scoop or slide into it. Use the nearest semitone.
    - **Missing note:** draw it in. **Extra note** (written but not sung): delete it.
    - **Unsure:** keep your best guess and write the time and the reason in your notes.
-6. **Export:** File → Export Annotation Layer, saved as CSV. Name it `P01_M0N_T01_reviewerA.csv` (or `reviewerB`).
-7. **Write down** how many minutes the recording took and any notes you were unsure about.
+6. **Export:** File → Export Annotation Layer, saved as CSV. Name it `M0N_<yourname>.csv`, for example `M01_najmi.csv`.
+7. **Fill in `review_log.csv`:** how many minutes the recording took, and the time and reason for any note you were unsure about.
+
+When all five are done, send your five CSVs and `review_log.csv` back to the E3 owner.
 
 Work **independently**: do not look at the other reviewer's file until both are finished. Ideally neither reviewer is the singer, since the singer knows what they meant to sing.
 
