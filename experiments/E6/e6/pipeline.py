@@ -373,8 +373,9 @@ class Run:
         lines = ["# E6 test run summary", ""]
         if self.synthetic:
             lines += ["> **SYNTHETIC DATA** - these numbers test the code path only and are not evidence.", ""]
+        n_queries = max((s["cross_melody"]["n_queries"] for s in summaries.values()), default=0)
         lines += ["Cosine similarity values are similarities, not probabilities or artist match percentages.",
-                  "Twelve queries is small-sample evidence; the bootstrap interval is exploratory.", "",
+                  f"{n_queries} cross melody queries is small-sample evidence; the bootstrap interval is exploratory.", "",
                   "## Results table", "", md_table(table), ""]
         for name, s in summaries.items():
             cm, sep, pt, bs = s["cross_melody"], s["separation"], s["pilot_target"], s["bootstrap_top1"]

@@ -3,7 +3,7 @@
 # Do not change anything below after locking; the test stage records a hash of this file.
 
 experiment: E6 singing voice embedding feasibility
-locked: false          # the test stage refuses to run until this is true
+locked: true           # the test stage refuses to run until this is true
 seed: 1234
 
 paths:
@@ -56,7 +56,7 @@ models:
   ecapa:
     enabled: true
     source: speechbrain/spkrec-ecapa-voxceleb
-    revision: 0f99f2d0ebe89ac095bcc5903c4dd8f72b367286   # served on 2026-09-30; recheck before locking
+    revision: 0f99f2d0ebe89ac095bcc5903c4dd8f72b367286   # served on 2026-09-30; rechecked 2026-10-07 before locking
     device: auto                 # auto | cpu | cuda
     segmentation: whole          # whole | windows
     window_s: 5.0                # fixed non-overlapping windows
@@ -75,8 +75,8 @@ evaluation:
   bootstrap_resamples: 2000      # participant-level resampling, reported as exploratory
 
 pilot_target:
-  min_top1_correct: 9
-  expected_queries: 12
+  min_top1_correct: 11         # 7 singers x 2 M03 takes; 11/14 ~ the proposed 9/12 (75%) rate
+  expected_queries: 14
   require_positive_separation: true
 
 stress:
