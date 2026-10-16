@@ -126,13 +126,29 @@ class MetricTests(unittest.TestCase):
         self.assertEqual(m["frame_accuracy"], 0.0)
 
 
+def load_tool(name):
+    import importlib.util
+    path = Path(__file__).resolve().parents[1] / "tools" / f"{name}.py"
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 class AnnotationComparisonTests(unittest.TestCase):
+    def test_resolution_spots_group_touching_disagreements(self):
+        rp = load_tool("make_resolution_package")
+        log = pd.DataFrame({"issue": ["pitch", "only x", "timing"],
+                            "x_start_s": [4.1, 4.5, 9.0], "x_end_s": [4.4, 4.9, 9.5],
+                            "y_start_s": [4.1, np.nan, 9.1], "y_end_s": [4.9, np.nan, 9.5]})
+        s = rp.spots(log, ("x", "y"))
+        self.assertEqual([sorted(x["kinds"]) for x in s], [["only", "pitch"], ["timing"]])
+        freq = rp.frequency_table().set_index("note")
+        self.assertAlmostEqual(freq.loc["A3", "centre_hz"], 220.0)
+        self.assertAlmostEqual(freq.loc["A3", "highest_hz"], freq.loc["A#3", "lowest_hz"])
+
     def test_disagreements_are_paired_by_overlap(self):
-        import importlib.util
-        path = Path(__file__).resolve().parents[1] / "tools" / "compare_annotations.py"
-        spec = importlib.util.spec_from_file_location("compare_annotations", path)
-        ca = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(ca)
+        ca = load_tool("compare_annotations")
         a = notes([(0.0, 0.5, 60), (1.0, 1.5, 62), (2.0, 2.5, 64), (4.0, 4.5, 65)])
         b = notes([(0.0, 0.5, 60), (1.0, 1.5, 63), (2.3, 2.6, 64), (3.0, 3.5, 67)])
         log = ca.disagreements(a, b, ca.match(a, b, 0.05, 50), ("x", "y"))

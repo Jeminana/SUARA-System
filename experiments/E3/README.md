@@ -123,7 +123,7 @@ python tools/make_pilot_songs.py --out data        # five pilot MIDI songs + pra
 python tools/prepare_pilot_data.py --data data      # synth melodies, mixes, annotation drafts, manifests
 ```
 
-`prepare_pilot_data.py` aligns each MIDI melody to its recording with chroma-based dynamic time warping (none of the tested methods is involved). It renders the accompaniment on the singer's timing for the mix and writes annotation drafts with MIDI pitches on the singer's timing. Original recordings are never modified. Human recordings stay excluded as "awaiting verified annotation" until two reviewers have agreed a verified file; see [ANNOTATION_GUIDE.md](ANNOTATION_GUIDE.md). `tools/import_annotation.py` converts Sonic Visualiser exports into E3 note files.
+`prepare_pilot_data.py` aligns each MIDI melody to its recording with chroma-based dynamic time warping (none of the tested methods is involved). It renders the accompaniment on the singer's timing for the mix and writes annotation drafts with MIDI pitches on the singer's timing. Original recordings are never modified. Human recordings stay excluded as "awaiting verified annotation" until two reviewers have agreed a verified file; see [ANNOTATION_GUIDE.md](ANNOTATION_GUIDE.md). `tools/import_annotation.py` converts Sonic Visualiser exports into E3 note files. If the reviewers cannot meet to resolve disagreements, `tools/make_resolution_package.py --names <a> <b>` builds a blind re-check package for each reviewer from the ambiguity logs; see [RESOLUTION_GUIDE.md](RESOLUTION_GUIDE.md).
 
 ## Synthetic smoke test
 
