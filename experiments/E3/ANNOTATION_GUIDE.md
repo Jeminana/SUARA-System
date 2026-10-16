@@ -48,10 +48,13 @@ Work **independently**: do not look at the other reviewer's file until both are 
 ## After both reviewers finish (the E3 owner runs these)
 
 ```bash
-python tools/import_annotation.py A_export.csv data/annotations/P01_M0N_T01_reviewerA.csv
-python tools/import_annotation.py B_export.csv data/annotations/P01_M0N_T01_reviewerB.csv
-python tools/compare_annotations.py data/annotations/P01_M0N_T01_reviewerA.csv \
-    data/annotations/P01_M0N_T01_reviewerB.csv --out data/annotations/P01_M0N_T01_ambiguity_log.csv
+python tools/import_annotation.py returned/<a>/M0N_<a>.csv data/annotations/P01_M0N_T01_<a>.csv
+python tools/import_annotation.py returned/<b>/M0N_<b>.csv data/annotations/P01_M0N_T01_<b>.csv
+python tools/compare_annotations.py data/annotations/P01_M0N_T01_<a>.csv \
+    data/annotations/P01_M0N_T01_<b>.csv --names <a> <b> \
+    --out data/annotations/P01_M0N_T01_ambiguity_log.csv
 ```
 
-The comparison lists every note the two reviewers disagree on. Listen to those places together and agree on each one, writing the decision in the log's `resolution` column. If you cannot agree, say why; unresolved ambiguity is allowed but must be documented. Save the agreed notes as `data/annotations/P01_M0N_T01_verified.csv`, then in `data/recordings.csv` set `excluded` to `false` for `P01_M0N_T01` and `P01_M0N_T01_MIX` and clear their `exclusion_reason`.
+The comparison writes one row per disagreement: the time, the issue (`pitch`, `timing`, or a note only one reviewer marked) and each reviewer's note. Listen to those places together and agree on each one, writing the decision in the log's `resolution` column.
+
+For pitch disagreements of one semitone, the singer was usually between the two notes. Decide by measurement rather than by ear: in the plain spectrogram, hover over the steady middle of the note and read the frequency of the lowest bright line, then pick the semitone closer to it (for example, 147 Hz is D3 and 156 Hz is D#3, so 150 Hz is D3). Do not add a pitch-tracking plugin for this. If you cannot agree, say why; unresolved ambiguity is allowed but must be documented. Save the agreed notes as `data/annotations/P01_M0N_T01_verified.csv`, then in `data/recordings.csv` set `excluded` to `false` for `P01_M0N_T01` and `P01_M0N_T01_MIX` and clear their `exclusion_reason`.

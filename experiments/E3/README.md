@@ -72,7 +72,7 @@ Blank templates with every column are in `templates/`. Paths inside the manifest
 - **recordings.csv**: `kind` is `synth_melody` (rendered from the MIDI), `isolated_vocal` (consented human take, named like `P01_M01_T01`), `mix` (that take plus accompaniment, with `paired_with` set to the isolated take), or `licensed_mix`. `audio_offset_s` is where the excerpt starts in the audio file. `reference_type` is `midi` for synthesized material or `notes_csv` for the two-reviewer verified annotation of what was actually sung; an optional `reference_f0_path` (`time_s`, `f0_hz`) gives a verified F0 track for frame accuracy. A mix inherits its reference, singer and consent from its paired take. Human recordings need `consent = yes`.
 - **corrections.csv**: `recording_id`, `method` (as labelled in the outputs, e.g. `pyin`, `basic_pitch`, `demucs+pyin`), `reviewer`, `correction_minutes` and `corrected_notes_path`. Corrected notes are scored as a separate `corrected` version; raw outputs are never overwritten.
 
-Splits are assigned per song, so paired stems, mixtures and alternate crops always share a split. Annotation and note files use `start_s`, `end_s` and `midi_note` in the recording's audio time; MIDI 60 is C4. Use `tools/compare_annotations.py a.csv b.csv` to compare two reviewers and produce an ambiguity log to resolve or document.
+Splits are assigned per song, so paired stems, mixtures and alternate crops always share a split. Annotation and note files use `start_s`, `end_s` and `midi_note` in the recording's audio time; MIDI 60 is C4. Use `tools/compare_annotations.py a.csv b.csv --names a b` to compare two reviewers and produce an ambiguity log, one row per disagreement, to resolve or document.
 
 ## Workflow
 

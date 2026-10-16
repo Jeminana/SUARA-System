@@ -126,6 +126,21 @@ class MetricTests(unittest.TestCase):
         self.assertEqual(m["frame_accuracy"], 0.0)
 
 
+class AnnotationComparisonTests(unittest.TestCase):
+    def test_disagreements_are_paired_by_overlap(self):
+        import importlib.util
+        path = Path(__file__).resolve().parents[1] / "tools" / "compare_annotations.py"
+        spec = importlib.util.spec_from_file_location("compare_annotations", path)
+        ca = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(ca)
+        a = notes([(0.0, 0.5, 60), (1.0, 1.5, 62), (2.0, 2.5, 64), (4.0, 4.5, 65)])
+        b = notes([(0.0, 0.5, 60), (1.0, 1.5, 63), (2.3, 2.6, 64), (3.0, 3.5, 67)])
+        log = ca.disagreements(a, b, ca.match(a, b, 0.05, 50), ("x", "y"))
+        self.assertEqual(log["issue"].tolist(), ["pitch", "timing", "only y", "only x"])
+        self.assertEqual(log.loc[0, "x_note"], "D4")
+        self.assertEqual(log.loc[0, "y_note"], "D#4")
+
+
 class ProfileTests(unittest.TestCase):
     def test_duration_weighted_percentiles_and_reliable_range(self):
         n = notes([(0.0, 0.1, 55), (0.1, 4.1, 62), (4.1, 5.1, 67), (5.1, 5.15, 79)])
