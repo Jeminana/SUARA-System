@@ -1,7 +1,7 @@
 """Compare two reviewers' note annotations of the same recording.
 
     python tools/compare_annotations.py reviewer_a.csv reviewer_b.csv --out ambiguity_log.csv \
-        --names athirah adib
+        --names reviewerA reviewerB
 
 Both files use start_s, end_s, midi_note (audio time). Notes are matched one to one with the
 same rule as the evaluation (onset within 50 ms, pitch within 50 cents). Each unmatched note is

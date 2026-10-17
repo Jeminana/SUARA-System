@@ -4,7 +4,7 @@ E1 compares pYIN and CREPE for fundamental-frequency estimation. The completed P
 
 ## Completed evaluation
 
-CREPE raw pitch accuracy within 50 cents was 99.30%, 99.27%, and 99.03% at clean, 20 dB, and 10 dB. pYIN was 91.67%, 91.67%, and 91.40%. CREPE had no octave errors; pYIN had approximately 8.3% in each condition. At 10 dB, CREPE missed 28 of 3,000 voiced reference frames and had 2 false-voiced frames; pYIN missed 1 and had 158 false-voiced frames. Runtime observations include first-call initialization/JIT and are not warm-inference benchmarks. See [Phase 8 analysis](outputs/phase8/phase8_analysis.md), [results table](outputs/phase8/results_table.csv), and [figure index](outputs/phase8/figure_index.md).
+CREPE raw pitch accuracy within 50 cents was 99.30%, 99.27%, and 99.03% at clean, 20 dB, and 10 dB. pYIN was 91.67%, 91.67%, and 91.40%. CREPE had no octave errors; pYIN had approximately 8.3% in each condition. At 10 dB, CREPE missed 28 of 3,000 voiced reference frames and had 2 false-voiced frames; pYIN missed 1 and had 158 false-voiced frames. Runtime observations include first-call initialization/JIT and are not warm-inference benchmarks. All pYIN octave errors come from one recording, SYN_T01_R012 (C6, 1046.50 Hz), whose target sits exactly at the pYIN `fmax` of C6 (250, 250, and 249 of 250 frames); the other 11 pYIN recordings have no octave errors, so this search-range boundary accounts for the pYIN–CREPE accuracy gap. See [Phase 8 analysis](outputs/phase8/phase8_analysis.md), [results table](outputs/phase8/results_table.csv), and [figure index](outputs/phase8/figure_index.md).
 
 ## Contents
 
@@ -13,11 +13,13 @@ CREPE raw pitch accuracy within 50 cents was 99.30%, 99.27%, and 99.03% at clean
 - `config/`: synthetic tone design and frozen Phase 6 evaluation configuration. Do not edit the frozen configuration to reinterpret completed results.
 - `data/raw/synthetic/official/` and `data/references/synthetic/official/`: 12 official synthetic WAV fixtures and exact references; `data/manifests/` contains their manifest.
 - `data/smoke/`: software-only sine fixtures.
-- `outputs/phase7/`: corrected aggregate and per-recording results, provenance, and hashes. Source-path fields were removed from the per-recording table for portability.
+- `outputs/phase7/`: corrected aggregate and per-recording results, provenance, and hashes. Source-path fields were removed from the per-recording table for portability. `evaluator_source_sha256` in `provenance.json` identifies the full Phase 7 evaluator in restricted storage; `scripts/evaluate_phase7.py` is a portable extract of its scoring core and does not match that hash.
 - `outputs/phase8/`: corrected aggregate analysis, validation records, and seven figures in PNG and PDF formats.
 - `docs/SUARA_E1_Pitch_Detection_Final_Report.docx`: repository copy with author and affiliation removed from the text and personal editor/date fields removed from metadata. The authoritative original remains in the separate experiment source directory.
 
 No human audio, consent records, reviewer worksheets, identity links, raw human predictions, or invalidated Phase 7 outputs are included.
+
+Hashed CSV and JSON files are stored byte-for-byte (see `.gitattributes`), and `tests/test_result_hashes.py` checks them against the recorded hashes. Run all tests from `experiments/E1` with `python -m pytest`.
 
 ## Portable setup
 

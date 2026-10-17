@@ -38,7 +38,7 @@ Install **Sonic Visualiser** (free, Windows/Mac/Linux) from sonicvisualiser.org.
    - **Pitch:** the note the singer settles on and holds, not a scoop or slide into it. Use the nearest semitone.
    - **Missing note:** draw it in. **Extra note** (written but not sung): delete it.
    - **Unsure:** keep your best guess and write the time and the reason in your notes.
-6. **Export:** File → Export Annotation Layer, saved as CSV. Name it `M0N_<yourname>.csv`, for example `M01_najmi.csv`.
+6. **Export:** File → Export Annotation Layer, saved as CSV. Name it `M0N_<yourname>.csv`, for example `M01_reviewerA.csv`.
 7. **Fill in `review_log.csv`:** how many minutes the recording took, and the time and reason for any note you were unsure about.
 
 When all five are done, send your five CSVs and `review_log.csv` back to the E3 owner.

@@ -1,6 +1,6 @@
 """Supporting tables for the report, computed from a finished test run (no tool is rerun).
 
-    python tools/report_tables.py outputs/pilot_test --names athirah adib
+    python tools/report_tables.py outputs/pilot_test --names reviewerA reviewerB
 
 Writes into the run folder:
 

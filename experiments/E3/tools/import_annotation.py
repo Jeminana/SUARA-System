@@ -4,7 +4,8 @@
 
 Sonic Visualiser exports note layers as rows of time, value, duration[, level, label], with or
 without a header. Values are read as MIDI pitch when they look like MIDI numbers (<= 127) and
-as Hz otherwise; either way the output pitch is rounded to the nearest semitone.
+as Hz otherwise (pass --unit to override, e.g. for an Hz export of a melody below ~123 Hz);
+either way the output pitch is rounded to the nearest semitone.
 """
 from __future__ import annotations
 
@@ -20,7 +21,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from e3.references import hz_to_midi  # noqa: E402
 
 
-def read_export(path: Path) -> tuple[pd.DataFrame, str]:
+def read_export(path: Path, unit: str = "auto") -> tuple[pd.DataFrame, str]:
     """Notes (start_s, end_s, midi_note) from a Sonic Visualiser export, and 'MIDI' or 'Hz'."""
     raw = pd.read_csv(path, header=None)
     if not pd.api.types.is_numeric_dtype(raw[0]):  # first row was a header
@@ -29,7 +30,8 @@ def read_export(path: Path) -> tuple[pd.DataFrame, str]:
     if raw.shape[1] < 3:
         raise SystemExit(f"{path}: expected at least time, value and duration columns (export a Notes layer).")
     value = raw[1].astype(float).to_numpy()
-    unit = "MIDI" if np.nanmedian(value) <= 127 else "Hz"
+    if unit == "auto":
+        unit = "MIDI" if np.nanmedian(value) <= 127 else "Hz"
     midi = value if unit == "MIDI" else hz_to_midi(value)
     notes = pd.DataFrame({"start_s": raw[0].astype(float), "end_s": raw[0].astype(float) + raw[2].astype(float),
                           "midi_note": np.round(midi)})
@@ -41,11 +43,13 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("exported", type=Path)
     ap.add_argument("out", type=Path)
+    ap.add_argument("--unit", choices=["auto", "MIDI", "Hz"], default="auto",
+                    help="pitch unit of the exported values (default: detect)")
     args = ap.parse_args()
-    notes, unit = read_export(args.exported)
+    notes, unit = read_export(args.exported, args.unit)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     notes.to_csv(args.out, index=False)
-    print(f"{len(notes)} notes written to {args.out} ({unit} values detected)")
+    print(f"{len(notes)} notes written to {args.out} ({unit} values)")
 
 
 if __name__ == "__main__":

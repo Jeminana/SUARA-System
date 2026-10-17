@@ -80,7 +80,7 @@ def validate_manifest(path, data_root):
     rows = read_manifest(path)
     errors, warnings = [], []
     seen = set()
-    by_id = {r.get("recording_id", ""): r for r in rows}
+    by_id = {r.get("recording_id", "").strip(): r for r in rows}
     for i, row in enumerate(rows, 2):
         rid = row.get("recording_id", "").strip()
         label = f"row {i} ({rid or 'no recording_id'})"
@@ -145,8 +145,10 @@ def validate_manifest(path, data_root):
                                 warnings.append(f"{label}: badly clipped audio (>1% near full scale): {value}")
                         except (ImportError, RuntimeError, OSError, ValueError) as fallback_exc:
                             errors.append(f"{label}: unreadable WAV {value}: {exc}; soundfile fallback: {fallback_exc}")
-                    except (OSError, ValueError) as exc:
+                    except OSError as exc:
                         errors.append(f"{label}: unreadable WAV {value}: {exc}")
+                    except ValueError as exc:
+                        errors.append(f"{label}: invalid numeric manifest field or WAV data {value}: {exc}")
         parent = row.get("parent_recording_id", "").strip()
         if parent and parent in by_id and row.get("split") != by_id[parent].get("split"):
             errors.append(f"{label}: derived recording split differs from parent {parent}")

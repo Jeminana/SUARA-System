@@ -1,1 +1,1 @@
-"""SUARA E1 implementation package (experiment implementation not started)."""
+"""SUARA E1 pitch detection package namespace; experiment code lives in scripts/."""

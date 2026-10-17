@@ -340,9 +340,9 @@ class Run:
             agg = (sub.groupby(["candidate", *keys, "method"])[["note_f1", "frame_accuracy", "note_f1_with_offset"]]
                    .mean().reset_index())
             agg.to_csv(self.out / fname, index=False)
-            # Choose on non-diagnostic methods only, pooled over recordings.
+            # Choose on non-diagnostic methods only, pooled over recordings; ties keep grid order.
             pick = (sub[~sub["diagnostic"]].groupby(["candidate", *keys])["note_f1"].mean()
-                    .sort_values(ascending=False))
+                    .sort_values(ascending=False, kind="mergesort"))
             if len(pick):
                 cand, score = pick.index[0], float(pick.iloc[0])
                 best[tool] = {"settings": dict(zip(keys, cand[1:])), "mean_dev_note_f1": score}
