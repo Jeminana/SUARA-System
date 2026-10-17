@@ -12,14 +12,17 @@ import pandas as pd  # noqa: E402
 
 
 def piano_roll(ref: pd.DataFrame, preds: dict[str, tuple[pd.DataFrame, pd.DataFrame | None]],
-               title: str, path: Path) -> None:
-    """One panel per method: reference notes in grey, predicted notes in colour, contour as a line."""
+               title: str, path: Path, ignore: np.ndarray | None = None) -> None:
+    """One panel per method: reference notes in grey, predicted notes in colour, contour as a line,
+    and spans left out of scoring shaded."""
     n = max(len(preds), 1)
     fig, axes = plt.subplots(n, 1, figsize=(12, 2.4 * n), sharex=True, squeeze=False)
     pitches = [ref["midi_note"]] + [p["midi_note"] for p, _ in preds.values() if not p.empty]
     allp = pd.concat(pitches) if pitches else pd.Series([60.0])
     lo, hi = (allp.min() - 3, allp.max() + 3) if len(allp) else (48, 84)
     for ax, (label, (notes, contour)) in zip(axes[:, 0], preds.items()):
+        for s, e in (ignore if ignore is not None else []):
+            ax.axvspan(s, e, color="tab:orange", alpha=0.12, lw=0)
         for r in ref.itertuples():
             ax.add_patch(plt.Rectangle((r.start_s, r.midi_note - 0.45), r.end_s - r.start_s, 0.9,
                                        color="0.75", lw=0))
@@ -35,7 +38,8 @@ def piano_roll(ref: pd.DataFrame, preds: dict[str, tuple[pd.DataFrame, pd.DataFr
     end = max([ref["end_s"].max() if len(ref) else 1.0] +
               [p["end_s"].max() for p, _ in preds.values() if not p.empty])
     axes[-1, 0].set_xlim(0, end)
-    fig.suptitle(f"{title}  (grey = reference, blue = notes, red = contour)", fontsize=10)
+    key = "grey = reference, blue = notes, red = contour" + (", orange = not scored" if ignore is not None else "")
+    fig.suptitle(f"{title}  ({key})", fontsize=10)
     fig.tight_layout()
     fig.savefig(path, dpi=130)
     plt.close(fig)

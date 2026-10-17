@@ -14,8 +14,8 @@ data/audio/M0N.wav. Original recordings are never modified. For each song it:
    unchanged, as an E3 note CSV and a Sonic Visualiser import CSV, for two reviewers to correct
 5. writes catalog.csv and recordings.csv (never overwrites existing ones)
 
-Human rows stay excluded ("awaiting verified annotation") until data/annotations/<id>_verified.csv
-exists; remove the exclusion in recordings.csv once the two reviewers have agreed it.
+Human rows stay excluded ("awaiting verified annotation") until tools/build_verified.py builds
+data/annotations/<id>_verified.csv from the two reviewers' annotations and includes them.
 """
 from __future__ import annotations
 

@@ -76,6 +76,30 @@ def read_f0_csv(path: str | Path) -> tuple[np.ndarray, np.ndarray]:
     return df["time_s"].to_numpy(float), hz_to_midi(df["f0_hz"].to_numpy(float))
 
 
+def read_regions_csv(path: str | Path, offset_s: float, duration_s: float) -> np.ndarray:
+    """Spans to leave out of scoring (start_s, end_s in audio time), as excerpt-time rows."""
+    df = pd.read_csv(path)
+    if not {"start_s", "end_s"} <= set(df.columns):
+        raise ValueError(f"{path}: region file needs start_s and end_s columns")
+    r = df[["start_s", "end_s"]].to_numpy(float) - offset_s
+    r = np.clip(r, 0.0, duration_s)
+    return r[r[:, 1] > r[:, 0]]
+
+
+def in_regions(times: np.ndarray, regions: np.ndarray | None) -> np.ndarray:
+    out = np.zeros(np.shape(times), dtype=bool)
+    for s, e in (regions if regions is not None else []):
+        out |= (times >= s) & (times < e)
+    return out
+
+
+def drop_in_regions(notes: pd.DataFrame, regions: np.ndarray | None) -> pd.DataFrame:
+    """Remove notes whose onset falls inside a left-out span."""
+    if regions is None or not len(regions) or notes.empty:
+        return notes
+    return notes[~in_regions(notes["start_s"].to_numpy(float), regions)].reset_index(drop=True)
+
+
 def _pick_lead(pm: pretty_midi.PrettyMIDI, lead_track: str) -> tuple[int, pretty_midi.Instrument]:
     pitched = [(i, inst) for i, inst in enumerate(pm.instruments) if not inst.is_drum]
     if not pitched:

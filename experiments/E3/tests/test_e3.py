@@ -120,6 +120,17 @@ class MetricTests(unittest.TestCase):
         self.assertAlmostEqual(m["octave_error_rate"], 0.25)
         self.assertAlmostEqual(m["voicing_false_alarm"], 1.0)
 
+    def test_unresolved_spans_are_left_out(self):
+        ref = notes([(0.0, 0.5, 60), (1.5, 2.0, 64)])  # nothing agreed in the disputed 0.6-1.4 s
+        est = notes([(0.0, 0.5, 60), (0.7, 1.2, 50), (1.5, 2.0, 64)])  # a low note in the dispute
+        plain = ev.evaluate(ref, est, 2.0, CFG)
+        skipped = ev.evaluate(ref, est, 2.0, CFG, ignore=np.array([[0.6, 1.4]]))
+        self.assertLess(plain["note_precision"], 1.0)
+        self.assertEqual(skipped["note_f1"], 1.0)
+        self.assertEqual(skipped["voicing_false_alarm"], 0.0)
+        self.assertEqual(skipped["low_error_st"], 0.0)  # the disputed low note does not set the range
+        self.assertAlmostEqual(skipped["ignored_s"], 0.8)
+
     def test_empty_prediction_scores_zero(self):
         m = ev.evaluate(notes([(0.0, 1.0, 60)]), rf.empty_notes(), 1.0, CFG)
         self.assertEqual(m["note_f1"], 0.0)
@@ -146,6 +157,19 @@ class AnnotationComparisonTests(unittest.TestCase):
         freq = rp.frequency_table().set_index("note")
         self.assertAlmostEqual(freq.loc["A3", "centre_hz"], 220.0)
         self.assertAlmostEqual(freq.loc["A3", "highest_hz"], freq.loc["A#3", "lowest_hz"])
+
+    def test_verified_keeps_agreed_notes_and_lists_disputes(self):
+        bv, ca = load_tool("build_verified"), load_tool("compare_annotations")
+        a = notes([(0.0, 0.5, 60), (1.0, 1.5, 62), (2.0, 2.5, 64)])
+        b = notes([(0.02, 0.48, 60), (1.0, 1.5, 63), (2.0, 2.6, 64)])
+        pairs = ca.match(a, b, 0.05, 50)
+        v = bv.verified_notes(a, b, pairs)
+        self.assertEqual(v["midi_note"].tolist(), [60, 64])
+        self.assertAlmostEqual(v["start_s"].iat[0], 0.01)
+        u = bv.unresolved_spots(ca.disagreements(a, b, pairs, ("x", "y")), a, b, ("x", "y"), "test")
+        self.assertEqual(len(u), 1)
+        self.assertAlmostEqual(u["start_s"].iat[0], 0.95)  # moved earlier by the lead-in
+        self.assertEqual((u["x_notes"].iat[0], u["y_notes"].iat[0]), ("D4", "D#4"))
 
     def test_disagreements_are_paired_by_overlap(self):
         ca = load_tool("compare_annotations")

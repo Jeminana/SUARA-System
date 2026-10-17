@@ -47,14 +47,16 @@ Work **independently**: do not look at the other reviewer's file until both are 
 
 ## After both reviewers finish (the E3 owner runs these)
 
+Save each reviewer's files in `data/annotations/returned/<name>/`, then:
+
 ```bash
-python tools/import_annotation.py returned/<a>/M0N_<a>.csv data/annotations/P01_M0N_T01_<a>.csv
-python tools/import_annotation.py returned/<b>/M0N_<b>.csv data/annotations/P01_M0N_T01_<b>.csv
-python tools/compare_annotations.py data/annotations/P01_M0N_T01_<a>.csv \
-    data/annotations/P01_M0N_T01_<b>.csv --names <a> <b> \
-    --out data/annotations/P01_M0N_T01_ambiguity_log.csv
+python tools/build_verified.py --names <a> <b>
 ```
 
-The comparison writes one row per disagreement: the time, the issue (`pitch`, `timing`, or a note only one reviewer marked) and each reviewer's note. Listen to those places together and agree on each one, writing the decision in the log's `resolution` column.
+For each recording this writes `data/annotations/P01_M0N_T01_ambiguity_log.csv` (one row per disagreement), `P01_M0N_T01_verified.csv` (the notes both reviewers agree on) and `P01_M0N_T01_unresolved.csv` (the disputed spots), plus `annotation_summary.csv` with how much sung time each recording loses. It also includes the recording and its mix in `data/recordings.csv`. Scoring leaves the unresolved spots out for the reference and every method alike.
 
-For pitch disagreements of one semitone, the singer was usually between the two notes. Decide by measurement rather than by ear: in the plain spectrogram, hover over the steady middle of the note and read the frequency of the lowest bright line, then pick the semitone closer to it (for example, 147 Hz is D3 and 156 Hz is D#3, so 150 Hz is D3). Do not add a pitch-tracking plugin for this. If you cannot agree, say why; unresolved ambiguity is allowed but must be documented. Save the agreed notes as `data/annotations/P01_M0N_T01_verified.csv`, then in `data/recordings.csv` set `excluded` to `false` for `P01_M0N_T01` and `P01_M0N_T01_MIX` and clear their `exclusion_reason`.
+To shrink the unresolved spots, the reviewers either listen together and agree, or do the blind re-check in [RESOLUTION_GUIDE.md](RESOLUTION_GUIDE.md) and return `M0N_<name>_v2.csv` files. Rerun with `--suffix _v2`; the verified and unresolved files are replaced.
+
+For pitch disagreements of one semitone, the singer was usually between the two notes. Decide by measurement rather than by ear: in the plain spectrogram, hover over the steady middle of the note and read the frequency of the lowest bright line, then pick the semitone closer to it (for example, 147 Hz is D3 and 156 Hz is D#3, so 150 Hz is D3). Do not add a pitch-tracking plugin for this.
+
+Unresolved ambiguity is allowed but must be documented: the report states how many spots and how much sung time stayed unresolved, and why.

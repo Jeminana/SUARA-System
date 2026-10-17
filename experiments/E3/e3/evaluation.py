@@ -1,7 +1,9 @@
 """Metrics: frame pitch accuracy, note precision/recall/F1, range and concentration band errors.
 
 Note matching uses mir_eval's one-to-one transcription matching (onset within 50 ms, pitch
-within 50 cents); offsets are reported separately.
+within 50 cents); offsets are reported separately. Spans the reviewers could not agree on can be
+left out: their frames are skipped, and reference and predicted notes starting inside them are
+dropped before matching and range estimation.
 """
 from __future__ import annotations
 
@@ -12,7 +14,7 @@ import numpy as np
 import pandas as pd
 
 from .profiles import profile_stats
-from .references import contour_to_frames, frame_grid, notes_to_frames
+from .references import contour_to_frames, drop_in_regions, frame_grid, in_regions, notes_to_frames
 
 
 def _note_arrays(notes: pd.DataFrame) -> tuple[np.ndarray, np.ndarray]:
@@ -80,9 +82,11 @@ def range_metrics(ref: pd.DataFrame, est: pd.DataFrame, reliable_min_note_s: flo
 
 
 def evaluate(ref_notes: pd.DataFrame, est_notes: pd.DataFrame, duration_s: float, cfg: dict,
-             ref_f0: tuple | None = None, est_contour: pd.DataFrame | None = None) -> dict:
+             ref_f0: tuple | None = None, est_contour: pd.DataFrame | None = None,
+             ignore: np.ndarray | None = None) -> dict:
     """All metrics for one prediction. Frame accuracy uses the continuous contour when the
-    method has one, and the verified F0 annotation as reference when available."""
+    method has one, and the verified F0 annotation as reference when available. ignore holds
+    excerpt-time spans (rows of start, end) left out of every metric."""
     times = frame_grid(duration_s, float(cfg["frame_hop_s"]))
     ref_frames = contour_to_frames(*ref_f0, times) if ref_f0 is not None else notes_to_frames(ref_notes, times)
     if est_contour is not None:
@@ -90,9 +94,12 @@ def evaluate(ref_notes: pd.DataFrame, est_notes: pd.DataFrame, duration_s: float
                                        est_contour["midi"].to_numpy(float), times)
     else:
         est_frames = notes_to_frames(est_notes, times)
+    keep = ~in_regions(times, ignore)
+    ref_notes, est_notes = drop_in_regions(ref_notes, ignore), drop_in_regions(est_notes, ignore)
     return {"frame_source": "contour" if est_contour is not None else "notes",
             "reference_frames": "f0_annotation" if ref_f0 is not None else "notes",
-            **frame_metrics(ref_frames, est_frames, float(cfg["pitch_tolerance_cents"])),
+            "ignored_s": round(float((~keep).sum() * float(cfg["frame_hop_s"])), 3),
+            **frame_metrics(ref_frames[keep], est_frames[keep], float(cfg["pitch_tolerance_cents"])),
             **note_metrics(ref_notes, est_notes, cfg),
             **range_metrics(ref_notes, est_notes, float(cfg["reliable_min_note_s"]))}
 

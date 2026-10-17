@@ -23,8 +23,8 @@ CATALOG_OPTIONAL = {"melody_id": "", "lead_track": "", "source_url": "", "item_i
 RECORDING_REQUIRED = ["recording_id", "song_id", "kind", "file_path"]
 RECORDING_OPTIONAL = {"singer_id": "", "take": "", "consent": "", "audio_offset_s": "0",
                       "reference_type": "", "reference_path": "", "reference_f0_path": "",
-                      "paired_with": "", "device": "", "excluded": "false", "exclusion_reason": "",
-                      "notes": ""}
+                      "unresolved_path": "", "paired_with": "", "device": "", "excluded": "false",
+                      "exclusion_reason": "", "notes": ""}
 CORRECTION_COLUMNS = ["recording_id", "method", "reviewer", "correction_minutes",
                       "corrected_notes_path", "notes"]
 
@@ -147,7 +147,7 @@ def load_recordings(path: Path, data_root: Path, catalog: pd.DataFrame,
         p = by_id.loc[r["paired_with"]]
         inherit = ["singer_id", "consent"]
         if not r["reference_type"]:
-            inherit += ["reference_type", "reference_path", "reference_f0_path"]
+            inherit += ["reference_type", "reference_path", "reference_f0_path", "unresolved_path"]
         for col in inherit:
             if not r[col]:
                 df.at[i, col] = p[col]
@@ -168,10 +168,10 @@ def load_recordings(path: Path, data_root: Path, catalog: pd.DataFrame,
              "consent not recorded as accepted")
 
     for col, src in (("abs_path", "file_path"), ("reference_abs", "reference_path"),
-                     ("reference_f0_abs", "reference_f0_path")):
+                     ("reference_f0_abs", "reference_f0_path"), ("unresolved_abs", "unresolved_path")):
         df[col] = [str(resolve(data_root, p)) if p else "" for p in df[src]]
     live = df[~df["excluded"]]
-    missing = [p for col in ("abs_path", "reference_abs", "reference_f0_abs")
+    missing = [p for col in ("abs_path", "reference_abs", "reference_f0_abs", "unresolved_abs")
                for p in live[col] if p and not Path(p).is_file()]
     if missing:
         raise ManifestError(f"Files not found: {missing}")

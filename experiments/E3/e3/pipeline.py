@@ -133,6 +133,12 @@ class Run:
             f0 = (t[keep], m[keep])
         return notes, f0
 
+    def ignore_regions(self, rec):
+        """Excerpt-time spans the reviewers left unresolved, or None."""
+        if not getattr(rec, "unresolved_abs", ""):
+            return None
+        return rf.read_regions_csv(rec.unresolved_abs, rec.audio_offset_s, self.duration(rec.song_id))
+
     def methods_for(self, kind: str) -> list[str]:
         return [m for m, on in self.cfg["methods"].items() if on and kind in METHODS[m]["kinds"]]
 
@@ -225,7 +231,8 @@ class Run:
         return res
 
     def evaluate(self, rec, notes, contour, ref, f0) -> dict:
-        return ev.evaluate(ref, notes, self.duration(rec.song_id), self.cfg["evaluation"], f0, contour)
+        return ev.evaluate(ref, notes, self.duration(rec.song_id), self.cfg["evaluation"], f0, contour,
+                           self.ignore_regions(rec))
 
     def environment(self, extra: dict) -> None:
         io_utils.write_json(self.out / "environment.json", io_utils.environment_record(
@@ -258,6 +265,10 @@ class Run:
             if rec.reference_type == "notes_csv":
                 ref, _ = self.reference(rec)
                 ref.to_csv(ref_dir / f"{rec.recording_id}.csv", index=False, float_format="%.4f")
+                ignore = self.ignore_regions(rec)
+                if ignore is not None:
+                    pd.DataFrame(ignore, columns=["start_s", "end_s"]).to_csv(
+                        ref_dir / f"{rec.recording_id}_unresolved.csv", index=False, float_format="%.4f")
         audio = pd.DataFrame(audio_rows)
         audio.to_csv(self.out / "audio_check.csv", index=False)
         flagged = audio[audio["qc_flags"] != ""] if len(audio) else audio
@@ -364,7 +375,8 @@ class Run:
             d.mkdir(parents=True, exist_ok=True)
             ref.to_csv(d / "reference_notes.csv", index=False, float_format="%.4f")
             if rec.kind == "isolated_vocal" and rec.reference_type == "notes_csv" and rec.song_id in self.refs:
-                m = ev.evaluate(self.refs[rec.song_id], ref, self.duration(rec.song_id), cfg["evaluation"])
+                m = ev.evaluate(self.refs[rec.song_id], ref, self.duration(rec.song_id), cfg["evaluation"],
+                                ignore=self.ignore_regions(rec))
                 intended_rows.append({"recording_id": rec.recording_id, "song_id": rec.song_id,
                                       "comparison": "sung annotation vs intended MIDI", **m})
             plot_preds = {}
@@ -413,7 +425,7 @@ class Run:
                         song, corrected, rel, METHODS[method]["source_type"], label, c.reviewer, fc, "corrected")})
                     plot_preds[f"{label} (corrected)"] = (corrected, None)
             plots.piano_roll(ref, plot_preds, f"{rec.recording_id} ({rec.kind}, {rec.song_id})",
-                             plot_dir / f"{rec.recording_id}.png")
+                             plot_dir / f"{rec.recording_id}.png", self.ignore_regions(rec))
             self.log.info("test %s done", rec.recording_id)
 
         per = pd.DataFrame(metrics)

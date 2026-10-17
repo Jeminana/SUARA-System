@@ -52,4 +52,4 @@ For every recording, export your note layer (File → Export Annotation Layer, C
 
 ## What happens next (the E3 owner runs this)
 
-The two `_v2` files are compared again with `tools/compare_annotations.py`. Spots where you now agree are settled. Any spot still split is decided by a third person with the same frequency rule, or recorded as unresolved with the reason, and the report says which.
+`tools/build_verified.py --suffix _v2` compares the two `_v2` files again. Spots where you now agree are settled and scored. Any spot still split is decided by a third person with the same frequency rule, or recorded as unresolved with the reason, and the report says which.
