@@ -1,0 +1,100 @@
+# SUARA SYSTEM E3 - Song and reference melody analysis feasibility
+# Workflow: `check` -> `dev` (dev songs only, choose settings) -> set locked: true -> `test` -> `catalog`.
+# Do not change anything below after locking; every run records a hash of this file.
+
+experiment: E3 song and reference melody analysis feasibility
+locked: true           # the test stage refuses to run until this is true
+seed: 1234
+
+paths:
+  data_root: data                # override with --data-root; the three manifests below live here
+  catalog: catalog.csv           # songs, splits, excerpts, MIDI reference and rights record
+  recordings: recordings.csv     # audio items; file and reference paths are relative to data_root
+  corrections: corrections.csv   # optional manual correction log
+  output_root: outputs
+  model_cache: pretrained_models # Demucs (HuggingFace) downloads
+
+consent:
+  accepted_values: ["yes"]       # human recordings with any other consent value are excluded and logged
+
+methods:                         # which routes run; each applies only to matching recording kinds
+  basic_pitch: true              # isolated melody/vocal -> Basic Pitch note events -> lead line rules
+  detector_isolated: true        # isolated vocal -> pitch detector contour -> notes
+  demucs_detector: true          # paired mix -> Demucs vocal stem -> same pitch detector, identical settings
+  demucs_basic_pitch: false      # optional: Demucs vocal stem -> Basic Pitch
+  detector_mix: true             # diagnostic baseline: pitch detector directly on the full mix
+
+pitch:
+  detector: pyin                 # provisional baseline; rerun with E1's selection once chosen
+  pyin:
+    sample_rate: 22050
+    frame_length: 2048
+    hop_length: 220              # 10 ms
+    fmin_note: C2
+    fmax_note: C6
+    min_voiced_prob: 0.5         # frames below this voicing probability count as unvoiced
+
+segmentation:                    # contour -> notes; min_note_s and pitch_change_semitones chosen on dev
+  smoothing_frames: 5            # median filter within voiced runs
+  pitch_change_semitones: 1.2    # deviation from the current note median that starts a new note
+  change_frames: 4               # ...sustained for this many frames (vibrato does not split notes)
+  min_note_s: 0.12               # chosen on dev (outputs/pilot_wide_dev)
+  merge_gap_s: 0.03              # same-pitch notes closer than this are one note
+
+basic_pitch:                     # onset/frame thresholds chosen on dev
+  onset_threshold: 0.9           # chosen on dev (outputs/pilot_wide_dev)
+  frame_threshold: 0.4
+  minimum_note_length_ms: 58
+  min_note: C2                   # restrict transcription to a vocal range
+  max_note: C6
+  melodia_trick: true
+
+lead_line:                       # rules for reducing Basic Pitch output to one lead line
+  priority: amplitude            # amplitude (loudest note wins) | highest (skyline)
+  overlap_tolerance_s: 0.03
+  min_note_s: 0.06
+  merge_gap_s: 0.03
+
+demucs:
+  model: htdemucs                # record the exact checkpoint: environment.json lists the snapshot commit
+  stem: vocals
+  device: auto                   # auto | cpu | cuda
+  shifts: 1
+  overlap: 0.25
+
+dev:                             # candidate grids evaluated on dev songs only
+  segmentation_grid:
+    min_note_s: [0.05, 0.08, 0.12, 0.16, 0.20]
+    pitch_change_semitones: [0.5, 0.8, 1.0, 1.2, 1.5]
+  basic_pitch_grid:
+    onset_threshold: [0.3, 0.5, 0.7, 0.8, 0.9]
+    frame_threshold: [0.2, 0.3, 0.4, 0.5, 0.6]
+
+evaluation:
+  frame_hop_s: 0.01
+  pitch_tolerance_cents: 50
+  onset_tolerance_s: 0.05
+  offset_ratio: 0.2              # offset accuracy is reported separately from onset-only note F1
+  offset_min_tolerance_s: 0.05
+  reliable_min_note_s: 0.15      # range endpoints ignore shorter notes
+
+pilot_target:                    # provisional; justifies further testing only
+  min_frame_accuracy: 0.85
+  min_note_f1: 0.80
+  max_endpoint_error_semitones: 1.0
+
+flags:
+  octave_error_rate: 0.05
+  outlier_frame_accuracy: 0.5
+  range_endpoint_semitones: 1.0
+  separation_loss: 0.10          # frame accuracy drop from isolated vocal to its paired mix
+
+audio_qc:                        # QC only flags; exclusions are decided by a person in recordings.csv
+  clip_threshold: 0.999
+  max_clip_fraction: 0.001
+  silence_top_db: 40
+  max_silence_fraction: 0.6
+  min_sample_rate: 16000
+
+catalog:
+  profile_version: v1-verified   # bump when profiles change; raw and corrected versions stay distinct

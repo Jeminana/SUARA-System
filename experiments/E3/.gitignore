@@ -1,0 +1,6 @@
+# Recordings, annotations and model downloads are restricted to the team - never commit them.
+data/
+outputs/
+pretrained_models/
+.venv*/
+__pycache__/
