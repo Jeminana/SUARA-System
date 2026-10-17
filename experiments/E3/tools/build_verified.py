@@ -1,7 +1,7 @@
 """Build verified references from two reviewers' annotations, leaving disputed spots unscored.
 
-    python tools/build_verified.py --data data --names athirah adib
-    python tools/build_verified.py --data data --names athirah adib --suffix _v2   # after the re-check
+    python tools/build_verified.py --data data --names reviewerA reviewerB
+    python tools/build_verified.py --data data --names reviewerA reviewerB --suffix _v2   # after the re-check
 
 Reads data/annotations/returned/<name>/M0N_<name><suffix>.csv for both reviewers. For each
 recording it writes, under data/annotations/:
@@ -13,8 +13,9 @@ recording it writes, under data/annotations/:
 - P01_M0N_T01_unresolved.csv         the disputed spots, which scoring leaves out
 
 and annotation_summary.csv with how much sung time each recording loses to unresolved spots.
-It then updates data/recordings.csv for P01_M0N_T01 and its mix: includes them, points the
-reference and unresolved paths at the new files, and moves audio_offset_s to just before the
+It then updates data/recordings.csv for P01_M0N_T01 and its mix: points the
+reference and unresolved paths at the new files, lifts the "awaiting verified annotation"
+exclusion (other exclusions are kept), and moves audio_offset_s to just before the
 first annotated note if the reviewers placed it earlier than the draft. Rerun with the re-check
 files to shrink the unresolved spots; verified and unresolved files are replaced each time.
 """
@@ -117,7 +118,10 @@ def main() -> None:
         first = min(a.start_s.min(), b.start_s.min())
         offset = round(max(0.0, min(float(row["audio_offset_s"] or 0), first - LEAD_IN_S)), 3)
         both = iso | (recs["paired_with"] == rid)
-        recs.loc[both, ["excluded", "exclusion_reason", "audio_offset_s"]] = ["false", "", str(offset)]
+        # Lift only the placeholder exclusion from prepare_pilot_data; keep manual ones (e.g. QC).
+        pending = both & (recs["exclusion_reason"] == "awaiting verified annotation")
+        recs.loc[pending, ["excluded", "exclusion_reason"]] = ["false", ""]
+        recs.loc[both, "audio_offset_s"] = str(offset)
         recs.loc[iso, ["reference_type", "reference_path", "unresolved_path"]] = [
             "notes_csv", f"annotations/{rid}_verified.csv", f"annotations/{rid}_unresolved.csv"]
 

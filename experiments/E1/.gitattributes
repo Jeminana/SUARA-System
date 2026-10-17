@@ -1,0 +1,12 @@
+# Hashed files are stored byte-for-byte so recorded SHA-256 values verify on
+# every checkout. CSV writers emit CRLF; JSON files were hashed with LF.
+data/manifests/*.csv -text
+data/references/**/*.csv -text
+outputs/phase7/per_recording_results.csv -text
+config/*.json -text
+outputs/phase7/*.json -text
+
+*.wav binary
+*.docx binary
+*.png binary
+*.pdf binary

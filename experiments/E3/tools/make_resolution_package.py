@@ -1,6 +1,6 @@
 """Build one blind re-check package per reviewer from the ambiguity logs.
 
-    python tools/make_resolution_package.py --data data --names athirah adib
+    python tools/make_resolution_package.py --data data --names reviewerA reviewerB
 
 For each song, nearby disagreements in data/annotations/P01_M0N_T01_ambiguity_log.csv are
 grouped into spots to re-check. Each reviewer's sheet lists the spots with only their own notes

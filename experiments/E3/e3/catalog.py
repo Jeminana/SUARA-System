@@ -126,8 +126,12 @@ def load_recordings(path: Path, data_root: Path, catalog: pd.DataFrame,
             errors.append(f"{r.recording_id}: kind must be one of {sorted(KINDS)}")
         if r.song_id not in songs.index:
             errors.append(f"{r.recording_id}: song_id {r.song_id} is not in the catalog")
-        if r.kind == "mix" and r.paired_with not in set(df["recording_id"]):
-            errors.append(f"{r.recording_id}: a mix needs paired_with = its isolated vocal recording_id")
+        if r.kind == "mix":
+            partner = df[df["recording_id"] == r.paired_with]
+            if partner.empty:
+                errors.append(f"{r.recording_id}: a mix needs paired_with = its isolated vocal recording_id")
+            elif partner.iloc[0]["kind"] != "isolated_vocal" or partner.iloc[0]["song_id"] != r.song_id:
+                errors.append(f"{r.recording_id}: paired_with {r.paired_with} must be an isolated_vocal of song {r.song_id}")
         if r.kind == "isolated_vocal":
             m = TAKE_RE.match(r.recording_id)
             if not m:
