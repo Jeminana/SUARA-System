@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "suara-e1-pitch-detection"
+version = "0.1.0"
+description = "SUARA SYSTEM E1 pitch detection feasibility experiment workspace"
+requires-python = ">=3.12"
+dependencies = []
+
+[tool.setuptools.packages.find]
+where = ["src"]

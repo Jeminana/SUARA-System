@@ -1,0 +1,4 @@
+# Install only after requirements-crepe.txt. CREPE's legacy hmmlearn,<0.3,
+# imageio, and resampy dependencies are not needed for viterbi=False on 16 kHz.
+--no-deps
+crepe==0.0.12

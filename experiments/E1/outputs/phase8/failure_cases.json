@@ -1,0 +1,202 @@
+[
+  {
+    "voicing_tp": 250,
+    "voicing_fp": 10,
+    "voicing_fn": 0,
+    "raw_pitch_accuracy_50c_correct": 0,
+    "octave_errors": 250,
+    "jointly_voiced_valid_f0_frames": 250,
+    "recording_id": "SYN_T01_R012",
+    "condition": "clean",
+    "detector": "pyin",
+    "octave_frame_examples": [
+      {
+        "frame_index": 25,
+        "time_s": 0.25,
+        "reference_f0_hz": 1046.502261202394,
+        "predicted_f0_hz": 523.251131,
+        "cents_error": -1199.9999986805162
+      },
+      {
+        "frame_index": 26,
+        "time_s": 0.26,
+        "reference_f0_hz": 1046.502261202394,
+        "predicted_f0_hz": 523.251131,
+        "cents_error": -1199.9999986805162
+      },
+      {
+        "frame_index": 27,
+        "time_s": 0.27,
+        "reference_f0_hz": 1046.502261202394,
+        "predicted_f0_hz": 523.251131,
+        "cents_error": -1199.9999986805162
+      }
+    ],
+    "false_voiced_frame_examples": [
+      {
+        "frame_index": 21,
+        "time_s": 0.21,
+        "f0_hz": 523.251131
+      },
+      {
+        "frame_index": 22,
+        "time_s": 0.22,
+        "f0_hz": 523.251131
+      },
+      {
+        "frame_index": 23,
+        "time_s": 0.23,
+        "f0_hz": 523.251131
+      }
+    ],
+    "raw_output_sha256": "edb3f51f7f6a719fe893ed6f8e3474e87f991e33b443693472123c483d7b85b0"
+  },
+  {
+    "voicing_tp": 250,
+    "voicing_fp": 6,
+    "voicing_fn": 0,
+    "raw_pitch_accuracy_50c_correct": 0,
+    "octave_errors": 250,
+    "jointly_voiced_valid_f0_frames": 250,
+    "recording_id": "SYN_T01_R012",
+    "condition": "gaussian_white_20db",
+    "detector": "pyin",
+    "octave_frame_examples": [
+      {
+        "frame_index": 25,
+        "time_s": 0.25,
+        "reference_f0_hz": 1046.502261202394,
+        "predicted_f0_hz": 523.251131,
+        "cents_error": -1199.9999986805162
+      },
+      {
+        "frame_index": 26,
+        "time_s": 0.26,
+        "reference_f0_hz": 1046.502261202394,
+        "predicted_f0_hz": 523.251131,
+        "cents_error": -1199.9999986805162
+      },
+      {
+        "frame_index": 27,
+        "time_s": 0.27,
+        "reference_f0_hz": 1046.502261202394,
+        "predicted_f0_hz": 523.251131,
+        "cents_error": -1199.9999986805162
+      }
+    ],
+    "false_voiced_frame_examples": [
+      {
+        "frame_index": 23,
+        "time_s": 0.23,
+        "f0_hz": 523.251131
+      },
+      {
+        "frame_index": 24,
+        "time_s": 0.24,
+        "f0_hz": 523.251131
+      },
+      {
+        "frame_index": 275,
+        "time_s": 2.75,
+        "f0_hz": 523.251131
+      }
+    ],
+    "raw_output_sha256": "e9ff491542c8953b13271c7ceb419ea4574731961e960af811e251b567c43291"
+  },
+  {
+    "voicing_tp": 249,
+    "voicing_fp": 4,
+    "voicing_fn": 1,
+    "raw_pitch_accuracy_50c_correct": 0,
+    "octave_errors": 249,
+    "jointly_voiced_valid_f0_frames": 249,
+    "recording_id": "SYN_T01_R012",
+    "condition": "gaussian_white_10db",
+    "detector": "pyin",
+    "octave_frame_examples": [
+      {
+        "frame_index": 26,
+        "time_s": 0.26,
+        "reference_f0_hz": 1046.502261202394,
+        "predicted_f0_hz": 523.251131,
+        "cents_error": -1199.9999986805162
+      },
+      {
+        "frame_index": 27,
+        "time_s": 0.27,
+        "reference_f0_hz": 1046.502261202394,
+        "predicted_f0_hz": 523.251131,
+        "cents_error": -1199.9999986805162
+      },
+      {
+        "frame_index": 28,
+        "time_s": 0.28,
+        "reference_f0_hz": 1046.502261202394,
+        "predicted_f0_hz": 523.251131,
+        "cents_error": -1199.9999986805162
+      }
+    ],
+    "false_voiced_frame_examples": [
+      {
+        "frame_index": 275,
+        "time_s": 2.75,
+        "f0_hz": 523.251131
+      },
+      {
+        "frame_index": 276,
+        "time_s": 2.7600000000000002,
+        "f0_hz": 523.251131
+      },
+      {
+        "frame_index": 277,
+        "time_s": 2.77,
+        "f0_hz": 520.237426
+      }
+    ],
+    "raw_output_sha256": "c8848987cf1e85680a7e514dcb2d6c3c5d21d026b3bff262a6b92a042aa31856"
+  },
+  {
+    "voicing_tp": 244,
+    "voicing_fp": 0,
+    "voicing_fn": 6,
+    "raw_pitch_accuracy_50c_correct": 244,
+    "octave_errors": 0,
+    "jointly_voiced_valid_f0_frames": 244,
+    "recording_id": "SYN_T01_R001",
+    "condition": "gaussian_white_10db",
+    "detector": "crepe",
+    "octave_frame_examples": [],
+    "false_voiced_frame_examples": [],
+    "raw_output_sha256": "ba8c45f71732578a45913e8f865c10b76d7b106402f4a845ad62bb2528aaa4fc"
+  },
+  {
+    "voicing_tp": 250,
+    "voicing_fp": 31,
+    "voicing_fn": 0,
+    "raw_pitch_accuracy_50c_correct": 248,
+    "octave_errors": 0,
+    "jointly_voiced_valid_f0_frames": 250,
+    "recording_id": "SYN_T01_R003",
+    "condition": "gaussian_white_10db",
+    "detector": "pyin",
+    "octave_frame_examples": [],
+    "false_voiced_frame_examples": [
+      {
+        "frame_index": 4,
+        "time_s": 0.04,
+        "f0_hz": 96.873246
+      },
+      {
+        "frame_index": 5,
+        "time_s": 0.05,
+        "f0_hz": 96.873246
+      },
+      {
+        "frame_index": 6,
+        "time_s": 0.06,
+        "f0_hz": 96.873246
+      }
+    ],
+    "raw_output_sha256": "4913b516f9446dc45569d75c6fd2d9f153f42b130e46e1d137aca6bb730319f3"
+  }
+]

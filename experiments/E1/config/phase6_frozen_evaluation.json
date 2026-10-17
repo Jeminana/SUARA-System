@@ -1,0 +1,93 @@
+{
+  "phase": "6",
+  "status": "frozen_pre_final_scoring",
+  "frozen_on": "2026-10-13",
+  "data_driven_development_tuning": false,
+  "development_tuning_reason": "There are no scoring-eligible frame-level human F0 labels in development. The exact synthetic references are all assigned to test. Phase 4D observations are qualitative, and the few provisional pilot F0 values are explicitly non-scoring.",
+  "detectors": {
+    "pyin": {
+      "version": "0.11.0",
+      "libraries": {
+        "librosa": "0.11.0",
+        "numba": "0.61.2",
+        "numpy": "2.2.6"
+      },
+      "settings": {
+        "sample_rate_hz": 16000,
+        "fmin_hz": 65.40639132514966,
+        "fmax_hz": 1046.5022612023945,
+        "frame_length": 2048,
+        "hop_length": 160,
+        "center": true,
+        "pad_mode": "constant",
+        "fill_na": "NaN",
+        "remaining_arguments": "pinned librosa 0.11.0 defaults"
+      },
+      "voicing_decision": "Use native voiced_flag. Retain voiced_probability as raw confidence; do not apply an additional threshold."
+    },
+    "crepe": {
+      "version": "0.0.12",
+      "libraries": {
+        "tensorflow": "2.16.2",
+        "numpy": "1.26.4"
+      },
+      "settings": {
+        "sample_rate_hz": 16000,
+        "model_capacity": "tiny",
+        "step_size_ms": 10,
+        "center": true,
+        "viterbi": false,
+        "batch_size": 32,
+        "device": "CPU",
+        "input_preprocessing": "CREPE native per-frame mean subtraction and standard-deviation normalization; no external clipping or gain normalization"
+      },
+      "confidence": "Retain native activation-maximum confidence unchanged.",
+      "voicing_decision": "For evaluation only, call an estimate voiced when F0 is finite and positive and native confidence is >= 0.5. This is a prespecified policy cutoff, not a tuned or package-default threshold. Exactly silent frames remain unvoiced."
+    }
+  },
+  "reference_scope": {
+    "scoring_recording_type": "synthetic only",
+    "synthetic_recording_count": 12,
+    "split": "test",
+    "reference_source": "data/manifests/e1_official_synthetic.csv reference_path values (data/references/synthetic/official/*_reference.csv); tone design is described in config/e1_synthetic_tones.json",
+    "human_scoring": false,
+    "human_status": "No scoring-eligible frame-level F0 reference labels; qualitative Phase 4D observations and provisional pilot values are not F0 ground truth."
+  },
+  "alignment": {
+    "grid_interval_s": 0.01,
+    "grid_origin_s": 0.0,
+    "timestamp_match_tolerance_s": 0.000001,
+    "policy": "Match reference row k only to the prediction with timestamp 0.01*k within tolerance. Do not interpolate, shift, or use nearest-frame fallback.",
+    "duration_endpoint": "Use reference times in [0, duration). For a 3.00 s recording, score 0.00 through 2.99 s (300 rows). Retain the centered prediction at 3.00 s in raw output but exclude it as outside the reference grid.",
+    "condition_reference": "Use the exact same source recording reference rows and voiced mask for clean, 20 dB, and 10 dB conditions. Noise does not alter the reference F0 grid."
+  },
+  "prediction_handling": {
+    "valid_f0": "finite and > 0 Hz",
+    "missing_or_invalid_prediction": "Treat as unvoiced for voicing metrics and as a miss for reference-voiced raw pitch accuracy; preserve the raw output and do not impute.",
+    "confidence": "Retain raw confidence. Apply only the detector-specific decisions above; do not tune thresholds on test data.",
+    "silence": "Use the exact synthetic reference voiced mask. Reference-unvoiced frames remain in voicing metrics; do not infer silence from detector output. CREPE's explicit zero-variance guard remains unvoiced."
+  },
+  "metrics": {
+    "raw_pitch_accuracy_within_50_cents": "Supported for synthetic references only. Correct / all reference-voiced frames; a missing, invalid, or unvoiced prediction is incorrect.",
+    "median_absolute_cents_error": "Supported for synthetic references only; calculate over jointly voiced frames with valid positive F0. Report the denominator and prediction coverage alongside it.",
+    "p90_absolute_cents_error": "Supported for synthetic references only; same jointly voiced valid-F0 subset as median absolute cents error.",
+    "octave_error_rate": "Supported for synthetic references only. Count a prediction when its absolute cents error is within 50 cents of +1200 or -1200; denominator is all reference-voiced frames. Missing estimates are not octave errors.",
+    "voicing_precision_recall_f1": "Supported for synthetic references only, using the exact reference voiced mask and the frozen detector-specific voiced decision. Missing predictions are unvoiced.",
+    "coverage": "Report reference coverage (valid reference grid rows / expected rows) and voiced-estimate coverage (reference-voiced frames with a valid voiced F0 / reference-voiced frames). Do not report one without naming which coverage it is.",
+    "runtime_rtf": "Runtime seconds / audio duration. Report warm inference RTF separately from cold initialization. Existing Phase 5 timing includes initialization/JIT in the first call and does not isolate those components; do not present that first call as warm inference RTF.",
+    "human_f0_metrics": "Not applicable and not measurable with current human reference data."
+  },
+  "aggregation": "Report each condition and detector separately. Include pooled frame metrics and per-recording results/counts. No threshold or parameter selection based on test results.",
+  "exclusions": [
+    "No human recording enters F0 accuracy or voicing ground-truth metrics.",
+    "No qualitative stable-note or continuous-voicing observation is converted to frame-level F0 truth.",
+    "No reference-to-prediction interpolation or time shifting.",
+    "No detector threshold or hyperparameter tuning on test recordings."
+  ],
+  "limitations": [
+    "No valid development F0 labels are available, so empirical threshold tuning and development performance estimation are not possible.",
+    "The synthetic exact references are test-only; final scoring on them must remain held out until the configuration is frozen.",
+    "CREPE's 0.5 confidence cutoff is a fixed evaluation rule, not a development-optimized operating point.",
+    "The protocol's originally proposed target values are not tuning objectives or acceptance claims in the absence of development labels."
+  ]
+}

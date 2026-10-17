@@ -1,0 +1,24 @@
+{
+  "phase7_evaluator_version": "2.0.0",
+  "phase6_config_hash_verified": true,
+  "phase7_rows": 72,
+  "aggregate_rows": 6,
+  "pooled_counts_and_ratios_verified": true,
+  "matched_frames_per_run": 300,
+  "runs": 72,
+  "selected_raw_failure_cases_match_phase7": true,
+  "archive_read": false,
+  "human_pitch_accuracy_included": false,
+  "figure_count": 7,
+  "formats": [
+    "PNG",
+    "PDF"
+  ],
+  "phase7_result_hashes": {
+    "per_recording_results.csv": "7198638d2ebbbc593e9972084a221bb9624f5a71ab5058c3353230496846892d",
+    "aggregate_results.json": "741b413b486b19f86327aaad1ac02028fdbf06e7d6fd8cda6e61dbecb9f2aa88"
+  },
+  "included_corrected_result_hashes_verified": true,
+  "full_phase7_source_hash_set_available": false,
+  "note": "Run linkage and raw detector predictions are intentionally excluded; included aggregate and per-recording result hashes are verified."
+}

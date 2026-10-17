@@ -1,0 +1,57 @@
+{
+  "phase": "7",
+  "status": "corrected_valid",
+  "evaluator_version": "2.0.0",
+  "correction_date": "2026-10-14",
+  "correction_reason": "Replaced floating-point timestamp dictionary keys with strict integer 10 ms frame indices. The prior key scheme matched only 265/300 rows because binary float representations differed.",
+  "configuration_path": "config/phase6_frozen_evaluation.json",
+  "configuration_sha256": "a8f7414aeb2da47aab7ac6c4da83f36517d3f9281081c85216180e3e1f93af82",
+  "policy_sha256": "4ea736418a7570e38c4bb65e7582be63bbcfe51dc274122e4eef1013152ba903",
+  "evaluator_source_sha256": "976a07ff51808ac78cd619966a371819ae85395eb72021867ddaa29ceba10554",
+  "run_manifest_sha256": "60751ced1824d6dd7fd35c59e9504a5f335b966955c881e43263313a903f60bb",
+  "synthetic_manifest_sha256": "7bb37ad00382f103f24b37a3fcf5981be5bf87bf5ffee86ab274b262f263e961",
+  "selected_output_count": 72,
+  "successful_scored_outputs": 72,
+  "all_split_test": true,
+  "reference_ids": [
+    "SYN_T01_R001",
+    "SYN_T01_R002",
+    "SYN_T01_R003",
+    "SYN_T01_R004",
+    "SYN_T01_R005",
+    "SYN_T01_R006",
+    "SYN_T01_R007",
+    "SYN_T01_R008",
+    "SYN_T01_R009",
+    "SYN_T01_R010",
+    "SYN_T01_R011",
+    "SYN_T01_R012"
+  ],
+  "detector_versions": {
+    "pyin": "0.11.0",
+    "crepe": "0.0.12"
+  },
+  "alignment": {
+    "method": "integer frame index k = round((timestamp - origin) / interval)",
+    "grid_interval_s": 0.01,
+    "grid_origin_s": 0.0,
+    "strict_timestamp_tolerance_s": 1e-06,
+    "scored_indices": "0..299",
+    "raw_endpoint_index": 300,
+    "endpoint_scored": false,
+    "interpolation_or_shift": false
+  },
+  "validation": {
+    "matched_reference_frames_per_run": 300,
+    "expected_reference_frames_per_run": 300,
+    "matched_reference_frames_total": 21600,
+    "missing_prediction_frames": 0,
+    "duplicate_indices": 0,
+    "off_grid_timestamps": 0,
+    "raw_endpoint_rows_retained_and_excluded": 72,
+    "raw_outputs_modified": false
+  },
+  "aggregation": "Pooled integer frame counts; conditional median/p90 computed over pooled jointly voiced valid-F0 errors.",
+  "human_f0_scoring": false,
+  "regenerated_result_hashes_file": "outputs/phase7/result_hashes.json"
+}
