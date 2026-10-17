@@ -1,0 +1,32 @@
+{
+  "design": "12 equally tempered harmonic tone references spanning the shared C2-C6 region",
+  "tuning_reference_hz": 440.0,
+  "sample_rate_hz": 16000,
+  "duration_s": 3.0,
+  "time_grid_s": 0.01,
+  "tone_interval_s": [0.25, 2.75],
+  "fade_in_s": 0.05,
+  "fade_out_s": 0.05,
+  "fade_shape": "raised cosine",
+  "harmonics": [
+    {"multiple": 1, "relative_amplitude": 0.6},
+    {"multiple": 2, "relative_amplitude": 0.2},
+    {"multiple": 3, "relative_amplitude": 0.1}
+  ],
+  "random_seed": null,
+  "randomness": "none",
+  "tones": [
+    {"note": "C", "octave": 2, "midi": 36, "target_f0_hz": 65.40639132514966},
+    {"note": "E", "octave": 2, "midi": 40, "target_f0_hz": 82.4068892282175},
+    {"note": "G", "octave": 2, "midi": 43, "target_f0_hz": 97.99885899543733},
+    {"note": "C", "octave": 3, "midi": 48, "target_f0_hz": 130.8127826502993},
+    {"note": "E", "octave": 3, "midi": 52, "target_f0_hz": 164.813778456435},
+    {"note": "G", "octave": 3, "midi": 55, "target_f0_hz": 195.99771799087466},
+    {"note": "C", "octave": 4, "midi": 60, "target_f0_hz": 261.6255653005986},
+    {"note": "E", "octave": 4, "midi": 64, "target_f0_hz": 329.62755691287},
+    {"note": "G", "octave": 4, "midi": 67, "target_f0_hz": 391.9954359817493},
+    {"note": "C", "octave": 5, "midi": 72, "target_f0_hz": 523.2511306011972},
+    {"note": "E", "octave": 5, "midi": 76, "target_f0_hz": 659.25511382574},
+    {"note": "C", "octave": 6, "midi": 84, "target_f0_hz": 1046.5022612023945}
+  ]
+}

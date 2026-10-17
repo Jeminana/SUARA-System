@@ -1,0 +1,8 @@
+{
+  "evaluator_version": "2.0.0",
+  "correction_date": "2026-10-14",
+  "files": {
+    "per_recording_results.csv": "7198638d2ebbbc593e9972084a221bb9624f5a71ab5058c3353230496846892d",
+    "aggregate_results.json": "741b413b486b19f86327aaad1ac02028fdbf06e7d6fd8cda6e61dbecb9f2aa88"
+  }
+}
