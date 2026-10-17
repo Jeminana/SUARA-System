@@ -32,7 +32,7 @@ Catalog preparation and review are separate from analysis of a user's recording.
 
 ## Experiment programme
 
-Experiments evaluate the analysis methods and recommendations before the project commits to the full feature set. E1 is complete, E3 and E6 have locked configurations, and other work depends on their feasibility results.
+Experiments evaluate the analysis methods and recommendations before the project commits to the full feature set. E1 and E6 are complete, E3 has a locked configuration with interim results, and other work depends on their feasibility results.
 
 | ID | Experiment | Evidence sought | Status |
 |---|---|---|---|
@@ -41,7 +41,7 @@ Experiments evaluate the analysis methods and recommendations before the project
 | E3 | Song and reference melody analysis | Note errors and manual effort for MIDI, isolated vocals, and separated mixes | Config locked; results interim |
 | E4 | Vocal-to-song matching | Compare rankings with range-only matching and participant suitability ratings | Planned |
 | E5 | Automatic key recommendation | Test range coverage after transposition and participant comfort ratings | Planned |
-| E6 | Timbre and singing voice embedding | Same-singer and different-singer similarity across melodies and takes | Config locked; results pending |
+| E6 | Timbre and singing voice embedding | Same-singer and different-singer similarity across melodies and takes | Complete (pilot) |
 | E7 | Similar artist or singer matching | Test ranking repeatability and plausibility; compare embeddings with combined features | Planned |
 | E8 | Pitch accuracy and rhythm analysis | Test alignment against references and tolerance to performance variation | Planned |
 | E9 | End-to-end feasibility | Evaluate the full flow, response time, robustness, usefulness, and usability | Planned |
@@ -58,9 +58,9 @@ The Phase 7 evaluation compared pYIN and CREPE on 12 synthetic test recordings a
 
 The `check`, `dev`, `test`, and `catalog` pipeline is implemented with pYIN, Basic Pitch, and Demucs routes, along with tools for preparing pilot songs, two-reviewer annotation, and blind re-checks. The configuration was locked from development runs on songs S01 and S02. Real-singer results are interim: spots where the two reviewers disagree are left out of scoring until the blind re-check returns. Recordings, annotations, and outputs are not committed. See [experiments/E3/README.md](experiments/E3/README.md).
 
-### E6: Singing voice embedding (configuration locked, results pending)
+### E6: Singing voice embedding (complete, pilot)
 
-The ECAPA-TDNN and MFCC pipeline is implemented. On 2026-10-12 the configuration was locked with a pinned ECAPA model revision. The pilot grew to seven singers, giving 14 held-out cross-melody queries with a continuation target of at least 11 of 14 correct at top-1, which keeps the proposed 75% rate. Measured results have not been added to the repository yet. See [experiments/E6/README.md](experiments/E6/README.md).
+The locked test compared ECAPA-TDNN with an MFCC baseline on seven consented singers (42 clips, 14 held-out cross-melody queries; target at least 11 of 14 correct at top-1). ECAPA retrieved the right singer for 14 of 14 queries at top-1 and 7 of 7 same-melody queries, with positive similarity separation (0.314); MFCC reached 13 of 14. Under added noise ECAPA held 11 of 14 at 5 dB SNR while MFCC fell to 4 of 14. The conclusion is feasible for the stated scope, as small-sample evidence: one singer (P05) recorded on a different device from the others, keys were not recorded, no shared-key check was run, and identity retrieval does not show cross-person voice similarity, which E7 must test. See [experiments/E6/README.md](experiments/E6/README.md).
 
 ## Further experiments and improvements
 
@@ -78,9 +78,10 @@ These are open follow-ups identified so far. They are candidates, not commitment
 - Test external validity on licensed excerpts and on more singers once rights and consent are in place.
 
 **E6**
-- Publish the locked test results, per-singer counts, and exploratory uncertainty in the E6 README.
-- Run the shared-key subset and the stress tests (second device, added noise, shorter crops) to check whether the embeddings are driven by pitch register or microphone.
-- If the target is missed, compare interpretable features or a singing-specific embedding; in any case, test cross-person vocal similarity with listener judgments in E7.
+- Control for microphone and pitch register: record every singer on the same device plus a second-device variant (P05 used a different device from the others), log each take's key, and add a shared-key subset.
+- Enlarge the pilot beyond seven singers and 14 queries; with no errors, the current run cannot estimate an error rate.
+- Improve noise robustness (ECAPA fell to 11 of 14 at 5 dB SNR), for example with denoising or noise-augmented enrollment, and try a singing-specific embedding.
+- Test cross-person vocal similarity with listener judgments in E7, using the E6 embeddings and handoff files.
 
 **Programme**
 - Start E2 (vocal profile extraction), then E4 and E5, using E1's detector choice and E3's verified song profiles.
