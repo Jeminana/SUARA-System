@@ -85,12 +85,18 @@ These are open follow-ups identified so far. They are candidates, not commitment
 
 **Programme**
 - Start E2 (vocal profile extraction), then E4 and E5, using E1's detector choice and E3's verified song profiles.
-- Begin the shared pipeline in `main_pipeline/` once detector and profile formats are settled.
+- Implement the shared runtime in `main_pipeline/` using the Day 1 integration contracts, then connect teammate adapters.
 - Add continuous integration to run each experiment's tests on pull requests.
 
 ## Repository layout
 
-- `main_pipeline/` — reserved for the shared pipeline; implementation has not started
+The local MVP integration foundation is now documented in
+[main_pipeline/README.md](main_pipeline/README.md), with typed contracts under
+`main_pipeline/src/suara/` and design documents under `docs/`. Day 1 covers
+architecture and contracts only; the runnable pipeline remains pending. This
+local MVP is narrower than the longer-term web/streaming proposal above.
+
+- `main_pipeline/` — shared pipeline contracts and design; runtime implementation pending
 - `experiments/E1/` through `experiments/E9/` — experiment workspaces and documentation
 - `experiments/E1/` — pitch detection study: scripts, synthetic data, results, figures, and report
 - `experiments/E3/` — song and reference melody analysis implementation and its README
