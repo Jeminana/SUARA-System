@@ -6,7 +6,7 @@ rewritten, or imported on the default application path.
 
 ```mermaid
 flowchart TD
-    WAV[Local WAV] --> CLI[CLI: Day 2]
+    WAV[Local WAV] --> CLI[Local CLI]
     CLI --> RUN[run_pipeline]
     RUN --> PRE[preprocess_audio: real WAV processing]
     PRE --> AUDIO[AudioData]
@@ -27,8 +27,9 @@ flowchart TD
     DEPS -.-> REC
 ```
 
-All runtime nodes above are planned for Day 2. Day 1 implements only their data
-boundaries and callable signatures. There is no command that runs analysis yet.
+All runtime nodes above now have Day 2 implementations. Analysis and ranking are
+explicit deterministic mocks; preprocessing performs real audio transformations.
+Day 1 schemas remain unchanged. Real adapters are teammate work.
 
 ## Package placement
 
@@ -38,27 +39,30 @@ main_pipeline/
   README.md                        # scope and development entry point
   src/suara/
     __init__.py                    # no runtime imports or model loading
-    contracts.py                   # Day 1 schemas, errors, protocols
+    contracts.py                   # Day 1 schemas, errors, protocols (unchanged)
+    errors.py                      # Day 2 public error helpers
     pipeline.py                    # Day 2: orchestration and profile assembly
     cli.py                         # Day 2: arguments, JSON, exit codes
     audio/preprocessing.py         # Day 2: real WAV preprocessing
     modules/                       # future real adapter modules
     mocks/                         # Day 2: deterministic fixtures and catalog
   pyproject.toml                   # Day 2: isolated installable package
-  tests/                           # Day 3: synthetic audio and integration tests
+  tests/                           # Day 2 smoke tests; expand on Day 3
+  tools/generate_smoke_wav.py       # Day 2 synthetic manual CLI fixture
 experiments/                       # existing work preserved
 ```
 
-Only the files marked Day 1 and the README exist in this change. Do not create
-empty runtime placeholders that imply functionality. Day 2 package installation
-will target `main_pipeline/`, not the repository root or an experiment package.
+The Day 1/Day 2 files above now exist, except `modules/`, which is reserved for
+future real adapters and is not created as an empty placeholder. Package
+installation targets `main_pipeline/`, not the repository root or an experiment.
 
 ## Execution and dependency direction
 
 `contracts` uses only Python's standard library. Adapters depend on contracts;
 contracts never depend on adapters. Importing `suara` must not import librosa,
-Torch, TensorFlow, experiment scripts, or download checkpoints. NumPy and an
-audio/resampling library may be justified in Day 2; none is needed for Day 1.
+Torch, TensorFlow, experiment scripts, or download checkpoints. The real
+preprocessor uses NumPy arrays and SciPy's anti-aliasing `resample_poly` with a
+Kaiser beta=5.0 filter and constant-zero padding. Versions are reported when used.
 
 The orchestrator validates options and a unique-ID catalog, loads the recording
 once, validates each analyzer result, builds the profile, calls the recommender,
@@ -85,7 +89,7 @@ No partial success result is returned when a stage fails. Modules raise
 `PipelineError(ErrorInfo(...))` for expected failures. The orchestrator wraps
 schema violations and unexpected adapter exceptions with the appropriate public
 code/stage, retaining the original cause locally. Public JSON must omit tracebacks,
-absolute paths, participant identities, and recording contents. The future CLI
+absolute paths, participant identities, and recording contents. The CLI
 writes success JSON to stdout (exit 0); failure JSON to stderr (exit 2).
 
 Waveforms are transient in-memory values. Do not include them in `PipelineResult`,

@@ -1,9 +1,10 @@
 # Integration contract 1.0.0
 
 This is the Day 1 agreement for the local MVP. Schemas and protocols are implemented
-in `main_pipeline/src/suara/contracts.py`; preprocessing, analysis, assembly,
-ranking and orchestration are Day 2 work. Rules labeled runtime must be enforced
-by those implementations; dataclasses cannot verify how audio was measured.
+in `main_pipeline/src/suara/contracts.py`. Day 2 implements preprocessing, mock
+analysis/ranking, assembly and orchestration without changing these schemas.
+Runtime rules are enforced by those implementations; dataclasses cannot verify
+how audio was measured. Real analysis/ranking implementations remain teammate work.
 
 ## Common conventions
 
@@ -40,7 +41,8 @@ by those implementations; dataclasses cannot verify how audio was measured.
 | `RecommendSongs` | `recommend_songs(voice_profile: VoiceProfile, song_catalog: Sequence[SongFeatures], top_k: int = 5) -> list[Recommendation]` | Unique ranked subset with provenance |
 | `RunPipeline` | `run_pipeline(audio_path: str | Path, *, mode: Mode = "mock", top_k: int = 5, song_catalog: Sequence[SongFeatures] | None = None, dependencies: PipelineDependencies | None = None) -> PipelineResult` | Boundary validation and orchestration |
 
-These are callable `Protocol`s, not runnable functions. `PipelineDependencies`
+These declarations are callable `Protocol`s. The matching runtime functions now
+exist in `audio/preprocessing.py`, `mocks/`, and `pipeline.py`. `PipelineDependencies`
 holds `preprocess_audio`, `analyze_pitch`, `analyze_timbre`, `recommend_songs`;
 it is an injection container, not serialized JSON. `top_k` must be an integer
 (not bool) from 1 through 5; reject other values with `invalid_configuration`.
@@ -64,6 +66,11 @@ Runtime policy for Day 2:
    integer PCM 8/16/24/32-bit WAV, mono or stereo, source rates 8000–192000 Hz.
    Reject compressed WAV, float WAV, malformed frames, unsupported channels/rates
    and invalid metadata. This deliberately narrow support can expand with tests.
+   Day 2 accepts RIFF PCM and full-width WAVE_FORMAT_EXTENSIBLE PCM; RF64, RIFX,
+   reduced-valid-bit extensible PCM and multiple data chunks are unsupported.
+   RIFF size must match physical file size; malformed/trailing container bytes
+   are rejected. Unknown bounded metadata chunks are skipped. An absent pad byte
+   is tolerated only after the final odd-sized chunk, as emitted by some writers.
 2. Validate file/header frame counts and duration before allocating the full
    waveform. Reject zero frames as `invalid_audio`, <0.5 s as `audio_too_short`,
    and >60 s as `audio_too_long`; endpoints accepted. Reject unreadable/corrupt or
@@ -75,6 +82,8 @@ Runtime policy for Day 2:
    or linear interpolation. Record implementation/settings in warnings/adapter
    documentation. Output length is `max(1, round(source_frames * target/source_rate))`;
    trim/pad resampler rounding only, not user content. Recompute duration.
+   Day 2 uses SciPy `resample_poly`, reduced integer up/down factors, Kaiser
+   beta=5.0 and constant-zero padding; its version/settings appear in warnings.
 5. Preserve gain and silence; no automatic denoising, trimming or normalization.
    If resampling causes overshoot, clamp to [-1,1] and emit a warning describing
    clamped samples. Source samples with abs amplitude >=0.999 generate a clipping
@@ -193,8 +202,9 @@ Optional future descriptors require a reviewed schema extension, not ad hoc keys
 Return at most top_k unique entries, ordered by descending score then ascending
 song_id (lexical tie-break). Empty catalog returns an empty list. Do not invent
 pitch matches for null pitch or unverified melody ranges. Initial Day 2 mock
-ranking will use fictional catalog entries and a fixed, documented order with
-fixed fixture scores; it does not evaluate pitch or timbre suitability. No actual
+ranking uses fictional catalog entries, ascending song_id order and fixed fixture
+scores 0.9, 0.8, 0.7, 0.6, 0.5 by position (at most five). Reordering an input
+catalog does not change rank. It does not evaluate pitch or timbre suitability. No actual
 range-matching formula is proposed in Day 1. A later real rule must document its
 formula, missing-data behavior, normalization and evaluation limitations.
 

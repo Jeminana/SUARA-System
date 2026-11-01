@@ -1,13 +1,68 @@
 # Main SUARA pipeline
 
-Day 1 architecture and typed application contracts are available. The runnable
-pipeline, preprocessing, mock modules, CLI and full tests are planned for Days 2
-and 3; they are not implemented yet.
+Day 2 implements an installable local pipeline: real WAV preprocessing followed
+by explicitly synthetic pitch/timbre features and fictional song recommendations.
+The mock scores do not measure voice suitability. Real AI modules are not included.
 
-The current MVP accepts one local singing WAV and will return a structured voice
-profile and ranked recommendations. Its first runtime will use real preprocessing
-with explicitly synthetic mock analysis and song data. No model or cloud service
-is required for the contract layer.
+The MVP accepts one local WAV and returns a structured voice profile and up to
+five ranked recommendations as JSON. No cloud services, API keys, or downloaded
+models are required. Experiment code and participant recordings are not used.
+
+## Install and run
+
+From the repository root in PowerShell, using Python 3.12:
+
+```powershell
+python -m venv main_pipeline/.venv
+main_pipeline/.venv/Scripts/python.exe -m pip install -e main_pipeline
+main_pipeline/.venv/Scripts/python.exe main_pipeline/tools/generate_smoke_wav.py
+main_pipeline/.venv/Scripts/python.exe -m suara.cli --audio main_pipeline/.smoke/tone.wav --mode mock
+```
+
+Replace the generated path with your local recording, or add `--top-k 3`.
+On macOS/Linux use `main_pipeline/.venv/bin/python` in place of the Windows path.
+The installed `suara` console command accepts the same options. Installation needs
+package-index access; runtime is offline. Dependencies are NumPy (PCM array
+conversion) and SciPy (anti-aliasing polyphase resampling). Contracts stay standard
+library only. Keep this environment separate from all experiment environments.
+
+Success writes PipelineResult JSON to stdout and exits 0. Expected failures write
+ErrorInfo JSON to stderr and exit 2. Invalid arguments also return JSON; `--help`
+prints usage. The CLI accepts `--mode real` but rejects it because real adapters
+can currently be supplied only through the Python API. It never falls back.
+
+## Audio support and mock behavior
+
+Support: little-endian RIFF integer PCM WAV, 8/16/24/32-bit, mono or stereo,
+8000–192000 Hz source rate, 0.5–60 seconds. Full-width extensible PCM is supported;
+float/compressed WAV, RF64 and big-endian WAV are rejected. Container/chunk sizes,
+frame alignment, duration and waveform data are validated before analysis.
+Output is mono at 16000 Hz by default. Gain is preserved; clipping is warned,
+resampling overshoot is clamped with a warning, and near-silent input is rejected.
+No trimming or denoising is applied. See the contract for exact thresholds.
+
+Mock pitch is always 110/330/220 Hz (min/max/median) with fixture voiced_ratio=0.8.
+Mock timbre is always 20 zeros and a fixture centroid of 1000 Hz. None of these
+numbers is extracted from the input. Five fictional catalog records have null
+melody ranges. Ranking sorts song_id ascending and assigns scores 0.9, 0.8, 0.7,
+0.6, 0.5 by position, independent of voice features. Every result is labeled mock
+and carries synthetic-output warnings/explanations. Real preprocessing warnings
+describe transformations actually applied to the audio.
+
+## Smoke verification
+
+```powershell
+main_pipeline/.venv/Scripts/python.exe -m unittest discover -s main_pipeline/tests -v
+main_pipeline/.venv/Scripts/python.exe -m pip check
+```
+
+Tests use temporary generated WAVs under ignored `.smoke/`. They cover the local
+integration path, basic audio errors, deterministic mocks, injection, real-mode
+rejection, JSON and CLI channels. They are Day 2 smoke coverage; the broader
+boundary, quality, schema and regression suite remains Day 3 work. A small WAV
+generator is included for repeatable manual CLI checks; recordings are not tracked.
+
+## Integration documents
 
 - [MVP scope and repository inspection](../docs/MVP_SCOPE.md)
 - [Architecture and planned package layout](../docs/ARCHITECTURE.md)
@@ -15,13 +70,13 @@ is required for the contract layer.
 - [Teammate integration guide](../docs/TEAM_INTEGRATION_GUIDE.md)
 
 Shared source lives in `src/suara/`; experiment code remains in `../experiments/`.
-Python 3.12 is the application target. From the repository root in PowerShell:
+For a contracts-only import check without installing audio dependencies:
 
 ```powershell
 $env:PYTHONPATH = (Resolve-Path main_pipeline/src).Path
 python -c "from suara.contracts import SCHEMA_VERSION; print(SCHEMA_VERSION)"
 ```
 
-This imports the dependency-free schemas. Packaging/install commands and the
-`python -m suara.cli --audio ... --mode mock` command are Day 2 work and do not
-work yet. Do not install the experiment dependency stacks into this package.
+Real replacements use `PipelineDependencies` as shown in the teammate guide.
+Schema definitions remain at 1.0.0 with no Day 2 changes. Real analysis, database,
+GUI, evaluated recommendation rules and streaming integration remain out of scope.

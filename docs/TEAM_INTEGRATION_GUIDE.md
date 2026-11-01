@@ -18,7 +18,8 @@ to make them resemble application modules.
 
 ## Implement a callable adapter
 
-Day 1 supplies protocols only. The following is a signature sketch, not runnable
+Day 1 supplies the protocols; Day 2 supplies the runtime and mock adapters. The
+following is a signature sketch for a teammate, not runnable
 analysis; the teammate supplies the implementation in their module:
 
 ```python
@@ -50,7 +51,7 @@ contract change. Never relabel old coefficients or embeddings to pass validation
 
 ```python
 from suara.contracts import PipelineDependencies
-# The following runtime imports will exist only after Day 2.
+# Day 2 runtime; my_team imports are supplied by teammates.
 from suara.pipeline import run_pipeline
 from suara.audio.preprocessing import preprocess_audio
 from my_team.pitch import analyze_pitch
@@ -84,9 +85,19 @@ $env:PYTHONPATH = (Resolve-Path main_pipeline/src).Path
 python -c "from suara.contracts import SCHEMA_VERSION; print(SCHEMA_VERSION)"
 ```
 
-Use Python 3.12. No pip installation is required for these schemas. The editable
-installation and CLI commands will be added with `main_pipeline/pyproject.toml`
-on Day 2; do not claim `pip install -e main_pipeline` works yet.
+Use Python 3.12. No pip installation is required for these schemas. Day 2 adds
+the installable package; see [the pipeline README](../main_pipeline/README.md)
+for editable installation, CLI and smoke-test commands. Use a separate pipeline
+virtual environment. The tests include a custom dependency bundle and test-only
+stubs to exercise the API; those stubs are not real analysis implementations.
+
+Known mock callables expose an optional `suara_mode="mock"` marker and are rejected
+before invocation in real mode. All analyzer/recommendation output modes are also
+validated. Marker-free teammate implementations must label their output truthfully;
+runtime validation cannot prove that a claimed real algorithm actually ran.
+Expected `PipelineError` payloads are preserved: adapters must use safe public
+messages, keep private paths/traces in the exception cause, and never silently
+return mocks on failure.
 
 ## Adapter tests and pull requests
 
@@ -107,7 +118,7 @@ on Day 2; do not claim `pip install -e main_pipeline` works yet.
    agreed integration branch, identifying contract versions and sample input/output.
    Coordinate contract changes before changing field meanings or dimensions.
 
-The complete pipeline suite is Day 3 work, not present in this foundation. The
+The complete pipeline suite is Day 3 work; Day 2 includes basic smoke tests. The
 Main Pipeline Lead must not report application or experiment test suites as passed
 based solely on schema checks. No pushes, main merges, or branch deletions are
-part of this Day 1 task.
+part of this Day 2 task.

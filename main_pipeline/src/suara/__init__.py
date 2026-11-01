@@ -1,1 +1,1 @@
-"""SUARA application contracts. Runtime pipeline implementation follows in Day 2."""
+"""SUARA local application; importing this namespace does not load audio or models."""
