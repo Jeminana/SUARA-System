@@ -1,0 +1,13 @@
+{
+  "command": [
+    "git",
+    "-c",
+    "safe.directory=D:/hy-edu-2026/SUARA-System",
+    "diff",
+    "--check"
+  ],
+  "exit_code": 0,
+  "expected_exit_code": 0,
+  "stdout": "",
+  "stderr": "warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/INTEGRATION_CONTRACT.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/TEAM_INTEGRATION_GUIDE.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'main_pipeline/README.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'main_pipeline/src/suara/pipeline.py', LF will be replaced by CRLF the next time Git touches it\n"
+}

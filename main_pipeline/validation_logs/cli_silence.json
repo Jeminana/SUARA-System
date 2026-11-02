@@ -1,0 +1,13 @@
+{
+  "command": [
+    "D:\\hy-edu-2026\\SUARA-System\\main_pipeline\\.venv\\Scripts\\python.exe",
+    "-m",
+    "suara.cli",
+    "--audio",
+    "D:\\hy-edu-2026\\SUARA-System\\main_pipeline\\.smoke\\day3\\silence.wav"
+  ],
+  "exit_code": 2,
+  "expected_exit_code": 2,
+  "stdout": "",
+  "stderr": "{\n  \"code\": \"silent_audio\",\n  \"message\": \"Recording is below the silence floor (RMS <=1e-5 full scale).\",\n  \"stage\": \"preprocessing\",\n  \"schema_version\": \"1.0.0\"\n}\n"
+}

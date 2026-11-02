@@ -1,0 +1,166 @@
+python.exe : test_bad_header_fields_and_alignment (test_audio.AudioTests.test_bad_header_fields_and_alignment) ... ok
+위치 줄:2 문자:85
++ ... | Out-Null; & main_pipeline/.venv/Scripts/python.exe -m unittest disc ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (test_bad_header...ignment) ... ok:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+test_chunk_bounds_duplicates_missing_and_metadata
+(test_audio.AudioTests.test_chunk_bounds_duplicates_missing_and_metadata) ... ok
+test_clipping_is_warning_and_gain_preserved (test_audio.AudioTests.test_clipping_is_warning_and_gain_preserved) ... ok
+test_duration_endpoints_and_outside (test_audio.AudioTests.test_duration_endpoints_and_outside) ... ok
+test_extensible_pcm_and_invalid_extension (test_audio.AudioTests.test_extensible_pcm_and_invalid_extension) ... ok
+test_fractional_resampling_length (test_audio.AudioTests.test_fractional_resampling_length) ... ok
+test_invalid_target_rates (test_audio.AudioTests.test_invalid_target_rates) ... ok
+test_pcm_width_rate_channel_matrix (test_audio.AudioTests.test_pcm_width_rate_channel_matrix) ... ok
+test_resampling_overshoot_is_bounded_and_reported
+(test_audio.AudioTests.test_resampling_overshoot_is_bounded_and_reported) ... ok
+test_resampling_suppresses_aliases (test_audio.AudioTests.test_resampling_suppresses_aliases) ... ok
+test_signed_pcm_and_stereo_average (test_audio.AudioTests.test_signed_pcm_and_stereo_average) ... ok
+test_silence_and_near_silence (test_audio.AudioTests.test_silence_and_near_silence) ... ok
+test_stereo_cancellation_does_not_become_fake_signal
+(test_audio.AudioTests.test_stereo_cancellation_does_not_become_fake_signal) ... ok
+test_truncated_wrong_and_unsupported_containers
+(test_audio.AudioTests.test_truncated_wrong_and_unsupported_containers) ... ok
+test_all_contracts_required_and_unknown_fields
+(test_contracts.ContractTests.test_all_contracts_required_and_unknown_fields) ... ok
+test_all_contracts_versions_and_roundtrip (test_contracts.ContractTests.test_all_contracts_versions_and_roundtrip) ...
+ok
+test_all_numeric_fields_reject_nonfinite_and_bool
+(test_contracts.ContractTests.test_all_numeric_fields_reject_nonfinite_and_bool) ... ok
+test_audio_types_bounds_and_duration (test_contracts.ContractTests.test_audio_types_bounds_and_duration) ... ok
+test_nested_mutation_is_revalidated_before_serialization
+(test_contracts.ContractTests.test_nested_mutation_is_revalidated_before_serialization) ... ok
+test_pitch_ranges_and_voicing_nullability (test_contracts.ContractTests.test_pitch_ranges_and_voicing_nullability) ...
+ok
+test_profile_nesting_modes_status (test_contracts.ContractTests.test_profile_nesting_modes_status) ... ok
+test_result_ranking_duplicates_nesting_mode (test_contracts.ContractTests.test_result_ranking_duplicates_nesting_mode)
+... ok
+test_score_bounds (test_contracts.ContractTests.test_score_bounds) ... ok
+test_song_nullable_range_and_provenance (test_contracts.ContractTests.test_song_nullable_range_and_provenance) ... ok
+test_text_warnings_and_enum_types (test_contracts.ContractTests.test_text_warnings_and_enum_types) ... ok
+test_timbre_dimension_and_scalars (test_contracts.ContractTests.test_timbre_dimension_and_scalars) ... ok
+test_actual_preprocessor_and_injected_module_inputs
+(test_integration.IntegrationTests.test_actual_preprocessor_and_injected_module_inputs) ... ok
+test_audio_mutation_caught_before_next_analyzer
+(test_integration.IntegrationTests.test_audio_mutation_caught_before_next_analyzer) ... FAIL
+test_catalog_errors_before_preprocessing (test_integration.IntegrationTests.test_catalog_errors_before_preprocessing)
+... ok
+test_cli_success_errors_and_no_ai_imports
+(test_integration.IntegrationTests.test_cli_success_errors_and_no_ai_imports) ... ok
+test_invalid_recommendation_references_metadata_ranking_and_count
+(test_integration.IntegrationTests.test_invalid_recommendation_references_metadata_ranking_and_count) ... ok
+test_mixed_analyzer_provenance (test_integration.IntegrationTests.test_mixed_analyzer_provenance) ... ok
+test_mock_ranker_provenance_cannot_be_overridden
+(test_integration.IntegrationTests.test_mock_ranker_provenance_cannot_be_overridden) ... FAIL
+test_module_exceptions_are_safe_at_every_stage
+(test_integration.IntegrationTests.test_module_exceptions_are_safe_at_every_stage) ... ok
+test_mutated_nested_features_profile_and_catalog
+(test_integration.IntegrationTests.test_mutated_nested_features_profile_and_catalog) ... ok
+test_nyquist_limit (test_integration.IntegrationTests.test_nyquist_limit) ... ok
+test_preprocessor_must_honor_requested_rate
+(test_integration.IntegrationTests.test_preprocessor_must_honor_requested_rate) ... FAIL
+test_real_mode_has_no_fallback_or_declared_mock_components
+(test_integration.IntegrationTests.test_real_mode_has_no_fallback_or_declared_mock_components) ... ok
+test_real_mode_rejects_hidden_mock_outputs_and_mock_catalog
+(test_integration.IntegrationTests.test_real_mode_rejects_hidden_mock_outputs_and_mock_catalog) ... ok
+test_test_only_adapters_accept_real_mode_and_empty_catalog
+(test_integration.IntegrationTests.test_test_only_adapters_accept_real_mode_and_empty_catalog) ... ok
+test_timbre_audio_mutation_caught_even_if_return_value_valid
+(test_integration.IntegrationTests.test_timbre_audio_mutation_caught_even_if_return_value_valid) ... ERROR
+test_top_k_and_catalog_order (test_integration.IntegrationTests.test_top_k_and_catalog_order) ... ok
+test_unvoiced_pitch_and_missing_melody_are_safe
+(test_integration.IntegrationTests.test_unvoiced_pitch_and_missing_melody_are_safe) ... ok
+test_wrong_module_contract_types (test_integration.IntegrationTests.test_wrong_module_contract_types) ... ok
+test_bad_module_and_ranking_results (test_smoke.PipelineSmokeTests.test_bad_module_and_ranking_results) ... ok
+test_cli_json_and_error_channels (test_smoke.PipelineSmokeTests.test_cli_json_and_error_channels) ... ok
+test_custom_injection_and_unvoiced_profile (test_smoke.PipelineSmokeTests.test_custom_injection_and_unvoiced_profile)
+... ok
+test_empty_catalog_and_top_k (test_smoke.PipelineSmokeTests.test_empty_catalog_and_top_k) ... ok
+test_missing_and_corrupt_files (test_smoke.PipelineSmokeTests.test_missing_and_corrupt_files) ... ok
+test_mock_end_to_end_determinism (test_smoke.PipelineSmokeTests.test_mock_end_to_end_determinism) ... ok
+test_mock_imports_do_not_load_models (test_smoke.PipelineSmokeTests.test_mock_imports_do_not_load_models) ... ok
+test_mono_pcm_widths (test_smoke.PipelineSmokeTests.test_mono_pcm_widths) ... ok
+test_real_mode_does_not_fallback (test_smoke.PipelineSmokeTests.test_real_mode_does_not_fallback) ... ok
+test_rejected_audio_basics (test_smoke.PipelineSmokeTests.test_rejected_audio_basics) ... ok
+test_stereo_and_resampling (test_smoke.PipelineSmokeTests.test_stereo_and_resampling) ... ok
+test_truncated_data_rejected (test_smoke.PipelineSmokeTests.test_truncated_data_rejected) ... ok
+test_wav_format_headers (test_smoke.PipelineSmokeTests.test_wav_format_headers) ... ok
+
+======================================================================
+ERROR: test_timbre_audio_mutation_caught_even_if_return_value_valid
+(test_integration.IntegrationTests.test_timbre_audio_mutation_caught_even_if_return_value_valid)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\hy-edu-2026\SUARA-System\main_pipeline\tests\test_integration.py", line 168, in
+test_timbre_audio_mutation_caught_even_if_return_value_valid
+    self.assert_error('invalid_audio', lambda: run_pipeline('unused',
+  File "D:\hy-edu-2026\SUARA-System\main_pipeline\tests\helpers.py", line 64, in assert_error
+    action()
+  File "D:\hy-edu-2026\SUARA-System\main_pipeline\tests\test_integration.py", line 168, in <lambda>
+    self.assert_error('invalid_audio', lambda: run_pipeline('unused',
+                                               ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\hy-edu-2026\SUARA-System\main_pipeline\src\suara\pipeline.py", line 131, in run_pipeline
+    profile = replace(profile, warnings=warnings,
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python312\Lib\dataclasses.py", line 1588, in replace
+    return obj.__class__(**changes)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 9, in __init__
+  File "D:\hy-edu-2026\SUARA-System\main_pipeline\src\suara\contracts.py", line 70, in __post_init__
+    self.validate()
+  File "D:\hy-edu-2026\SUARA-System\main_pipeline\src\suara\contracts.py", line 190, in validate
+    _strings(self.warnings, "warnings")
+  File "D:\hy-edu-2026\SUARA-System\main_pipeline\src\suara\contracts.py", line 112, in _strings
+    _text(item, name)
+  File "D:\hy-edu-2026\SUARA-System\main_pipeline\src\suara\contracts.py", line 49, in _text
+    _require(isinstance(value, str) and bool(value.strip()), f"{name} must be nonempty text")
+  File "D:\hy-edu-2026\SUARA-System\main_pipeline\src\suara\contracts.py", line 33, in _require
+    raise ContractError(message)
+suara.contracts.ContractError: warnings must be nonempty text
+
+======================================================================
+FAIL: test_audio_mutation_caught_before_next_analyzer
+(test_integration.IntegrationTests.test_audio_mutation_caught_before_next_analyzer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\hy-edu-2026\SUARA-System\main_pipeline\tests\test_integration.py", line 160, in
+test_audio_mutation_caught_before_next_analyzer
+    self.assert_error('invalid_audio', lambda: run_pipeline('unused',
+  File "D:\hy-edu-2026\SUARA-System\main_pipeline\tests\helpers.py", line 65, in assert_error
+    self.assertEqual(caught.exception.error.code, code)
+AssertionError: 'module_failure' != 'invalid_audio'
+- module_failure
++ invalid_audio
+
+
+======================================================================
+FAIL: test_mock_ranker_provenance_cannot_be_overridden
+(test_integration.IntegrationTests.test_mock_ranker_provenance_cannot_be_overridden)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\hy-edu-2026\SUARA-System\main_pipeline\tests\test_integration.py", line 149, in
+test_mock_ranker_provenance_cannot_be_overridden
+    self.assert_error('invalid_catalog', lambda: run_pipeline('unused', song_catalog=stub_catalog(),
+  File "D:\hy-edu-2026\SUARA-System\main_pipeline\tests\helpers.py", line 63, in assert_error
+    with self.assertRaises(PipelineError) as caught:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: PipelineError not raised
+
+======================================================================
+FAIL: test_preprocessor_must_honor_requested_rate
+(test_integration.IntegrationTests.test_preprocessor_must_honor_requested_rate)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\hy-edu-2026\SUARA-System\main_pipeline\tests\test_integration.py", line 173, in
+test_preprocessor_must_honor_requested_rate
+    self.assert_error('invalid_audio', lambda: run_pipeline('unused', dependencies=dependencies(
+  File "D:\hy-edu-2026\SUARA-System\main_pipeline\tests\helpers.py", line 63, in assert_error
+    with self.assertRaises(PipelineError) as caught:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: PipelineError not raised
+
+----------------------------------------------------------------------
+Ran 57 tests in 12.033s
+
+FAILED (failures=3, errors=1)

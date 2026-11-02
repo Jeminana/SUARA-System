@@ -1,0 +1,16 @@
+         6822604 function calls (6820762 primitive calls) in 4.056 seconds
+
+   Ordered by: cumulative time
+   List reduced from 754 to 10 due to restriction <10>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    4.056    4.056 pipeline.py:93(run_pipeline)
+        9    0.000    0.000    3.578    0.398 pipeline.py:21(_invoke)
+        6    0.713    0.119    3.565    0.594 contracts.py:96(validate)
+   960197    2.165    0.000    2.743    0.000 contracts.py:36(_number)
+        1    0.000    0.000    1.162    1.162 pipeline.py:119(<lambda>)
+       10    0.002    0.000    1.147    0.115 __init__.py:1(<module>)
+        1    0.000    0.000    0.668    0.668 pipeline.py:123(<lambda>)
+        1    0.000    0.000    0.668    0.668 pitch.py:5(analyze_pitch)
+       20    0.000    0.000    0.589    0.029 pipeline.py:32(_checked)
+        1    0.002    0.002    0.573    0.573 preprocessing.py:117(preprocess_audio)

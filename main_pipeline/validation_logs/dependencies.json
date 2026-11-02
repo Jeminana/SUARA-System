@@ -1,0 +1,12 @@
+{
+  "command": [
+    "D:\\hy-edu-2026\\SUARA-System\\main_pipeline\\.venv\\Scripts\\python.exe",
+    "-m",
+    "pip",
+    "check"
+  ],
+  "exit_code": 0,
+  "expected_exit_code": 0,
+  "stdout": "No broken requirements found.\n",
+  "stderr": ""
+}

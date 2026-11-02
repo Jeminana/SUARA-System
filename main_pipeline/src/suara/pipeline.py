@@ -118,10 +118,16 @@ def run_pipeline(audio_path: str | Path, *, mode: Mode = "mock", top_k: int = 5,
 
     audio = _invoke("preprocessing", "invalid_audio", lambda: _checked(
         dependencies.preprocess_audio(audio_path, target_sample_rate=DEFAULT_SAMPLE_RATE), AudioData))
+    if audio.sample_rate != DEFAULT_SAMPLE_RATE:
+        raise failure("invalid_audio", "preprocessing", "Preprocessor did not return the requested sample rate.")
     pitch = _invoke("pitch", "invalid_features", lambda: _checked(dependencies.analyze_pitch(audio), PitchFeatures))
+    # Frozen dataclasses still contain mutable lists. Stop invalid input mutation
+    # at the responsible adapter, before another module consumes that input.
+    _invoke("pitch", "invalid_audio", audio.validate)
     if mode == "real" and pitch.mode != "real":
         raise failure("invalid_configuration", "configuration", "Pitch analyzer returned mock features in real mode.")
     timbre = _invoke("timbre", "invalid_features", lambda: _checked(dependencies.analyze_timbre(audio), TimbreFeatures))
+    _invoke("timbre", "invalid_audio", audio.validate)
     if mode == "real" and timbre.mode != "real":
         raise failure("invalid_configuration", "configuration", "Timbre analyzer returned mock features in real mode.")
     if timbre.spectral_centroid_mean_hz is not None and timbre.spectral_centroid_mean_hz > audio.sample_rate / 2:
@@ -133,7 +139,11 @@ def run_pipeline(audio_path: str | Path, *, mode: Mode = "mock", top_k: int = 5,
 
     def rank() -> list[Recommendation]:
         values = dependencies.recommend_songs(profile, song_catalog, top_k=top_k)
-        return _validate_recommendations(values, profile, song_catalog, top_k)
+        checked = _validate_recommendations(values, profile, song_catalog, top_k)
+        if (getattr(dependencies.recommend_songs, "suara_mode", None) == "mock" and
+                any(rec.mode != "mock" for rec in checked)):
+            raise ContractError("A declared mock ranker must return mock recommendations")
+        return checked
     recommendations = _invoke("recommendation", "invalid_catalog", rank)
     if mode == "real" and any(rec.mode != "real" for rec in recommendations):
         raise failure("invalid_configuration", "configuration", "Recommender returned mock results in real mode.")

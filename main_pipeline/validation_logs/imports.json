@@ -1,0 +1,11 @@
+{
+  "command": [
+    "D:\\hy-edu-2026\\SUARA-System\\main_pipeline\\.venv\\Scripts\\python.exe",
+    "-c",
+    "import sys; import suara; from suara.contracts import SCHEMA_VERSION; assert not ({'numpy','scipy','torch','tensorflow','librosa','speechbrain'} & sys.modules.keys()); print('Package and contracts import successfully without audio or AI libraries:', SCHEMA_VERSION)"
+  ],
+  "exit_code": 0,
+  "expected_exit_code": 0,
+  "stdout": "Package and contracts import successfully without audio or AI libraries: 1.0.0\n",
+  "stderr": ""
+}

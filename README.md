@@ -93,10 +93,12 @@ These are open follow-ups identified so far. They are candidates, not commitment
 The local MVP integration foundation is now documented in
 [main_pipeline/README.md](main_pipeline/README.md), with typed contracts under
 `main_pipeline/src/suara/` and design documents under `docs/`. Day 2 adds an
-installable mock runtime, CLI and synthetic-audio smoke tests. This
+installable mock runtime, CLI and synthetic-audio smoke tests. Day 3 adds boundary
+regressions, end-to-end CLI checks and reproducible performance measurements; see
+[the validation report](docs/DAY3_VALIDATION_REPORT.md). This
 local MVP is narrower than the longer-term web/streaming proposal above.
 
-- `main_pipeline/` — shared contracts, WAV preprocessing, mock runtime, CLI and smoke tests
+- `main_pipeline/` — shared contracts, WAV preprocessing, mock runtime, CLI and validation tests
 - `experiments/E1/` through `experiments/E9/` — experiment workspaces and documentation
 - `experiments/E1/` — pitch detection study: scripts, synthetic data, results, figures, and report
 - `experiments/E3/` — song and reference melody analysis implementation and its README

@@ -1,0 +1,13 @@
+{
+  "command": [
+    "D:\\hy-edu-2026\\SUARA-System\\main_pipeline\\.venv\\Scripts\\python.exe",
+    "-m",
+    "suara.cli",
+    "--audio",
+    "D:\\hy-edu-2026\\SUARA-System\\main_pipeline\\.smoke\\day3\\long.wav"
+  ],
+  "exit_code": 2,
+  "expected_exit_code": 2,
+  "stdout": "",
+  "stderr": "{\n  \"code\": \"audio_too_long\",\n  \"message\": \"Recording must be at most 60 seconds.\",\n  \"stage\": \"preprocessing\",\n  \"schema_version\": \"1.0.0\"\n}\n"
+}

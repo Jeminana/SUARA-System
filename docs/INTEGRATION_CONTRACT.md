@@ -26,6 +26,9 @@ how audio was measured. Real analysis/ranking implementations remain teammate wo
 - Containers are lists for a simple dependency-free boundary. Frozen dataclasses
   prevent field reassignment but do not freeze lists; adapters must not mutate
   inputs. Validate again at every module boundary.
+  Day 3 also revalidates AudioData after each analyzer and enforces the requested
+  16000 Hz preprocessing output rate. Invalid input mutation fails at that analyzer
+  stage; valid edits are not automatically detected and remain prohibited.
 - `mode`/`analysis_mode` is exactly `mock` or `real`. Mock means synthetic fixtures,
   never audio measurements. Real means produced by a real algorithm, not proven
   accurate. Profile and result aggregate provenance conservatively.
@@ -251,7 +254,13 @@ to stderr with exit 2; no PipelineResult or partial recommendations on failure.
 | module_failure | Unexpected decoder/adapter exception after input checks / failing stage |
 
 Known decode errors map to invalid_audio, not generic module_failure. No voiced
-pitch is a valid result, not an error. No automatic fallback, fabricated fields,
+pitch is a valid result, not an error. Day 3 additionally reports invalid_audio
+at pitch/timbre when an analyzer leaves its AudioData input invalid, and at
+preprocessing when an injected preprocessor ignores the requested sample rate.
+Declared mock rankers must label their recommendations mock regardless of input
+provenance; contradictory outputs fail with invalid_catalog.
+
+No automatic fallback, fabricated fields,
 or success-shaped error objects. Runtime adapters preserve causes for debugging
 locally without putting paths, traces or personal data in public messages.
 

@@ -1,0 +1,15 @@
+{
+  "command": [
+    "D:\\hy-edu-2026\\SUARA-System\\main_pipeline\\.venv\\Scripts\\python.exe",
+    "-m",
+    "suara.cli",
+    "--audio",
+    "D:\\hy-edu-2026\\SUARA-System\\main_pipeline\\.smoke\\day3\\1s_16000hz_1ch.wav",
+    "--mode",
+    "real"
+  ],
+  "exit_code": 2,
+  "expected_exit_code": 2,
+  "stdout": "",
+  "stderr": "{\n  \"code\": \"invalid_configuration\",\n  \"message\": \"Real mode requires explicit dependencies and a song catalog; no mock fallback is available.\",\n  \"stage\": \"configuration\",\n  \"schema_version\": \"1.0.0\"\n}\n"
+}

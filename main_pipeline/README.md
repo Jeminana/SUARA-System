@@ -1,6 +1,6 @@
 # Main SUARA pipeline
 
-Day 2 implements an installable local pipeline: real WAV preprocessing followed
+The local pipeline provides real WAV preprocessing followed
 by explicitly synthetic pitch/timbre features and fictional song recommendations.
 The mock scores do not measure voice suitability. Real AI modules are not included.
 
@@ -49,18 +49,27 @@ melody ranges. Ranking sorts song_id ascending and assigns scores 0.9, 0.8, 0.7,
 and carries synthetic-output warnings/explanations. Real preprocessing warnings
 describe transformations actually applied to the audio.
 
-## Smoke verification
+## Validation
 
 ```powershell
 main_pipeline/.venv/Scripts/python.exe -m unittest discover -s main_pipeline/tests -v
 main_pipeline/.venv/Scripts/python.exe -m pip check
+main_pipeline/.venv/Scripts/python.exe main_pipeline/tools/validate_day3.py
 ```
 
-Tests use temporary generated WAVs under ignored `.smoke/`. They cover the local
-integration path, basic audio errors, deterministic mocks, injection, real-mode
-rejection, JSON and CLI channels. They are Day 2 smoke coverage; the broader
-boundary, quality, schema and regression suite remains Day 3 work. A small WAV
-generator is included for repeatable manual CLI checks; recordings are not tracked.
+Tests use temporary generated WAVs under ignored `.smoke/`. Day 3 adds PCM width,
+rate/channel matrices, duration endpoints, malformed containers, silence/clipping,
+anti-aliasing checks, all eight contracts, mutable nested data, injected adapters,
+ranking references/order/limits, provenance and safe error JSON. No AI model or
+participant recording is used. Test-only real-labeled adapters verify wiring only.
+
+`validate_day3.py` also records ten CLI transcripts, environment/dependency checks,
+three cold and three warm timing samples per duration/input configuration, OS peak
+memory, and tracked E1/E3/E6 file hashes. Logs are saved in `validation_logs/`;
+generated audio stays in `.smoke/day3/`. Cold process wall time includes startup,
+imports and measurement/output overhead; `processing_time_s` covers only the
+pipeline invocation. These are mock-runtime measurements, not AI inference latency.
+See [the Day 3 validation report](../docs/DAY3_VALIDATION_REPORT.md) for actual results.
 
 ## Integration documents
 
@@ -68,6 +77,7 @@ generator is included for repeatable manual CLI checks; recordings are not track
 - [Architecture and planned package layout](../docs/ARCHITECTURE.md)
 - [Integration contract and JSON examples](../docs/INTEGRATION_CONTRACT.md)
 - [Teammate integration guide](../docs/TEAM_INTEGRATION_GUIDE.md)
+- [Day 3 validation and remaining integration risks](../docs/DAY3_VALIDATION_REPORT.md)
 
 Shared source lives in `src/suara/`; experiment code remains in `../experiments/`.
 For a contracts-only import check without installing audio dependencies:
@@ -78,5 +88,6 @@ python -c "from suara.contracts import SCHEMA_VERSION; print(SCHEMA_VERSION)"
 ```
 
 Real replacements use `PipelineDependencies` as shown in the teammate guide.
-Schema definitions remain at 1.0.0 with no Day 2 changes. Real analysis, database,
+Schema fields remain at 1.0.0. Day 3 hardens runtime boundaries without changing
+the callable interfaces. Real analysis, database,
 GUI, evaluated recommendation rules and streaming integration remain out of scope.
