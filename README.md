@@ -2,7 +2,7 @@
 
 SUARA (from *Sesuai Suara*, “suitable for the voice”) is a proposed AI-powered vocal profile and music recommendation service. It analyzes a short singing sample and aims to recommend songs, artists, and song keys that fit the singer. The primary product direction is an analysis and recommendation engine that can integrate with a music streaming service; a web demonstration will validate the idea first. This project is a capstone feasibility prototype, not a complete streaming platform.
 
-The proposal describes intended capabilities. They are not validated product claims, and the main pipeline has not been implemented yet.
+The proposal describes intended capabilities, not validated product claims. A local pipeline with real WAV preprocessing and explicitly synthetic mock analysis/recommendations is now implemented; real analysis integration remains pending.
 
 ## Project goals
 
@@ -85,12 +85,20 @@ These are open follow-ups identified so far. They are candidates, not commitment
 
 **Programme**
 - Start E2 (vocal profile extraction), then E4 and E5, using E1's detector choice and E3's verified song profiles.
-- Begin the shared pipeline in `main_pipeline/` once detector and profile formats are settled.
+- Connect real teammate adapters to the mock integration runtime in `main_pipeline/`, then evaluate the complete flow.
 - Add continuous integration to run each experiment's tests on pull requests.
 
 ## Repository layout
 
-- `main_pipeline/` — reserved for the shared pipeline; implementation has not started
+The local MVP integration foundation is now documented in
+[main_pipeline/README.md](main_pipeline/README.md), with typed contracts under
+`main_pipeline/src/suara/` and design documents under `docs/`. Day 2 adds an
+installable mock runtime, CLI and synthetic-audio smoke tests. Day 3 adds boundary
+regressions, end-to-end CLI checks and reproducible performance measurements; see
+[the validation report](docs/DAY3_VALIDATION_REPORT.md). This
+local MVP is narrower than the longer-term web/streaming proposal above.
+
+- `main_pipeline/` — shared contracts, WAV preprocessing, mock runtime, CLI and validation tests
 - `experiments/E1/` through `experiments/E9/` — experiment workspaces and documentation
 - `experiments/E1/` — pitch detection study: scripts, synthetic data, results, figures, and report
 - `experiments/E3/` — song and reference melody analysis implementation and its README

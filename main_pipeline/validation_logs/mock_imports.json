@@ -1,0 +1,12 @@
+{
+  "command": [
+    "D:\\hy-edu-2026\\SUARA-System\\main_pipeline\\.venv\\Scripts\\python.exe",
+    "-c",
+    "import sys; from suara.pipeline import run_pipeline; run_pipeline(sys.argv[1]); assert not ({'torch','tensorflow','librosa','speechbrain','crepe','transformers'} & sys.modules.keys()); print('Mock pipeline completed without AI libraries.')",
+    "D:\\hy-edu-2026\\SUARA-System\\main_pipeline\\.smoke\\day3\\1s_48000hz_2ch.wav"
+  ],
+  "exit_code": 0,
+  "expected_exit_code": 0,
+  "stdout": "Mock pipeline completed without AI libraries.\n",
+  "stderr": ""
+}

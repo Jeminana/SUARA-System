@@ -1,0 +1,15 @@
+{
+  "command": [
+    "D:\\hy-edu-2026\\SUARA-System\\main_pipeline\\.venv\\Scripts\\python.exe",
+    "-m",
+    "suara.cli",
+    "--audio",
+    "synthetic.wav",
+    "--top-k",
+    "six"
+  ],
+  "exit_code": 2,
+  "expected_exit_code": 2,
+  "stdout": "",
+  "stderr": "{\n  \"code\": \"invalid_configuration\",\n  \"message\": \"Invalid command arguments. Use --audio WAV, --mode mock|real, and --top-k 1..5; see --help.\",\n  \"stage\": \"configuration\",\n  \"schema_version\": \"1.0.0\"\n}\n"
+}

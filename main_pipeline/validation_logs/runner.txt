@@ -1,0 +1,27 @@
+tests: exit 0 (expected 0)
+dependencies: exit 0 (expected 0)
+imports: exit 0 (expected 0)
+cli_success: exit 0 (expected 0)
+cli_top2: exit 0 (expected 0)
+cli_silence: exit 2 (expected 2)
+cli_short: exit 2 (expected 2)
+cli_long: exit 2 (expected 2)
+cli_corrupt: exit 2 (expected 2)
+cli_unsupported: exit 2 (expected 2)
+cli_missing: exit 2 (expected 2)
+cli_real: exit 2 (expected 2)
+cli_bad_arguments: exit 2 (expected 2)
+mock_imports: exit 0 (expected 0)
+1s_16000hz_1ch: warm median 0.0989s
+1s_48000hz_2ch: warm median 0.0984s
+10s_16000hz_1ch: warm median 1.0656s
+10s_48000hz_2ch: warm median 1.0849s
+30s_16000hz_1ch: warm median 2.9261s
+30s_48000hz_2ch: warm median 2.9756s
+60s_16000hz_1ch: warm median 5.8472s
+60s_48000hz_2ch: warm median 5.9972s
+diff_check: exit 0 (expected 0)
+git_status: exit 0 (expected 0)
+git_branch: exit 0 (expected 0)
+experiment_diff: exit 0 (expected 0)
+All checks passed: True

@@ -1,0 +1,13 @@
+{
+  "command": [
+    "D:\\hy-edu-2026\\SUARA-System\\main_pipeline\\.venv\\Scripts\\python.exe",
+    "-m",
+    "suara.cli",
+    "--audio",
+    "D:\\hy-edu-2026\\SUARA-System\\main_pipeline\\.smoke\\day3\\unsupported.mp3"
+  ],
+  "exit_code": 2,
+  "expected_exit_code": 2,
+  "stdout": "",
+  "stderr": "{\n  \"code\": \"unsupported_audio\",\n  \"message\": \"Only local .wav files are supported.\",\n  \"stage\": \"preprocessing\",\n  \"schema_version\": \"1.0.0\"\n}\n"
+}

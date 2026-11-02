@@ -1,0 +1,13 @@
+{
+  "command": [
+    "git",
+    "-c",
+    "safe.directory=D:/hy-edu-2026/SUARA-System",
+    "status",
+    "--short"
+  ],
+  "exit_code": 0,
+  "expected_exit_code": 0,
+  "stdout": " M README.md\n M docs/INTEGRATION_CONTRACT.md\n M docs/TEAM_INTEGRATION_GUIDE.md\n M main_pipeline/README.md\n M main_pipeline/src/suara/pipeline.py\n?? docs/DAY3_VALIDATION_REPORT.md\n?? main_pipeline/tests/helpers.py\n?? main_pipeline/tests/test_audio.py\n?? main_pipeline/tests/test_contracts.py\n?? main_pipeline/tests/test_integration.py\n?? main_pipeline/tools/validate_day3.py\n?? main_pipeline/validation_logs/\n",
+  "stderr": ""
+}

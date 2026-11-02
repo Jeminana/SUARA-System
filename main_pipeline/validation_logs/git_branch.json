@@ -1,0 +1,13 @@
+{
+  "command": [
+    "git",
+    "-c",
+    "safe.directory=D:/hy-edu-2026/SUARA-System",
+    "branch",
+    "--show-current"
+  ],
+  "exit_code": 0,
+  "expected_exit_code": 0,
+  "stdout": "feature/main-pipeline\n",
+  "stderr": ""
+}
