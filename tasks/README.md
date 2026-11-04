@@ -15,11 +15,11 @@ The planned integration phase runs from **2026-11-04 to 2026-11-29**. All phase 
 
 Use ISO dates (`YYYY-MM-DD`) everywhere. Use **Unknown (not verified)** for historical dates that cannot be confirmed. Do not substitute the report date for a task's completion date.
 
-The foundation uses real audio preprocessing, synthetic analyzers, a fictional catalog and fixed mock rankings. Completed foundation work does not mean real AI has been integrated. All T01-T11 integration work starts as Not Started.
+The foundation uses real audio preprocessing, synthetic analyzers, a fictional catalog and fixed mock rankings. Completed foundation work does not mean real AI has been integrated. T01 completion and distribution of T02-T09, T12 and T13 were confirmed by the user in the update recorded on 2026-11-04. Distribution does not establish implementation progress; consult the board for current work status. T10 and T11 have not started. [T12](TASK_BOARD.md#t12) prepares evaluation assets for T10; [T13](TASK_BOARD.md#t13) prepares a minimal local demo interface using mocks first.
 
 ## Add a task
 
-1. Find the highest existing integration ID in the board and history, and choose the next unused ID (initially T12). Never reuse or rename an existing ID.
+1. Find the highest existing integration ID in the board and history, and choose the next unused ID (currently T14). Never reuse or rename an existing ID.
 2. Add one authoritative row to the board with the task name, clear description, why it matters, responsible role, planned start, expected deadline, status and dependency IDs.
 3. Use **Unassigned** when an owner has not been agreed. Existing E1/E3/E6 labels are proposed role assignments, not confirmed people.
 4. Add an acceptance-criteria checklist below the board using the task ID as a heading.

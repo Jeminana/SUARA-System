@@ -8,7 +8,7 @@ Phase Start Date: 2026-11-04
 
 Proposed Phase Deadline: 2026-11-29 (tentative, subject to team confirmation)
 
-Last Updated: 2026-11-04 (initial planning date, not a claim of actual update activity)
+Last Updated: 2026-11-04 (actual edit date; see [CHANGELOG.md](CHANGELOG.md))
 
 Tracker created: 2026-11-02 (actual edit date; see [CHANGELOG.md](CHANGELOG.md)).
 
@@ -38,11 +38,11 @@ All 15 foundation tasks are supported by repository evidence. These cover the th
 
 ## PHASE 1 — Real AI Module Integration
 
-All start dates and deadlines below are proposed. T02/T04/T06 share T01's start date so contract review and preparation can overlap; interface-dependent work waits for the T01 handoff.
+All start dates and deadlines below are proposed. T01's handoff is complete per the user's update recorded on 2026-11-04; its original planned dates are retained. T02-T09, T12 and T13 have been distributed to the team. Distribution alone does not confirm implementation has begun, so their work statuses remain Not Started pending progress updates. T10 and T11 have not started. Existing downstream dependencies still apply.
 
 | Task ID | Task Name | Description | Why We Need It | Responsible Member | Start Date | Expected Deadline | Status | Dependencies |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| T01 | [Distribute Integration Contract](#t01) | Share and explain the existing integration contract and team integration guide. | Shared input/output rules let modules work together without changing the main pipeline. | Main Pipeline Lead + All Team Members | 2026-11-04 | 2026-11-05 | Not Started | None |
+| T01 | [Distribute Integration Contract](#t01) | Share and explain the existing integration contract and team integration guide. | Shared input/output rules let modules work together without changing the main pipeline. | Main Pipeline Lead + All Team Members | 2026-11-04 | 2026-11-05 | Completed | None |
 | T02 | [E1 Real Pitch Analysis Adapter](#t02) | Convert the completed E1 pitch experiment into analyze_pitch(audio_data: AudioData) -> PitchFeatures. | Replaces fake pitch values with estimates measured from the user's singing. | E1 Member | 2026-11-04 | 2026-11-10 | Not Started | T01 |
 | T03 | [Integrate E1 Into Main Pipeline](#t03) | Review E1's pull request, inject its real pitch adapter through PipelineDependencies and run integration tests. | Ensures the real pitch analyzer works with preprocessing and voice profile assembly. | Main Pipeline Lead + E1 Member | 2026-11-11 | 2026-11-12 | Not Started | T02 |
 | T04 | [E6 Real Timbre Feature Adapter](#t04) | Convert the E6 MFCC/audio feature approach into analyze_timbre(audio_data: AudioData) -> TimbreFeatures. | Adds voice descriptors beyond pitch for later evaluation in song matching. | E6 Member | 2026-11-04 | 2026-11-12 | Not Started | T01 |
@@ -53,6 +53,8 @@ All start dates and deadlines below are proposed. T02/T04/T06 share T01's start 
 | T09 | [Integrate Recommendation Algorithm](#t09) | Connect the real ranking function through PipelineDependencies and test recording-to-recommendation behavior. | Enables actual feature-based recommendations in place of fictional fixed rankings. | Main Pipeline Lead + Recommendation Member | 2026-11-20 | 2026-11-22 | Not Started | T03, T05, T07, T08 |
 | T10 | [End-to-End Integration Testing](#t10) | Test real adapters, authorized recordings and the validated song catalog as a complete system. | Finds failures between modules and checks whether outputs support an initial demonstration. | Main Pipeline Lead + All Team Members | 2026-11-23 | 2026-11-26 | Not Started | T09 |
 | T11 | [Final Prototype Demonstration](#t11) | Prepare a local end-to-end SUARA demo with real analyzers and the rule-based recommender. | Demonstrates that the individual experiments form one integrated system. | Main Pipeline Lead + All Team Members | 2026-11-27 | 2026-11-29 | Not Started | T10 |
+| T12 | [Evaluation Framework & Test Preparation](#t12) | Prepare a reusable evaluation framework before real AI modules are fully integrated. | Provides consistent evaluation of pitch extraction, voice features, recommendation behavior and processing performance. | Member 5 (Evaluation & Testing) | 2026-11-04 | 2026-11-20 | Not Started | T01; integration contract and existing pipeline schemas (F03, F05) |
+| T13 | [Minimal SUARA Demo Interface](#t13) | Develop a simple local interface using the mock pipeline first, with support for later real integration. | Lets users, teammates and professors demonstrate the workflow without terminal commands or raw JSON. | Member 6 (Demo Interface Development) | 2026-11-04 | 2026-11-22 | Not Started | Main pipeline foundation (completed); T01 |
 
 ## Acceptance criteria
 
@@ -62,10 +64,12 @@ Check off individual deliverables here as evidence becomes available. Read curre
 
 **Distribute Integration Contract**
 
-- [ ] All teammates receive the [integration contract](../docs/INTEGRATION_CONTRACT.md) and [team guide](../docs/TEAM_INTEGRATION_GUIDE.md).
+- [x] All teammates receive the [integration contract](../docs/INTEGRATION_CONTRACT.md) and [team guide](../docs/TEAM_INTEGRATION_GUIDE.md).
 - [ ] Each member confirms their module's inputs and outputs.
 - [ ] Every task has a confirmed owner; replace Unassigned names in TEAM_ASSIGNMENTS.md.
 - [ ] Agree feature branches and PR targets before merging integration work.
+
+**Completion evidence:** User confirmed T01 complete and T02-T09, T12 and T13 distributed; recorded on 2026-11-04. See the [completion record](COMPLETED_TASKS.md#t01). The exact completion date was not provided. Remaining checklist details (individual interface confirmations, recorded owner names and branch/PR agreement) were not separately supplied; unchecked items indicate missing recorded detail, not a reversal of the user's completion confirmation. Existing role assignments are retained.
 
 ### T02
 
@@ -161,24 +165,114 @@ Check off individual deliverables here as evidence becomes available. Read curre
 - [ ] Present known limitations and a summary of evaluation results.
 - [ ] Demonstrate through a CLI or documented local Python runner using actual adapters; a full GUI requires separate approval.
 
+### T12
+
+**Evaluation Framework & Test Preparation**
+
+**Priority:** High
+
+**Description:** Prepare a reusable evaluation framework before the real AI modules are fully integrated.
+
+**Why:** Consistent methods are needed to evaluate pitch extraction, voice features, recommendation behavior and processing performance, and determine whether integrated outputs are correct and meaningful.
+
+**Required work:**
+
+1. Review the [integration contract](../docs/INTEGRATION_CONTRACT.md), [pipeline architecture](../docs/ARCHITECTURE.md) and [existing schemas](../main_pipeline/src/suara/contracts.py).
+2. Define evaluation metrics for pitch accuracy, runtime and recommendation ranking.
+3. Prepare synthetic WAV recordings with known reference frequencies.
+4. Prepare different synthetic VoiceProfile examples for recommendation testing.
+5. Prepare SongFeatures examples with known melody ranges.
+6. Create reusable test scripts for module outputs and edge cases.
+7. Define a naive recommendation baseline for later comparison.
+8. Prepare tests for invalid recordings, silence and missing pitch information.
+9. Document the evaluation methodology.
+10. Ensure evaluation data and scripts can be reused during [T10](#t10).
+
+**Expected deliverables:**
+
+- Evaluation methodology document and defined evaluation metrics.
+- Reusable test scripts.
+- Synthetic test recordings or reproducible generation scripts.
+- Sample VoiceProfile and SongFeatures fixtures.
+- Baseline comparison procedure.
+
+**Acceptance criteria:**
+
+- [ ] All evaluation metrics are clearly explained.
+- [ ] Synthetic reference data can be generated reproducibly.
+- [ ] Test scripts run independently of the final integrated AI modules.
+- [ ] No private participant recordings are committed.
+- [ ] Evaluation procedures are documented.
+- [ ] The framework can be used in T10.
+
+**Relationship to T10:** T12 prepares the tests; T10 runs them on the integrated system and analyzes actual results. Hand off the framework before T10's planned 2026-11-23 start without changing T10's existing dependency row.
+
+### T13
+
+**Minimal SUARA Demo Interface**
+
+**Priority:** Medium
+
+**Description:** Develop a simple local interface demonstrating the SUARA workflow, initially connected to the existing mock pipeline and compatible with later real integration. This is a prototype interface, not a production music streaming application.
+
+**Why:** The current pipeline uses Python commands and JSON outputs. A local interface lets users, teammates and professors demonstrate the product without directly using a terminal.
+
+**Required work:**
+
+1. Review the [pipeline architecture](../docs/ARCHITECTURE.md) and [PipelineResult contract](../docs/INTEGRATION_CONTRACT.md).
+2. Select a lightweight interface approach, preferably Streamlit for the first prototype.
+3. Create an audio upload interface supporting WAV files.
+4. Connect to the existing pipeline without duplicating its logic.
+5. Display analyzed pitch information.
+6. Display available timbre features.
+7. Display ranked song recommendations.
+8. Show song titles, artists, scores and explanations.
+9. Clearly label all mock results as synthetic.
+10. Display understandable error messages for invalid audio.
+11. Keep the interface compatible with future real module integration.
+12. Document installation and execution instructions.
+
+**Expected deliverables:**
+
+- Minimal working local interface with WAV upload functionality.
+- VoiceProfile display and recommendation results display.
+- Error handling.
+- Instructions for running the demo.
+
+**Acceptance criteria:**
+
+- [ ] The interface starts locally.
+- [ ] Users can upload a supported WAV recording.
+- [ ] The interface can call the existing main pipeline.
+- [ ] Voice profile information is displayed correctly.
+- [ ] Recommendation results are displayed correctly.
+- [ ] Mock results are clearly identified as synthetic.
+- [ ] Invalid files produce understandable error messages.
+- [ ] No core pipeline contract changes are made without team approval.
+
+**Later integration:** [T03](#t03), [T05](#t05), [T07](#t07) and [T09](#t09). Initial mock-interface work does not wait for these tasks. T13 covers the minimal local interface; T11 retains its existing real-pipeline demonstration criteria.
+
 ## Proposed milestones and schedule risks
 
 | Window | Planned work |
 | --- | --- |
 | 2026-11-04 to 2026-11-05 | Contract handoff, confirmed owners and branch/PR agreement (T01) |
 | 2026-11-04 to 2026-11-14 | E1, E6 and E3 adapter/catalog work (T02, T04, T06), after required handoff |
+| 2026-11-04 to 2026-11-20 | Evaluation framework and reusable test preparation ([T12](#t12), Member 5; High priority) |
+| 2026-11-04 to 2026-11-22 | Minimal local demo interface, initially using mocks ([T13](#t13), Member 6; Medium priority) |
 | 2026-11-11 to 2026-11-19 | Module/catalog integration and baseline ranking (T03, T05, T07, T08) |
 | 2026-11-20 to 2026-11-22 | Complete real dependency wiring and local entry point (T09) |
 | 2026-11-23 to 2026-11-26 | Real end-to-end testing and evaluation (T10) |
 | 2026-11-27 to 2026-11-29 | Local prototype demonstration (T11) |
 
 - **Converging dependencies:** T09 waits for T03, T05, T07 and T08; T10 then waits for T09 and T11 for T10. T08 finishes last in the proposed predecessor schedule, with no full spare day before T09.
-- **Contract timing:** T02/T04/T06 start on 2026-11-04 while T01 runs through 2026-11-05. Use the overlap for review/preparation; do not bypass contract agreement. Update dates if this leaves too little implementation time.
+- **Contract handoff:** T01 is complete per user confirmation recorded on 2026-11-04. Its original planned 2026-11-05 deadline is retained; the handoff no longer blocks successor preparation.
+- **T12/T13 preparation:** Both tasks have been distributed and their T01 handoff dependency is satisfied. Implementation progress is not yet reported. T12 prepares evaluation assets before T10, while T13 labels initial mock outputs as synthetic and waits for T03/T05/T07/T09 before demonstrating real results.
 - **T08 evaluation:** Ranking code may use compatible sample records from 2026-11-11, but evaluated integration waits for T06's catalog, due 2026-11-14.
 - **E6 representation:** Existing development-scaled, c0-excluded pooled features cannot be relabeled as the agreed 20 unscaled c0..c19 means. T04 needs re-extraction or an approved versioned migration.
 - **E3 readiness:** The repository describes interim results and pending review. T06 must preserve verification/provenance, secure authorized data, and export compatible records without importing the full experiment stack.
 - **Demo entry point:** The current CLI rejects real mode. T09 must provide explicit real dependency/catalog wiring through the CLI or a documented local Python runner before T11.
-- **Owners and data:** All real names are Unassigned; the recommendation role is explicitly pending. Confirm availability, authorized recordings, dataset access and model/runtime compatibility during T01.
+- **Owners and data:** The user confirms task distribution, but actual member names and any revised role mappings were not supplied. Existing assignments, including Member 5 for T12 and Member 6 for T13, are retained. Record confirmed names when available; authorized recordings, dataset access and model/runtime compatibility still need recorded evidence.
 - **Evaluation and latency:** Prior measurements concern mocks only. Agree real-runtime budgets and a naive comparison before T10; feature validity does not prove recommendation usefulness.
 - **Deadline:** 2026-11-29 remains tentative. Later gates have no full spare day between them; escalate predecessor delays promptly and record any revised dates.
 
