@@ -1,0 +1,218 @@
+[
+  {
+    "fixture_id": "low_voice",
+    "pitch": {
+      "min_pitch_hz": 110.0,
+      "max_pitch_hz": 330.0,
+      "median_pitch_hz": 190.5255888325765,
+      "voiced_ratio": 0.75,
+      "confidence": null,
+      "mode": "mock",
+      "model_version": "t12-synthetic-pitch-v1",
+      "warnings": [
+        "Synthetic fixture; not estimated from a voice recording."
+      ],
+      "schema_version": "1.0.0"
+    },
+    "timbre": {
+      "mfcc_mean": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "spectral_centroid_mean_hz": 1000.0,
+      "mode": "mock",
+      "model_version": "t12-synthetic-timbre-v1",
+      "processing_version": "t12-synthetic-mfcc-v1",
+      "warnings": [
+        "Synthetic MFCC fixture; not measured from an actual voice."
+      ],
+      "schema_version": "1.0.0"
+    },
+    "analysis_mode": "mock",
+    "status": "warning",
+    "warnings": [
+      "Synthetic features; not an observed vocal profile."
+    ],
+    "schema_version": "1.0.0"
+  },
+  {
+    "fixture_id": "mid_voice",
+    "pitch": {
+      "min_pitch_hz": 196.0,
+      "max_pitch_hz": 523.25,
+      "median_pitch_hz": 320.2452185435405,
+      "voiced_ratio": 0.75,
+      "confidence": null,
+      "mode": "mock",
+      "model_version": "t12-synthetic-pitch-v1",
+      "warnings": [
+        "Synthetic fixture; not estimated from a voice recording."
+      ],
+      "schema_version": "1.0.0"
+    },
+    "timbre": {
+      "mfcc_mean": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "spectral_centroid_mean_hz": 1000.0,
+      "mode": "mock",
+      "model_version": "t12-synthetic-timbre-v1",
+      "processing_version": "t12-synthetic-mfcc-v1",
+      "warnings": [
+        "Synthetic MFCC fixture; not measured from an actual voice."
+      ],
+      "schema_version": "1.0.0"
+    },
+    "analysis_mode": "mock",
+    "status": "warning",
+    "warnings": [
+      "Synthetic features; not an observed vocal profile."
+    ],
+    "schema_version": "1.0.0"
+  },
+  {
+    "fixture_id": "high_voice",
+    "pitch": {
+      "min_pitch_hz": 261.63,
+      "max_pitch_hz": 783.99,
+      "median_pitch_hz": 452.8965706427903,
+      "voiced_ratio": 0.75,
+      "confidence": null,
+      "mode": "mock",
+      "model_version": "t12-synthetic-pitch-v1",
+      "warnings": [
+        "Synthetic fixture; not estimated from a voice recording."
+      ],
+      "schema_version": "1.0.0"
+    },
+    "timbre": {
+      "mfcc_mean": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "spectral_centroid_mean_hz": 1000.0,
+      "mode": "mock",
+      "model_version": "t12-synthetic-timbre-v1",
+      "processing_version": "t12-synthetic-mfcc-v1",
+      "warnings": [
+        "Synthetic MFCC fixture; not measured from an actual voice."
+      ],
+      "schema_version": "1.0.0"
+    },
+    "analysis_mode": "mock",
+    "status": "warning",
+    "warnings": [
+      "Synthetic features; not an observed vocal profile."
+    ],
+    "schema_version": "1.0.0"
+  },
+  {
+    "fixture_id": "unvoiced",
+    "pitch": {
+      "min_pitch_hz": null,
+      "max_pitch_hz": null,
+      "median_pitch_hz": null,
+      "voiced_ratio": 0.0,
+      "confidence": null,
+      "mode": "mock",
+      "model_version": "t12-synthetic-pitch-v1",
+      "warnings": [
+        "Synthetic fixture; not estimated from a voice recording."
+      ],
+      "schema_version": "1.0.0"
+    },
+    "timbre": {
+      "mfcc_mean": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "spectral_centroid_mean_hz": 1000.0,
+      "mode": "mock",
+      "model_version": "t12-synthetic-timbre-v1",
+      "processing_version": "t12-synthetic-mfcc-v1",
+      "warnings": [
+        "Synthetic MFCC fixture; not measured from an actual voice."
+      ],
+      "schema_version": "1.0.0"
+    },
+    "analysis_mode": "mock",
+    "status": "no_voiced_pitch",
+    "warnings": [
+      "Synthetic features; not an observed vocal profile."
+    ],
+    "schema_version": "1.0.0"
+  }
+]

@@ -1,0 +1,46 @@
+[
+  {
+    "song_id": "synthetic_low",
+    "title": "Synthetic Low (fictional)",
+    "artist": "Fictional Test Artist",
+    "melody_min_pitch_hz": 110.0,
+    "melody_max_pitch_hz": 220.0,
+    "feature_version": "t12-synthetic-catalog-v1",
+    "provenance": "mock",
+    "source_description": "Synthetic demonstration melody range; no real music or verified melody.",
+    "schema_version": "1.0.0"
+  },
+  {
+    "song_id": "synthetic_mid",
+    "title": "Synthetic Mid (fictional)",
+    "artist": "Fictional Test Artist",
+    "melody_min_pitch_hz": 196.0,
+    "melody_max_pitch_hz": 392.0,
+    "feature_version": "t12-synthetic-catalog-v1",
+    "provenance": "mock",
+    "source_description": "Synthetic demonstration melody range; no real music or verified melody.",
+    "schema_version": "1.0.0"
+  },
+  {
+    "song_id": "synthetic_high",
+    "title": "Synthetic High (fictional)",
+    "artist": "Fictional Test Artist",
+    "melody_min_pitch_hz": 440.0,
+    "melody_max_pitch_hz": 880.0,
+    "feature_version": "t12-synthetic-catalog-v1",
+    "provenance": "mock",
+    "source_description": "Synthetic demonstration melody range; no real music or verified melody.",
+    "schema_version": "1.0.0"
+  },
+  {
+    "song_id": "synthetic_unknown",
+    "title": "Synthetic Unknown (fictional)",
+    "artist": "Fictional Test Artist",
+    "melody_min_pitch_hz": null,
+    "melody_max_pitch_hz": null,
+    "feature_version": "t12-synthetic-catalog-v1",
+    "provenance": "mock",
+    "source_description": "Synthetic demonstration melody range; no real music or verified melody.",
+    "schema_version": "1.0.0"
+  }
+]
