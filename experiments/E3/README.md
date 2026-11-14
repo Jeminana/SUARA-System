@@ -117,6 +117,17 @@ The lead-line rules (`lead_line`) drop short notes, keep the loudest note where 
 
 `catalog` writes `catalog/song_profiles.csv` (the handoff fields above plus `profile_version`), `melody_notes.csv`, `pitch_histogram.csv` (duration-weighted, one bin per semitone) and `song_profile_details.csv` (note names and interval statistics). Profiles come from the verified MIDI lead track, or from `verified_notes_path` when the catalog points at a reviewer-corrected transcription. Songs without a `verified_by` reviewer are flagged `unverified`.
 
+## Main app catalog export (T06)
+
+```bash
+python run_e3.py catalog --run-name t06
+python tools/export_song_features.py outputs/t06_catalog --data data   # writes handoff/song_features.json
+```
+
+`handoff/song_features.json` is the song catalog for the main SUARA app: one `SongFeatures` record per song, as defined in [docs/INTEGRATION_CONTRACT.md](../../docs/INTEGRATION_CONTRACT.md) (schema 1.0.0). The app runs on Python 3.12 and loads this file without importing E3. Each record holds the melody's reliable lowest and highest notes from the catalog run, converted once from MIDI to Hz (A4 = 440 Hz). Song IDs are `E3-S01`… so they cannot clash with other catalogs. `provenance` is `verified_melody` only when `verified_by` names who checked the melody and both endpoints exist; otherwise it is `unverified`. `source_description` gives the source type, excerpt boundaries and how many people verified the melody, but no names or file paths, because the repository is public.
+
+The five pilot records take their ranges from the written melodies (MIDI scores) that two team members approved. They do not come from the singer recordings, whose reviewer re-check is still pending. Each range describes the excerpt, not a whole song, and it is the melody's range, not a singer's comfortable range. `tests/test_e3.py` checks the committed file against the app's own `SongFeatures` class when `main_pipeline/` is present.
+
 ## Pilot data preparation
 
 ```bash

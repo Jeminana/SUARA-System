@@ -196,5 +196,72 @@ class ProfileTests(unittest.TestCase):
         self.assertTrue(row["quality_flag"].startswith("excerpt"))
 
 
+class SongFeaturesExportTests(unittest.TestCase):
+    SONG = {"song_id": "S01", "title": "Narrow range", "source_type": "ai_drafted_team_approved",
+            "creator": "Drafted by a tool; approved by Alice and Bob"}
+
+    def profile(self, **changes):
+        row = {"song_id": "S01", "excerpt_start_s": 2.5, "excerpt_end_s": 32.48, "low_midi": 57.0,
+               "high_midi": 69.0, "method": "midi_reference", "verified_by": "Alice; Bob",
+               "quality_flag": "excerpt", "profile_version": "v1-verified"}
+        return {**row, **changes}
+
+    def test_midi_to_hz(self):
+        ex = load_tool("export_song_features")
+        self.assertEqual(ex.midi_to_hz(69), 440.0)
+        self.assertEqual(ex.midi_to_hz(57), 220.0)
+        self.assertAlmostEqual(ex.midi_to_hz(60), 261.6256)
+
+    def test_verified_record_has_contract_fields_and_no_names(self):
+        ex = load_tool("export_song_features")
+        r = ex.song_record(self.profile(), self.SONG, "v")
+        ex.check_records([r])
+        self.assertEqual(list(r), ex.FIELDS)
+        self.assertEqual((r["song_id"], r["provenance"]), ("E3-S01", "verified_melody"))
+        self.assertEqual((r["melody_min_pitch_hz"], r["melody_max_pitch_hz"]), (220.0, 440.0))
+        text = " ".join(str(v) for v in r.values())
+        self.assertNotIn("Alice", text)
+        self.assertNotIn("Bob", text)
+        self.assertIn("2.50-32.48 s", r["source_description"])
+
+    def test_unverified_or_missing_range_is_never_verified(self):
+        ex = load_tool("export_song_features")
+        r = ex.song_record(self.profile(verified_by="unverified"), self.SONG, "v")
+        self.assertEqual(r["provenance"], "unverified")
+        self.assertEqual(r["melody_min_pitch_hz"], 220.0)  # the range is kept, only the label changes
+        r = ex.song_record(self.profile(low_midi="", high_midi=""), self.SONG, "v")
+        self.assertEqual((r["melody_min_pitch_hz"], r["melody_max_pitch_hz"], r["provenance"]),
+                         (None, None, "unverified"))
+        ex.check_records([r])
+
+    def test_invalid_records_are_rejected(self):
+        ex = load_tool("export_song_features")
+        r = ex.song_record(self.profile(), self.SONG, "v")
+        with self.assertRaises(SystemExit):
+            ex.check_records([r, r])  # duplicate song_id
+        with self.assertRaises(SystemExit):
+            ex.check_records([{**r, "melody_max_pitch_hz": None}])
+        with self.assertRaises(SystemExit):
+            ex.check_records([{**r, "melody_min_pitch_hz": 500.0}])  # min above max
+
+    def test_committed_export_builds_app_song_features(self):
+        """The app's contracts.py needs only the standard library, so it loads here without E3 changes."""
+        import importlib.util
+        import json
+        root = Path(__file__).resolve().parents[3]
+        contracts = root / "main_pipeline" / "src" / "suara" / "contracts.py"
+        export = Path(__file__).resolve().parents[1] / "handoff" / "song_features.json"
+        if not contracts.is_file():
+            self.skipTest("main_pipeline is not in this checkout")
+        spec = importlib.util.spec_from_file_location("suara_contracts", contracts)
+        module = importlib.util.module_from_spec(spec)
+        sys.modules["suara_contracts"] = module
+        spec.loader.exec_module(module)
+        rows = json.loads(export.read_text(encoding="utf-8"))
+        songs = [module.SongFeatures(**r) for r in rows]
+        self.assertEqual([s.to_dict() for s in songs], rows)
+        self.assertEqual(len({s.song_id for s in songs}), len(songs))
+
+
 if __name__ == "__main__":
     unittest.main()

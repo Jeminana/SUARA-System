@@ -1,0 +1,57 @@
+[
+  {
+    "song_id": "E3-S01",
+    "title": "Pilot song 1: Narrow range",
+    "artist": "SUARA team (AI-drafted pilot song)",
+    "melody_min_pitch_hz": 146.8324,
+    "melody_max_pitch_hz": 220.0,
+    "feature_version": "e3-melody-range-v1/v1-verified",
+    "provenance": "verified_melody",
+    "source_description": "AI-drafted, team-owned pilot melody made for the SUARA capstone; range from the written lead-vocal melody (MIDI score) over the excerpt 2.50-32.48 s, not from a full-mix spectrum or a singer recording; MIDI 50-57 converted to Hz with A4 = 440 Hz; melody approved by 2 team members; describes this excerpt only, not the full song.",
+    "schema_version": "1.0.0"
+  },
+  {
+    "song_id": "E3-S02",
+    "title": "Pilot song 2: Wide range",
+    "artist": "SUARA team (AI-drafted pilot song)",
+    "melody_min_pitch_hz": 110.0,
+    "melody_max_pitch_hz": 293.6648,
+    "feature_version": "e3-melody-range-v1/v1-verified",
+    "provenance": "verified_melody",
+    "source_description": "AI-drafted, team-owned pilot melody made for the SUARA capstone; range from the written lead-vocal melody (MIDI score) over the excerpt 2.61-33.89 s, not from a full-mix spectrum or a singer recording; MIDI 45-62 converted to Hz with A4 = 440 Hz; melody approved by 2 team members; describes this excerpt only, not the full song.",
+    "schema_version": "1.0.0"
+  },
+  {
+    "song_id": "E3-S03",
+    "title": "Pilot song 3: Sustained high notes",
+    "artist": "SUARA team (AI-drafted pilot song)",
+    "melody_min_pitch_hz": 164.8138,
+    "melody_max_pitch_hz": 329.6276,
+    "feature_version": "e3-melody-range-v1/v1-verified",
+    "provenance": "verified_melody",
+    "source_description": "AI-drafted, team-owned pilot melody made for the SUARA capstone; range from the written lead-vocal melody (MIDI score) over the excerpt 3.33-29.98 s, not from a full-mix spectrum or a singer recording; MIDI 52-64 converted to Hz with A4 = 440 Hz; melody approved by 2 team members; describes this excerpt only, not the full song.",
+    "schema_version": "1.0.0"
+  },
+  {
+    "song_id": "E3-S04",
+    "title": "Pilot song 4: Large jumps",
+    "artist": "SUARA team (AI-drafted pilot song)",
+    "melody_min_pitch_hz": 110.0,
+    "melody_max_pitch_hz": 293.6648,
+    "feature_version": "e3-melody-range-v1/v1-verified",
+    "provenance": "verified_melody",
+    "source_description": "AI-drafted, team-owned pilot melody made for the SUARA capstone; range from the written lead-vocal melody (MIDI score) over the excerpt 2.73-35.44 s, not from a full-mix spectrum or a singer recording; MIDI 45-62 converted to Hz with A4 = 440 Hz; melody approved by 2 team members; describes this excerpt only, not the full song.",
+    "schema_version": "1.0.0"
+  },
+  {
+    "song_id": "E3-S05",
+    "title": "Pilot song 5: Fast notes",
+    "artist": "SUARA team (AI-drafted pilot song)",
+    "melody_min_pitch_hz": 110.0,
+    "melody_max_pitch_hz": 220.0,
+    "feature_version": "e3-melody-range-v1/v1-verified",
+    "provenance": "verified_melody",
+    "source_description": "AI-drafted, team-owned pilot melody made for the SUARA capstone; range from the written lead-vocal melody (MIDI score) over the excerpt 2.40-31.18 s, not from a full-mix spectrum or a singer recording; MIDI 45-57 converted to Hz with A4 = 440 Hz; melody approved by 2 team members; describes this excerpt only, not the full song.",
+    "schema_version": "1.0.0"
+  }
+]
