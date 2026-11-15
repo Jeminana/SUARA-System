@@ -7,6 +7,11 @@ to make them resemble application modules.
 
 ## Module handoff
 
+T04/T05 now provide the application timbre adapter as
+`suara.timbre.analyze_timbre`. See [parameters and validation evidence](T04_T05_TIMBRE_VALIDATION.md)
+and use `--timbre real` for a mixed-mode CLI run. The E6 migration table below
+still explains why the locked experiment's vectors cannot be reused.
+
 | Owner | Input | Output | Required work |
 | --- | --- | --- | --- |
 | Pitch teammate | `AudioData` | `PitchFeatures` | Adapt E1 research into a reusable analyzer; record detector/version, frame grid, search limits, voicing threshold, confidence semantics and range aggregation |

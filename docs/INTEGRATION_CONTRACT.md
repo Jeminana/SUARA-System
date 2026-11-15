@@ -135,7 +135,8 @@ Short clips estimate observed range only, never total capability or tessitura.
 | warnings | `list[str]` | Empty allowed; synthetic disclosure for mocks |
 | schema_version | `str` | 1.0.0 |
 
-Proposed `mfcc-20-v1` real extraction convention (not implemented or evaluated):
+`mfcc-20-v1` real extraction convention (implemented by `suara.timbre`;
+see [T04/T05 validation](T04_T05_TIMBRE_VALIDATION.md), without a suitability claim):
 16 kHz mono; 512-point periodic Hann STFT, hop 160 samples, center=false, no
 pre-emphasis; 40 Slaney-normalized mel filters, Slaney frequency scale, 0–8000 Hz;
 power spectrum; `10*log10(max(power,1e-10))`, reference 1.0, no top-dB truncation;

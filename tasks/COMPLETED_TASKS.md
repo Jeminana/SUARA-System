@@ -8,7 +8,10 @@ Repository inspection supports all 15 foundation deliverables below. They belong
 
 The [Day 3 validation report](../docs/DAY3_VALIDATION_REPORT.md) is dated 2026-11-02 and provides later evidence than the older Day 1/2 snapshots in [MVP_SCOPE.md](../docs/MVP_SCOPE.md). It records 62 passing tests and mock-runtime measurements, with supporting logs. Those are existing results, not tests newly run during tracker creation, and the report date is not an actual completion date for each task.
 
-Real pitch/timbre analyzers, an E3 application catalog and evaluated feature-based rankings are upcoming work. T01 now has a user-confirmed completion record below; no other integration task is recorded as completed.
+The foundation evidence above describes the historical mock runtime. Later records
+below cover T01, local T04/T05 and merged T06/T07/T12. Real pitch integration and
+evaluated feature-based production rankings remain pending. Merge dates identify
+repository delivery; they do not establish the author's original completion date.
 
 ## F01
 
@@ -351,6 +354,86 @@ Real pitch/timbre analyzers, an E3 application catalog and evaluated feature-bas
 **Evidence:** User explicitly confirmed T01 complete and task distribution in the tracker update recorded on 2026-11-04. Supporting materials: [integration contract](../docs/INTEGRATION_CONTRACT.md) and [team guide](../docs/TEAM_INTEGRATION_GUIDE.md).
 
 **Notes and limitations:** The recorded update date is not an inferred completion date. Actual member names, individual interface confirmations and branch/PR agreement details were not supplied. Existing assignments and planned dates are preserved. Distribution does not establish implementation progress for T02-T09, T12 or T13; T10 and T11 have not started. No runtime tests or real-module integration are claimed.
+
+## T04
+
+**Task name:** E6 Real Timbre Feature Adapter
+
+**Responsible member:** E6 Member (actual name unconfirmed); implemented by Codex at the user's request.
+
+**Original expected deadline:** 2026-11-12
+
+**Actual completion date:** 2026-11-15
+
+**Deliverables:** Fresh 20-coefficient c0..c19 MFCC mean extraction and magnitude spectral centroid from AudioData; explicit mfcc-20-v1 processing and NumPy/SciPy model versions; preserved locked E6 baseline and separate ECAPA representation.
+
+**Evidence:** [Adapter](../main_pipeline/src/suara/timbre.py), [tests](../main_pipeline/tests/test_timbre.py), [parameters, commands and results](../docs/T04_T05_TIMBRE_VALIDATION.md): 78 pipeline tests passed, including 9 new timbre tests; all 42 authorized E6 source recordings passed standalone and integrated checks.
+
+**Notes and limitations:** No model checkpoint or new dependencies; no schema change. Recording authorization was confirmed by the user in this session. Private audio and per-recording features remain outside Git. Feature correctness does not establish perceptual similarity or song suitability. Changes are local on feature/t04-t05-real-timbre; no push or merge performed.
+
+## T05
+
+**Task name:** Integrate E6 Timbre Adapter
+
+**Responsible member:** Main Pipeline Lead + E6 Member (actual names unconfirmed); implemented by Codex at the user's request.
+
+**Original expected deadline:** 2026-11-15
+
+**Actual completion date:** 2026-11-15
+
+**Deliverables:** PipelineDependencies injection and CLI --timbre real selection; tests for actual preprocessing, profile assembly, matching standalone/integrated features and versions, mixed-mode provenance and safe failures; documented Python API use for future complete real dependencies.
+
+**Evidence:** [CLI wiring](../main_pipeline/src/suara/cli.py), [integration tests](../main_pipeline/tests/test_timbre.py), [local recording validator](../main_pipeline/tools/validate_timbre_recordings.py), [validation evidence](../docs/T04_T05_TIMBRE_VALIDATION.md): 78 tests and all 42 authorized recordings passed.
+
+**Notes and limitations:** Default mock behavior is preserved. Timbre is measured, but CLI pitch/ranking and overall result remain mock. The unvoiced assembly test uses a clearly named test-only pitch stub. Fully real pitch/recommendation integration and demonstration remain T03/T09/T10/T11 work; no success is claimed for those tasks. No commit, push or merge performed.
+
+## T06
+
+**Task name:** E3 Song Analysis and Catalog Export
+
+**Responsible member:** E3 Member (existing role retained; actual name unconfirmed).
+
+**Original expected deadline:** 2026-11-14
+
+**Actual completion date:** Unknown (not verified). PR #7 merged on 2026-11-14; deliverables reviewed on 2026-11-15.
+
+**Deliverables:** Exporter and five SongFeatures records for AI-drafted, team-owned pilot melodies; written lead-vocal MIDI ranges converted to Hz, exact schema fields, feature versions, excerpt boundaries and verification provenance.
+
+**Evidence:** [PR #7](https://github.com/Jeminana/SUARA-System/pull/7) (`dd9c04b`, implementation `6018229`), [exporter](../experiments/E3/tools/export_song_features.py), [catalog](../experiments/E3/handoff/song_features.json), [E3 export tests](../experiments/E3/tests/test_e3.py) and [application tests](../main_pipeline/tests/test_catalog.py). On 2026-11-15, the exporter validated all five records and conversions MIDI 69 -> 440 Hz and 57 -> 220 Hz; all 7 application catalog tests passed in Python 3.12.
+
+**Notes and limitations:** Ranges describe written-melody excerpts, not full-mix spectra or a singer's comfortable range. E3's real-singer annotation re-check remains pending. Full E3 experiment/model tests were not rerun for this documentation review. No original completion date or actual owner name was inferred from Git metadata.
+
+## T07
+
+**Task name:** Integrate Song Catalog
+
+**Responsible member:** Main Pipeline Lead + E3 Member (existing roles retained; actual names unconfirmed).
+
+**Original expected deadline:** 2026-11-17
+
+**Actual completion date:** Unknown (not verified). PR #8 merged on 2026-11-15; deliverables reviewed the same day.
+
+**Deliverables:** Standard-library JSON catalog loader, strict SongFeatures validation, unique IDs and required fields, safe errors, CLI --catalog option and pipeline integration.
+
+**Evidence:** [PR #8](https://github.com/Jeminana/SUARA-System/pull/8) (`7d805ed`, implementation `40174b4`), [loader](../main_pipeline/src/suara/catalog.py), [CLI](../main_pipeline/src/suara/cli.py), [7 passing catalog tests](../main_pipeline/tests/test_catalog.py), [usage](../main_pipeline/README.md#song-catalog-file). Verified on 2026-11-15 with `main_pipeline/.venv/Scripts/python.exe -m unittest discover -s main_pipeline/tests -p test_catalog.py -v` and PYTHONPATH set to main_pipeline/src.
+
+**Notes and limitations:** No E3 model stack is imported into the Python 3.12 application. The loader validates numeric range structure; MIDI-to-Hz conversion and source interpretation are upstream responsibilities. Real-mode wiring tests use test-only adapters and do not prove real recommendation behavior. The production CLI ranker remains mock.
+
+## T12
+
+**Task name:** Evaluation Framework & Test Preparation
+
+**Responsible member:** Member 5 (Evaluation & Testing; existing identifier retained).
+
+**Original expected deadline:** 2026-11-20
+
+**Actual completion date:** Unknown (not verified). PR #6 merged on 2026-11-10; deliverables reviewed on 2026-11-15.
+
+**Deliverables:** Reproducible synthetic WAV generator, mock VoiceProfile/SongFeatures fixtures, pure metric helpers, nullable range-coverage baseline, contract validation tests, sample runner and T10 methodology.
+
+**Evidence:** [PR #6](https://github.com/Jeminana/SUARA-System/pull/6) (`5948e41`, implementation `e64d996`), [evaluation package](../evaluation/README.md), [methodology](../evaluation/docs/EVALUATION_METHODOLOGY.md), [tests](../evaluation/tests/) and [contract bridge](../evaluation/scripts/contracts_bridge.py). All 23 tests passed against the live schema 1.0.0 in Python 3.12 on 2026-11-15. The generator produced six WAVs plus a manifest with identical SHA-256 hashes on rerun; the sample runner completed successfully. Commands are in the evaluation README.
+
+**Notes and limitations:** Two initial sandbox test errors were caused by an unwritable system temporary directory; setting TEMP/TMP to the ignored workspace .smoke directory resolved them without source changes. The bridge uses the live repository contracts by default or SUARA_REPO_ROOT override; no reference snapshot is shipped. T12 prepares evaluation; T10 still must collect actual frame-level predictions, run real modules and measure real quality/latency. Synthetic metrics and the naive baseline do not complete T08 or T10. No private participant recordings are tracked in evaluation/.
 
 ## Future completion record template
 

@@ -8,7 +8,7 @@ Phase Start Date: 2026-11-04
 
 Proposed Phase Deadline: 2026-11-29 (tentative, subject to team confirmation)
 
-Last Updated: 2026-11-04 (actual edit date; see [CHANGELOG.md](CHANGELOG.md))
+Last Updated: 2026-11-15 (actual edit date; see [CHANGELOG.md](CHANGELOG.md))
 
 Tracker created: 2026-11-02 (actual edit date; see [CHANGELOG.md](CHANGELOG.md)).
 
@@ -38,22 +38,22 @@ All 15 foundation tasks are supported by repository evidence. These cover the th
 
 ## PHASE 1 — Real AI Module Integration
 
-All start dates and deadlines below are proposed. T01's handoff is complete per the user's update recorded on 2026-11-04; its original planned dates are retained. T02-T09, T12 and T13 have been distributed to the team. Distribution alone does not confirm implementation has begun, so their work statuses remain Not Started pending progress updates. T10 and T11 have not started. Existing downstream dependencies still apply.
+All start dates and deadlines below are proposed. T01's handoff is complete per the user's update recorded on 2026-11-04; its original planned dates are retained. T04/T05 were implemented and validated on 2026-11-15 and are prepared for PR review on feature/t04-t05-real-timbre, pending merge. A repository review on 2026-11-15 also verified merged T06 (PR #7), T07 (PR #8) and T12 (PR #6); evidence and limitations are recorded below. Other task statuses retain their previously recorded values; distribution alone does not establish progress. T10 and T11 have not started. Existing downstream dependencies still apply.
 
 | Task ID | Task Name | Description | Why We Need It | Responsible Member | Start Date | Expected Deadline | Status | Dependencies |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | T01 | [Distribute Integration Contract](#t01) | Share and explain the existing integration contract and team integration guide. | Shared input/output rules let modules work together without changing the main pipeline. | Main Pipeline Lead + All Team Members | 2026-11-04 | 2026-11-05 | Completed | None |
 | T02 | [E1 Real Pitch Analysis Adapter](#t02) | Convert the completed E1 pitch experiment into analyze_pitch(audio_data: AudioData) -> PitchFeatures. | Replaces fake pitch values with estimates measured from the user's singing. | E1 Member | 2026-11-04 | 2026-11-10 | Not Started | T01 |
 | T03 | [Integrate E1 Into Main Pipeline](#t03) | Review E1's pull request, inject its real pitch adapter through PipelineDependencies and run integration tests. | Ensures the real pitch analyzer works with preprocessing and voice profile assembly. | Main Pipeline Lead + E1 Member | 2026-11-11 | 2026-11-12 | Not Started | T02 |
-| T04 | [E6 Real Timbre Feature Adapter](#t04) | Convert the E6 MFCC/audio feature approach into analyze_timbre(audio_data: AudioData) -> TimbreFeatures. | Adds voice descriptors beyond pitch for later evaluation in song matching. | E6 Member | 2026-11-04 | 2026-11-12 | Not Started | T01 |
-| T05 | [Integrate E6 Timbre Adapter](#t05) | Connect the real timbre analyzer, verify feature consistency and run integration tests. | Combines actual pitch and timbre measurements in one consistent voice profile. | Main Pipeline Lead + E6 Member | 2026-11-13 | 2026-11-15 | Not Started | T04 |
-| T06 | [E3 Song Analysis and Catalog Export](#t06) | Convert existing E3 song and melody analysis outputs into a catalog of SongFeatures. | Provides structured song information to compare with the user's vocal characteristics. | E3 Member | 2026-11-04 | 2026-11-14 | Not Started | T01 |
-| T07 | [Integrate Song Catalog](#t07) | Load the E3 catalog, validate SongFeatures records and test catalog access. | Gives the recommendation algorithm a reliable collection of songs and analyzed features. | Main Pipeline Lead + E3 Member | 2026-11-15 | 2026-11-17 | Not Started | T06 |
+| T04 | [E6 Real Timbre Feature Adapter](#t04) | Convert the E6 MFCC/audio feature approach into analyze_timbre(audio_data: AudioData) -> TimbreFeatures. | Adds voice descriptors beyond pitch for later evaluation in song matching. | E6 Member | 2026-11-04 | 2026-11-12 | Completed | T01 |
+| T05 | [Integrate E6 Timbre Adapter](#t05) | Connect the real timbre analyzer, verify feature consistency and run integration tests. | Combines actual pitch and timbre measurements in one consistent voice profile. | Main Pipeline Lead + E6 Member | 2026-11-13 | 2026-11-15 | Completed | T04 |
+| T06 | [E3 Song Analysis and Catalog Export](#t06) | Convert existing E3 song and melody analysis outputs into a catalog of SongFeatures. | Provides structured song information to compare with the user's vocal characteristics. | E3 Member | 2026-11-04 | 2026-11-14 | Completed | T01 |
+| T07 | [Integrate Song Catalog](#t07) | Load the E3 catalog, validate SongFeatures records and test catalog access. | Gives the recommendation algorithm a reliable collection of songs and analyzed features. | Main Pipeline Lead + E3 Member | 2026-11-15 | 2026-11-17 | Completed | T06 |
 | T08 | [Implement Basic Recommendation Algorithm](#t08) | Replace fixed mock rankings with an initial rule-based recommendation algorithm. | Makes recommendations respond to the user's measured vocal characteristics. | Recommendation Member (assignment pending) | 2026-11-11 | 2026-11-19 | Not Started | T01; T06 for evaluated integration (implementation may start earlier with contract-compatible sample data) |
 | T09 | [Integrate Recommendation Algorithm](#t09) | Connect the real ranking function through PipelineDependencies and test recording-to-recommendation behavior. | Enables actual feature-based recommendations in place of fictional fixed rankings. | Main Pipeline Lead + Recommendation Member | 2026-11-20 | 2026-11-22 | Not Started | T03, T05, T07, T08 |
 | T10 | [End-to-End Integration Testing](#t10) | Test real adapters, authorized recordings and the validated song catalog as a complete system. | Finds failures between modules and checks whether outputs support an initial demonstration. | Main Pipeline Lead + All Team Members | 2026-11-23 | 2026-11-26 | Not Started | T09 |
 | T11 | [Final Prototype Demonstration](#t11) | Prepare a local end-to-end SUARA demo with real analyzers and the rule-based recommender. | Demonstrates that the individual experiments form one integrated system. | Main Pipeline Lead + All Team Members | 2026-11-27 | 2026-11-29 | Not Started | T10 |
-| T12 | [Evaluation Framework & Test Preparation](#t12) | Prepare a reusable evaluation framework before real AI modules are fully integrated. | Provides consistent evaluation of pitch extraction, voice features, recommendation behavior and processing performance. | Member 5 (Evaluation & Testing) | 2026-11-04 | 2026-11-20 | Not Started | T01; integration contract and existing pipeline schemas (F03, F05) |
+| T12 | [Evaluation Framework & Test Preparation](#t12) | Prepare a reusable evaluation framework before real AI modules are fully integrated. | Provides consistent evaluation of pitch extraction, voice features, recommendation behavior and processing performance. | Member 5 (Evaluation & Testing) | 2026-11-04 | 2026-11-20 | Completed | T01; integration contract and existing pipeline schemas (F03, F05) |
 | T13 | [Minimal SUARA Demo Interface](#t13) | Develop a simple local interface using the mock pipeline first, with support for later real integration. | Lets users, teammates and professors demonstrate the workflow without terminal commands or raw JSON. | Member 6 (Demo Interface Development) | 2026-11-04 | 2026-11-22 | Not Started | Main pipeline foundation (completed); T01 |
 
 ## Acceptance criteria
@@ -94,38 +94,46 @@ Check off individual deliverables here as evidence becomes available. Read curre
 
 **E6 Real Timbre Feature Adapter**
 
-- [ ] Review [E6 feature extraction](../experiments/E6/README.md) and resolve the convention mismatch described in the [team guide](../docs/TEAM_INTEGRATION_GUIDE.md).
-- [ ] Re-extract the agreed 20-coefficient c0..c19 mean representation, or document an approved versioned contract change; do not pad, slice or relabel old vectors.
-- [ ] Extract MFCC means and spectral centroid; return validated TimbreFeatures.
-- [ ] Test with synthetic and authorized real audio.
-- [ ] Document extraction parameters, model version and processing version; keep ECAPA embeddings separate from MFCCs.
+- [x] Review [E6 feature extraction](../experiments/E6/README.md) and resolve the convention mismatch described in the [team guide](../docs/TEAM_INTEGRATION_GUIDE.md). See [migration and extraction parameters](../docs/T04_T05_TIMBRE_VALIDATION.md#exact-extraction-convention).
+- [x] Re-extract the agreed 20-coefficient c0..c19 mean representation, or document an approved versioned contract change; do not pad, slice or relabel old vectors. See [fresh extraction implementation](../main_pipeline/src/suara/timbre.py).
+- [x] Extract MFCC means and spectral centroid; return validated TimbreFeatures. See [adapter](../main_pipeline/src/suara/timbre.py).
+- [x] Test with synthetic and authorized real audio. See [9 new tests](../main_pipeline/tests/test_timbre.py) and [42-recording validation](../docs/T04_T05_TIMBRE_VALIDATION.md#reproducible-validation).
+- [x] Document extraction parameters, model version and processing version; keep ECAPA embeddings separate from MFCCs. See [implementation and version documentation](../docs/T04_T05_TIMBRE_VALIDATION.md).
+
+**Completion evidence (2026-11-15):** 78 pipeline tests passed; independent numerical reference comparisons passed; all 42 authorized E6 source recordings passed standalone and integrated checks. Locked E6 assets and schema 1.0.0 are preserved. See the [historical record](COMPLETED_TASKS.md#t04).
 
 ### T05
 
 **Integrate E6 Timbre Adapter**
 
-- [ ] Inject the real timbre analyzer through PipelineDependencies.
-- [ ] Verify MFCC dimension, convention, finite values and processing-version consistency.
-- [ ] Run integration tests with preprocessing and profile assembly, including mixed-mode provenance; record evidence.
+- [x] Inject the real timbre analyzer through PipelineDependencies. See [CLI `--timbre real` wiring](../main_pipeline/src/suara/cli.py) and [Python API instructions](../docs/T04_T05_TIMBRE_VALIDATION.md#run-and-inject).
+- [x] Verify MFCC dimension, convention, finite values and processing-version consistency. See [numerical and integration tests](../main_pipeline/tests/test_timbre.py).
+- [x] Run integration tests with preprocessing and profile assembly, including mixed-mode provenance; record evidence. See [78-test and 42-recording results](../docs/T04_T05_TIMBRE_VALIDATION.md#reproducible-validation).
+
+**Completion evidence (2026-11-15):** Actual preprocessing and timbre are integrated; mock pitch/ranking remain truthfully labeled and default mock behavior is preserved. Unvoiced assembly uses an explicitly test-only pitch stub. Fully real pitch/recommendation execution still requires T03/T09; this completion does not claim those tasks. See the [historical record](COMPLETED_TASKS.md#t05).
 
 ### T06
 
 **E3 Song Analysis and Catalog Export**
 
-- [ ] Select an initial authorized song or melody dataset.
-- [ ] Extract or review vocal melody pitch ranges; preserve interim or unverified status where review is incomplete.
-- [ ] Convert MIDI notes to Hz where appropriate.
-- [ ] Preserve metadata, source/excerpt information, feature version and provenance.
-- [ ] Export records compatible with SongFeatures and test catalog validity.
-- [ ] Do not treat a polyphonic audio spectrum as a vocal pitch range.
+- [x] Select an initial authorized song or melody dataset. The [E3 handoff](../experiments/E3/handoff/song_features.json) documents five AI-drafted, team-owned pilot melodies.
+- [x] Extract or review vocal melody pitch ranges; preserve interim or unverified status where review is incomplete. The [exporter](../experiments/E3/tools/export_song_features.py) distinguishes verified written melodies from unverified inputs; human-recording re-checks remain pending.
+- [x] Convert MIDI notes to Hz where appropriate. [Exporter](../experiments/E3/tools/export_song_features.py): MIDI 69 -> 440 Hz and 57 -> 220 Hz verified during review.
+- [x] Preserve metadata, source/excerpt information, feature version and provenance. See all five [handoff records](../experiments/E3/handoff/song_features.json).
+- [x] Export records compatible with SongFeatures and test catalog validity. [Export validation](../experiments/E3/tools/export_song_features.py) and [application catalog tests](../main_pipeline/tests/test_catalog.py) pass.
+- [x] Do not treat a polyphonic audio spectrum as a vocal pitch range. [Source descriptions](../experiments/E3/handoff/song_features.json) explicitly identify written lead-vocal MIDI excerpts, not full mixes or singer recordings.
+
+**Repository review (2026-11-15):** [PR #7](https://github.com/Jeminana/SUARA-System/pull/7) merged on 2026-11-14 (`dd9c04b`; implementation `6018229`). Five records pass exporter and application contract validation. This verifies the pilot handoff, not completion of E3's pending real-singer annotation re-check. Full E3 model/experiment tests were not rerun during this documentation review. See [completion history](COMPLETED_TASKS.md#t06).
 
 ### T07
 
 **Integrate Song Catalog**
 
-- [ ] Load the exported E3 catalog without importing its full Python 3.11 experiment stack into the Python 3.12 application.
-- [ ] Validate all SongFeatures, unique song IDs, Hz units, metadata and provenance.
-- [ ] Test catalog access, invalid records and empty catalogs; record evidence.
+- [x] Load the exported E3 catalog without importing its full Python 3.11 experiment stack into the Python 3.12 application. See [standard-library loader](../main_pipeline/src/suara/catalog.py) and [CLI --catalog option](../main_pipeline/src/suara/cli.py).
+- [x] Validate all SongFeatures, unique song IDs, Hz units, metadata and provenance. See [catalog tests](../main_pipeline/tests/test_catalog.py); the exporter performs MIDI conversion, while the loader validates values and schema.
+- [x] Test catalog access, invalid records and empty catalogs; record evidence. All 7 [catalog tests](../main_pipeline/tests/test_catalog.py) passed in Python 3.12 on 2026-11-15.
+
+**Repository review (2026-11-15):** [PR #8](https://github.com/Jeminana/SUARA-System/pull/8) merged on 2026-11-15 (`7d805ed`; implementation `40174b4`). Tests cover the committed export, empty and malformed catalogs, duplicate/missing fields, safe file errors, CLI selection and pipeline wiring. Real-mode tests use explicitly test-only adapters; production recommendations remain mock. See [completion history](COMPLETED_TASKS.md#t07).
 
 ### T08
 
@@ -198,12 +206,14 @@ Check off individual deliverables here as evidence becomes available. Read curre
 
 **Acceptance criteria:**
 
-- [ ] All evaluation metrics are clearly explained.
-- [ ] Synthetic reference data can be generated reproducibly.
-- [ ] Test scripts run independently of the final integrated AI modules.
-- [ ] No private participant recordings are committed.
-- [ ] Evaluation procedures are documented.
-- [ ] The framework can be used in T10.
+- [x] All evaluation metrics are clearly explained. See [methodology](../evaluation/docs/EVALUATION_METHODOLOGY.md) and [metric helpers](../evaluation/scripts/metrics.py).
+- [x] Synthetic reference data can be generated reproducibly. [Generator](../evaluation/scripts/generate_audio.py): six WAVs and manifest reproduced identical SHA-256 hashes on a second run during review.
+- [x] Test scripts run independently of the final integrated AI modules. All 23 [evaluation tests](../evaluation/tests/) passed against live schema 1.0.0 in Python 3.12 on 2026-11-15.
+- [x] No private participant recordings are committed. Tracked evaluation assets are scripts, documentation and synthetic JSON fixtures; [ignore rules](../evaluation/.gitignore) exclude generated WAVs and private audio.
+- [x] Evaluation procedures are documented. See [methodology and T10 handoff](../evaluation/docs/EVALUATION_METHODOLOGY.md).
+- [x] The framework can be used in T10. [Contract bridge](../evaluation/scripts/contracts_bridge.py), fixtures, metrics and baseline ran against the live repository; real-module measurements remain T10 work.
+
+**Repository review (2026-11-15):** [PR #6](https://github.com/Jeminana/SUARA-System/pull/6) merged on 2026-11-10 (`5948e41`; implementation `e64d996`). The sample runner and reproducible generator work; 23 tests pass. Windows sandbox tests used a writable workspace TEMP/TMP directory. The code loads live repository contracts by default; stale snapshot references were corrected in the evaluation notes. This completes framework preparation, not T10, real-model benchmarking or suitability evaluation. See [completion history](COMPLETED_TASKS.md#t12).
 
 **Relationship to T10:** T12 prepares the tests; T10 runs them on the integrated system and analyzes actual results. Hand off the framework before T10's planned 2026-11-23 start without changing T10's existing dependency row.
 
@@ -267,10 +277,10 @@ Check off individual deliverables here as evidence becomes available. Read curre
 
 - **Converging dependencies:** T09 waits for T03, T05, T07 and T08; T10 then waits for T09 and T11 for T10. T08 finishes last in the proposed predecessor schedule, with no full spare day before T09.
 - **Contract handoff:** T01 is complete per user confirmation recorded on 2026-11-04. Its original planned 2026-11-05 deadline is retained; the handoff no longer blocks successor preparation.
-- **T12/T13 preparation:** Both tasks have been distributed and their T01 handoff dependency is satisfied. Implementation progress is not yet reported. T12 prepares evaluation assets before T10, while T13 labels initial mock outputs as synthetic and waits for T03/T05/T07/T09 before demonstrating real results.
-- **T08 evaluation:** Ranking code may use compatible sample records from 2026-11-11, but evaluated integration waits for T06's catalog, due 2026-11-14.
-- **E6 representation:** Existing development-scaled, c0-excluded pooled features cannot be relabeled as the agreed 20 unscaled c0..c19 means. T04 needs re-extraction or an approved versioned migration.
-- **E3 readiness:** The repository describes interim results and pending review. T06 must preserve verification/provenance, secure authorized data, and export compatible records without importing the full experiment stack.
+- **T12/T13 preparation:** T12's framework is merged and verified; T13 still has no implementation evidence in fetched main. T13 should label initial mock outputs as synthetic and wait for T03/T05/T07/T09 before demonstrating real results. T12 completion does not complete T10.
+- **T08 evaluation:** T06's five-song pilot catalog and T07's loader are available. T08 can use these for baseline comparison; no production rule-based recommender was found in fetched main.
+- **E6 representation:** T04 now re-extracts the agreed 20 unscaled c0..c19 means from AudioData. Existing development-scaled, c0-excluded pooled features remain separate and cannot be relabeled. T05 supplies mixed-mode integration; fully real execution still waits for actual pitch/ranking.
+- **E3 readiness:** T06/T07 are merged: five written-melody pilot ranges are exported with excerpt/provenance information and loaded without E3's experiment stack. Real-singer annotation re-checks and broader model evaluation remain pending; catalog delivery does not resolve them.
 - **Demo entry point:** The current CLI rejects real mode. T09 must provide explicit real dependency/catalog wiring through the CLI or a documented local Python runner before T11.
 - **Owners and data:** The user confirms task distribution, but actual member names and any revised role mappings were not supplied. Existing assignments, including Member 5 for T12 and Member 6 for T13, are retained. Record confirmed names when available; authorized recordings, dataset access and model/runtime compatibility still need recorded evidence.
 - **Evaluation and latency:** Prior measurements concern mocks only. Agree real-runtime budgets and a naive comparison before T10; feature validity does not prove recommendation usefulness.

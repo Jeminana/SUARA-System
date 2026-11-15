@@ -68,7 +68,7 @@ Do not present these generated outputs as actual E1/E6/E3 performance. Project-l
 
 ## Contract-aligned fixture policy (November 9)
 
-Fixtures now use the actual schema 1.0.0 field names and are validated by constructing `PitchFeatures`, `TimbreFeatures`, `VoiceProfile`, and `SongFeatures` objects from the supplied team's contract class source. When using the live repository contract, set `SUARA_REPO_ROOT` to the repo root; this avoids silently diverging from future schema changes.
+Fixtures use schema 1.0.0 field names and are validated by constructing `PitchFeatures`, `TimbreFeatures`, `VoiceProfile`, and `SongFeatures` objects from the live repository contract source. The bridge defaults to this checkout; set `SUARA_REPO_ROOT` to select another repo root. No snapshot is shipped. The 2026-11-15 review passed all 23 framework tests, ran the sample runner and confirmed identical generated WAV/manifest hashes across two runs. These checks establish preparation readiness, not real-module evaluation results.
 
 Pitch MAE is defined on aligned **voiced** reference/prediction frame pairs, measured in cents; report frame alignment and missing/false voicing separately using voiced precision/recall/F1. Directly comparing one aggregate `median_pitch_hz` value to a full time series cannot substitute for frame-level MAE. The contract's `PitchFeatures` stores aggregates only: for true frame accuracy, the E1 tester must expose frame-level predictions through a separate evaluation-only adapter or report, without extending the approved wire schema.
 
