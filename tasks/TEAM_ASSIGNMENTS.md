@@ -6,6 +6,11 @@ The user confirmed T01 complete and T02-T09, T12 and T13 distributed in the upda
 
 Current task status lives only in [TASK_BOARD.md](TASK_BOARD.md). The Progress column links there so this file does not create conflicting status counts. F01-F15 evidence remains in [COMPLETED_TASKS.md](COMPLETED_TASKS.md).
 
+The 2026-11-15 PR review reconciled T06/T07/T12 with merged PRs #7/#8/#6 and
+recorded acceptance evidence in the board/history. T04/T05 work is prepared on
+feature/t04-t05-real-timbre for PR review, pending merge. No member names or role changes were inferred from commit authorship;
+the user's PR-manager role does not by itself assign other implementation roles.
+
 | Role | Member Name | Assigned Tasks | Responsibilities | Progress |
 | --- | --- | --- | --- | --- |
 | Main Pipeline Lead | Unassigned | [F01-F15](TASK_BOARD.md#phase-0--main-pipeline-foundation-completed); [T01](TASK_BOARD.md#t01), [T03](TASK_BOARD.md#t03), [T05](TASK_BOARD.md#t05), [T07](TASK_BOARD.md#t07), [T09](TASK_BOARD.md#t09), [T10](TASK_BOARD.md#t10), [T11](TASK_BOARD.md#t11) | Historical foundation owner role; coordinate handoff, review PRs, wire dependencies/catalog, provide a real local entry point, coordinate testing and demo | [See authoritative board](TASK_BOARD.md) |

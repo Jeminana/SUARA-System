@@ -1,6 +1,15 @@
 # Later real-module connection (T10)
 
-The starter intentionally does **not** import real SUARA contracts because actual repo files were not provided. Keep the helpers independent. In the team repository, create contract-aware integration tests that:
+The metric helpers remain independent of AI modules, while the fixture tests and
+sample runner load the live SUARA contracts through `scripts/contracts_bridge.py`.
+The default source is this checkout's `main_pipeline/src/suara/contracts.py`;
+`SUARA_REPO_ROOT` selects another checkout. No reference snapshot is shipped.
+The 2026-11-15 review verified all 23 framework tests against the live schema.
+
+T06/T07 supply the merged five-song pilot catalog and loader. Local T04/T05 work
+supplies `suara.timbre.analyze_timbre` and mixed-mode tests, but has not been merged.
+Real pitch and ranking still need implementation/integration. During T10, add
+contract-aware evaluation that:
 
 - Call the real `analyze_pitch(audio_data: AudioData) -> PitchFeatures` adapter on generated WAVs, after the official preprocessing route.
 - Check extracted F0 statistics, voiced ratio, null behavior, metadata/version and typed validation.

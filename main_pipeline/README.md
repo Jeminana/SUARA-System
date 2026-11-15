@@ -1,12 +1,13 @@
 # Main SUARA pipeline
 
 The local pipeline provides real WAV preprocessing followed
-by explicitly synthetic pitch/timbre features and fictional song recommendations.
-The mock scores do not measure voice suitability. Real AI modules are not included.
+by synthetic pitch/timbre features and fictional song recommendations by default.
+T04/T05 add optional measured timbre via `--timbre real`. Pitch and recommendation
+modules remain synthetic. The mock scores do not measure voice suitability.
 
 The MVP accepts one local WAV and returns a structured voice profile and up to
 five ranked recommendations as JSON. No cloud services, API keys, or downloaded
-models are required. Experiment code and participant recordings are not used.
+models are required. The runtime does not import experiment code.
 
 ## Install and run
 
@@ -23,13 +24,30 @@ Replace the generated path with your local recording, or add `--top-k 3`.
 On macOS/Linux use `main_pipeline/.venv/bin/python` in place of the Windows path.
 The installed `suara` console command accepts the same options. Installation needs
 package-index access; runtime is offline. Dependencies are NumPy (PCM array
-conversion) and SciPy (anti-aliasing polyphase resampling). Contracts stay standard
+conversion and spectral analysis) and SciPy (polyphase resampling and DCT). Contracts stay standard
 library only. Keep this environment separate from all experiment environments.
 
 Success writes PipelineResult JSON to stdout and exits 0. Expected failures write
 ErrorInfo JSON to stderr and exit 2. Invalid arguments also return JSON; `--help`
 prints usage. The CLI accepts `--mode real` but rejects it because real adapters
 can currently be supplied only through the Python API. It never falls back.
+
+## Measured timbre (T04/T05)
+
+```powershell
+main_pipeline/.venv/Scripts/python.exe -m suara.cli --audio main_pipeline/.smoke/tone.wav --timbre real
+```
+
+This selects `suara.timbre.analyze_timbre` through `PipelineDependencies`. The
+20 MFCC means and centroid are measured from the preprocessed recording. The
+nested timbre mode is `real`; pitch, recommendations and the overall result
+remain `mock`. Default runs still use synthetic timbre. Fully real mode requires
+the remaining actual adapters through the Python API; this option does not supply
+E1 pitch or a real ranker.
+
+The extractor uses the existing NumPy/SciPy dependencies, needs no checkpoint,
+and implements `mfcc-20-v1` without changing contracts or locked E6 assets.
+See [parameters, API injection and validation evidence](../docs/T04_T05_TIMBRE_VALIDATION.md).
 
 ## Song catalog file
 
@@ -108,5 +126,5 @@ python -c "from suara.contracts import SCHEMA_VERSION; print(SCHEMA_VERSION)"
 
 Real replacements use `PipelineDependencies` as shown in the teammate guide.
 Schema fields remain at 1.0.0. Day 3 hardens runtime boundaries without changing
-the callable interfaces. Real analysis, database,
+the callable interfaces. Beyond the optional measured timbre adapter, real analysis, database,
 GUI, evaluated recommendation rules and streaming integration remain out of scope.

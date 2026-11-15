@@ -2,7 +2,7 @@
 
 SUARA (from *Sesuai Suara*, “suitable for the voice”) is a proposed AI-powered vocal profile and music recommendation service. It analyzes a short singing sample and aims to recommend songs, artists, and song keys that fit the singer. The primary product direction is an analysis and recommendation engine that can integrate with a music streaming service; a web demonstration will validate the idea first. This project is a capstone feasibility prototype, not a complete streaming platform.
 
-The proposal describes intended capabilities, not validated product claims. A local pipeline with real WAV preprocessing and explicitly synthetic mock analysis/recommendations is now implemented; real analysis integration remains pending.
+The proposal describes intended capabilities, not validated product claims. The local pipeline has real WAV preprocessing and optional measured timbre (`--timbre real`), with synthetic pitch and recommendations by default. See [T04/T05 implementation and validation](docs/T04_T05_TIMBRE_VALIDATION.md); real pitch and recommendation integration remain pending.
 
 ## Project goals
 
@@ -50,6 +50,42 @@ Each experiment should record its data, configuration, measured results, failure
 
 ## Current progress
 
+### Integration delivery review (2026-11-15)
+
+The merged repository includes these integration deliverables. Current task status
+and acceptance evidence are maintained in the [task board](tasks/TASK_BOARD.md).
+
+| Task | Delivered work | Merge evidence |
+| --- | --- | --- |
+| T06 | Five pilot SongFeatures records, written-melody ranges converted from MIDI to Hz, excerpt metadata and provenance | [PR #7](https://github.com/Jeminana/SUARA-System/pull/7), merged 2026-11-14 |
+| T07 | Validated JSON catalog loader and CLI `--catalog` selection, including empty/invalid catalog handling | [PR #8](https://github.com/Jeminana/SUARA-System/pull/8), merged 2026-11-15 |
+| T12 | Synthetic WAV generator, contract-compatible fixtures, evaluation metrics, naive ranking baseline and T10 procedure | [PR #6](https://github.com/Jeminana/SUARA-System/pull/6), merged 2026-11-10 |
+
+The review reran 7 catalog tests and 23 evaluation tests successfully, checked the
+five exported records and MIDI conversion, and confirmed repeatable generation of
+six WAVs plus their manifest. These checks verify delivered interfaces and test
+preparation. The catalog uses team-approved written melody excerpts; E3's separate
+real-singer annotation re-check remains pending. T12's illustrative results are
+synthetic, and its range baseline is not the production recommender for T08.
+
+T04/T05 are implemented and tested on `feature/t04-t05-real-timbre`, with
+78 pipeline tests and 42 authorized E6 recording checks passing; the branch is
+prepared for PR review and merge. [Run instructions and evidence](docs/T04_T05_TIMBRE_VALIDATION.md)
+include the optional `--timbre real` switch. T02/T03 (real pitch), T08/T09
+(recommendation), T10/T11 (end-to-end evaluation/demo) and T13 (interface) have no
+completion evidence in fetched main. Real pitch, ranking and the complete real
+demo remain pending.
+
+To select the merged E3 catalog in the local CLI:
+
+```powershell
+main_pipeline/.venv/Scripts/python.exe -m suara.cli --audio main_pipeline/.smoke/tone.wav --catalog experiments/E3/handoff/song_features.json
+```
+
+This changes catalog metadata; ranking remains synthetic. See the
+[pipeline README](main_pipeline/README.md) for setup and the
+[evaluation README](evaluation/README.md) for T12 commands.
+
 ### E1: Pitch detection (complete)
 
 The Phase 7 evaluation compared pYIN and CREPE on 12 synthetic test recordings at clean, 20 dB, and 10 dB SNR. CREPE reached 99.30%, 99.27%, and 99.03% raw pitch accuracy within 50 cents, with no octave errors; pYIN reached 91.67%, 91.67%, and 91.40%. All pYIN octave errors come from one recording whose pitch sits exactly at pYIN's C6 upper search limit. At 10 dB, CREPE missed 28 of 3,000 voiced frames and pYIN produced 158 false-voiced frames. The repository includes the synthetic fixtures, results, seven figures, and a sanitized final report; result hashes are checked by the test suite. Claims apply to synthetic tones only, not human singing. See [experiments/E1/README.md](experiments/E1/README.md).
@@ -85,7 +121,7 @@ These are open follow-ups identified so far. They are candidates, not commitment
 
 **Programme**
 - Start E2 (vocal profile extraction), then E4 and E5, using E1's detector choice and E3's verified song profiles.
-- Connect real teammate adapters to the mock integration runtime in `main_pipeline/`, then evaluate the complete flow.
+- Complete real pitch and recommendation integration with the delivered timbre adapter and E3 catalog, then run T10 using the merged evaluation framework.
 - Add continuous integration to run each experiment's tests on pull requests.
 
 ## Repository layout

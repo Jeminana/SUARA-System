@@ -15,7 +15,7 @@ The planned integration phase runs from **2026-11-04 to 2026-11-29**. All phase 
 
 Use ISO dates (`YYYY-MM-DD`) everywhere. Use **Unknown (not verified)** for historical dates that cannot be confirmed. Do not substitute the report date for a task's completion date.
 
-The foundation uses real audio preprocessing, synthetic analyzers, a fictional catalog and fixed mock rankings. Completed foundation work does not mean real AI has been integrated. T01 completion and distribution of T02-T09, T12 and T13 were confirmed by the user in the update recorded on 2026-11-04. Distribution does not establish implementation progress; consult the board for current work status. T10 and T11 have not started. [T12](TASK_BOARD.md#t12) prepares evaluation assets for T10; [T13](TASK_BOARD.md#t13) prepares a minimal local demo interface using mocks first.
+The default pipeline uses real audio preprocessing, synthetic analyzers, a fictional catalog and fixed mock rankings. The 2026-11-15 repository review verified merged T06 (five-song E3 export, PR #7), T07 (catalog loader, PR #8) and T12 (evaluation framework, PR #6); evidence is recorded in the [board](TASK_BOARD.md) and [history](COMPLETED_TASKS.md). T04/T05 add optional measured timbre on feature/t04-t05-real-timbre, prepared for PR review and pending merge; see the [validation evidence](../docs/T04_T05_TIMBRE_VALIDATION.md). Real pitch and production recommendation integration remain separate work. T01 completion and task distribution were confirmed by the user in the update recorded on 2026-11-04. Distribution does not establish implementation progress. T10/T11 have not started; T12 preparation does not complete T10. T13 still lacks implementation evidence in fetched main.
 
 ## Add a task
 
