@@ -31,6 +31,25 @@ ErrorInfo JSON to stderr and exit 2. Invalid arguments also return JSON; `--help
 prints usage. The CLI accepts `--mode real` but rejects it because real adapters
 can currently be supplied only through the Python API. It never falls back.
 
+## Song catalog file
+
+```powershell
+main_pipeline/.venv/Scripts/python.exe -m suara.cli --audio main_pipeline/.smoke/tone.wav --catalog experiments/E3/handoff/song_features.json
+```
+
+`--catalog` replaces the fictional mock catalog with a JSON file. In Python, use
+`suara.catalog.load_song_catalog(path)` and pass the result as `song_catalog=`.
+The file is a JSON list of complete `SongFeatures` objects (see the contract). The E3 export at
+`experiments/E3/handoff/song_features.json` holds five pilot songs whose `verified_melody`
+ranges come from team-approved written melodies. The loader uses only the standard library
+and never imports E3. Beyond the `SongFeatures` checks, it requires exactly the nine contract
+fields in every record (including `schema_version`, which the constructor would otherwise fill in),
+and it rejects NaN/Infinity, repeated fields within a record, and duplicate song IDs. Any problem,
+including a missing or unreadable file, is an `invalid_catalog` error whose message has no path.
+`[]` is a valid empty catalog. The loader cannot tell Hz from MIDI numbers; the exporter
+converts units (E3's `tools/export_song_features.py` and its tests). Until a real recommender
+exists, the CLI still ranks these songs with the fixed mock scores.
+
 ## Audio support and mock behavior
 
 Support: little-endian RIFF integer PCM WAV, 8/16/24/32-bit, mono or stereo,
