@@ -65,8 +65,28 @@ fields in every record (including `schema_version`, which the constructor would 
 and it rejects NaN/Infinity, repeated fields within a record, and duplicate song IDs. Any problem,
 including a missing or unreadable file, is an `invalid_catalog` error whose message has no path.
 `[]` is a valid empty catalog. The loader cannot tell Hz from MIDI numbers; the exporter
-converts units (E3's `tools/export_song_features.py` and its tests). Until a real recommender
-exists, the CLI still ranks these songs with the fixed mock scores.
+converts units (E3's `tools/export_song_features.py` and its tests). The CLI still ranks
+these songs with the fixed mock scores until T09 wires in the recommender below.
+
+## Pitch-range recommender (T08)
+
+`suara.recommender.recommend_songs` ranks songs by how well each melody range fits the
+singer's observed pitch range, using rule `pitch-range-fit-v1`. In semitones,
+`score = 0.8 * max(0, 1 - outside/12) + 0.2 * max(0, 1 - centre_distance/12)`, where
+`outside` is how far the melody goes above the highest or below the lowest observed pitch.
+Timbre is not used. Songs with no range or with `unverified` provenance are left out, and a
+profile with no voiced pitch gets no recommendations. Each recommendation explains its score.
+The weights are unvalidated starting values and the score does not measure suitability. It has
+the same signature as the mock ranker but is not yet selected by the CLI (T09). Use it in Python:
+
+```python
+from suara.contracts import PipelineDependencies
+from suara.recommender import recommend_songs
+dependencies = PipelineDependencies(..., recommend_songs=recommend_songs)
+```
+
+`main_pipeline/tools/compare_recommender_baseline.py` compares it with the T12 naive baseline on
+the E3 catalog. See [formula, missing-data policy and comparison](../docs/T08_RECOMMENDER_VALIDATION.md).
 
 ## Audio support and mock behavior
 
