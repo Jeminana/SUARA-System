@@ -43,8 +43,8 @@ All start dates and deadlines below are proposed. T01's handoff is complete per 
 | Task ID | Task Name | Description | Why We Need It | Responsible Member | Start Date | Expected Deadline | Status | Dependencies |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | T01 | [Distribute Integration Contract](#t01) | Share and explain the existing integration contract and team integration guide. | Shared input/output rules let modules work together without changing the main pipeline. | Main Pipeline Lead + All Team Members | 2026-11-04 | 2026-11-05 | Completed | None |
-| T02 | [E1 Real Pitch Analysis Adapter](#t02) | Convert the completed E1 pitch experiment into analyze_pitch(audio_data: AudioData) -> PitchFeatures. | Replaces fake pitch values with estimates measured from the user's singing. | E1 Member | 2026-11-04 | 2026-11-10 | Not Started | T01 |
-| T03 | [Integrate E1 Into Main Pipeline](#t03) | Review E1's pull request, inject its real pitch adapter through PipelineDependencies and run integration tests. | Ensures the real pitch analyzer works with preprocessing and voice profile assembly. | Main Pipeline Lead + E1 Member | 2026-11-11 | 2026-11-12 | Not Started | T02 |
+| T02 | [E1 Real Pitch Analysis Adapter](#t02) | Convert the completed E1 pitch experiment into analyze_pitch(audio_data: AudioData) -> PitchFeatures. | Replaces fake pitch values with estimates measured from the user's singing. | E1 Member | 2026-11-04 | 2026-11-10 | Completed | T01 |
+| T03 | [Integrate E1 Into Main Pipeline](#t03) | Review E1's pull request, inject its real pitch adapter through PipelineDependencies and run integration tests. | Ensures the real pitch analyzer works with preprocessing and voice profile assembly. | Main Pipeline Lead + E1 Member | 2026-11-11 | 2026-11-12 | Completed | T02 |
 | T04 | [E6 Real Timbre Feature Adapter](#t04) | Convert the E6 MFCC/audio feature approach into analyze_timbre(audio_data: AudioData) -> TimbreFeatures. | Adds voice descriptors beyond pitch for later evaluation in song matching. | E6 Member | 2026-11-04 | 2026-11-12 | Completed | T01 |
 | T05 | [Integrate E6 Timbre Adapter](#t05) | Connect the real timbre analyzer, verify feature consistency and run integration tests. | Combines actual pitch and timbre measurements in one consistent voice profile. | Main Pipeline Lead + E6 Member | 2026-11-13 | 2026-11-15 | Completed | T04 |
 | T06 | [E3 Song Analysis and Catalog Export](#t06) | Convert existing E3 song and melody analysis outputs into a catalog of SongFeatures. | Provides structured song information to compare with the user's vocal characteristics. | E3 Member | 2026-11-04 | 2026-11-14 | Completed | T01 |
@@ -75,20 +75,20 @@ Check off individual deliverables here as evidence becomes available. Read curre
 
 **E1 Real Pitch Analysis Adapter**
 
-- [ ] Select a suitable method from [E1 results](../experiments/E1/README.md) and adapt the code to the application interface.
-- [ ] Extract measured pitch from real audio and calculate minimum, maximum, median pitch and voiced ratio.
-- [ ] Return validated PitchFeatures, with null pitch statistics when no voiced frames exist.
-- [ ] Add tests using synthetic tones and suitable authorized recordings; keep private recordings out of Git.
-- [ ] Document extraction parameters, detector/model version, voicing policy and known limitations.
-- [ ] Submit a pull request for review.
+- [x] Select a suitable method from [E1 results](../experiments/E1/README.md) and adapt the code to the application interface.
+- [x] Extract measured pitch from real audio and calculate minimum, maximum, median pitch and voiced ratio.
+- [x] Return validated PitchFeatures, with null pitch statistics when no voiced frames exist.
+- [x] Add tests using synthetic tones and suitable authorized recordings; keep private recordings out of Git.
+- [x] Document extraction parameters, detector/model version, voicing policy and known limitations.
+- [x] Submit a pull request for review.
 
 ### T03
 
 **Integrate E1 Into Main Pipeline**
 
-- [ ] Review the E1 PR and connect the adapter through PipelineDependencies.
-- [ ] Verify compatibility with actual preprocessing and voice profile assembly.
-- [ ] Run integration tests for voiced/unvoiced inputs, validated outputs, provenance and safe errors; record evidence.
+- [x] Review the E1 PR and connect the adapter through PipelineDependencies.
+- [x] Verify compatibility with actual preprocessing and voice profile assembly.
+- [x] Run integration tests for voiced/unvoiced inputs, validated outputs, provenance and safe errors; record evidence.
 
 ### T04
 
