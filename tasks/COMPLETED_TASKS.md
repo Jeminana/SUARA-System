@@ -355,6 +355,38 @@ repository delivery; they do not establish the author's original completion date
 
 **Notes and limitations:** The recorded update date is not an inferred completion date. Actual member names, individual interface confirmations and branch/PR agreement details were not supplied. Existing assignments and planned dates are preserved. Distribution does not establish implementation progress for T02-T09, T12 or T13; T10 and T11 have not started. No runtime tests or real-module integration are claimed.
 
+## T02
+
+**Task name:** E1 Real Pitch Analysis Adapter
+
+**Responsible member:** E1 Member (actual name unconfirmed).
+
+**Original expected deadline:** 2026-11-10
+
+**Actual completion date:** Unknown (not verified). PR #11 merged on 2026-11-17.
+
+**Deliverables:** An isolated CREPE tiny worker and a pitch adapter that returns validated minimum, maximum, median, voiced ratio and confidence with explicit no-voicing behavior.
+
+**Evidence:** [PR #11](https://github.com/Jeminana/SUARA-System/pull/11) (`adcd30e`), [adapter](../main_pipeline/src/suara/pitch.py) and [macOS validation](../docs/T02_PITCH_ADAPTER.md#verified-t02-results), including actual inference on a generated 220 Hz tone.
+
+**Notes and limitations:** The recorded results use synthetic audio. T10 covers authorized human recordings. Real inference requires a separately configured worker environment.
+
+## T03
+
+**Task name:** Integrate E1 Into Main Pipeline
+
+**Responsible member:** Main Pipeline Lead + E1 Member (actual names unconfirmed).
+
+**Original expected deadline:** 2026-11-12
+
+**Actual completion date:** Unknown (not verified). PR #13 merged on 2026-11-17.
+
+**Deliverables:** Python API integration tests covering actual WAV preprocessing, pitch and profile assembly, voiced and unvoiced results, provenance and safe worker failures.
+
+**Evidence:** [PR #13](https://github.com/Jeminana/SUARA-System/pull/13) (`774e403`), [integration tests](../main_pipeline/tests/test_pitch_pipeline.py) and [execution record](../docs/T03_PIPELINE_INTEGRATION.md#execution-record), including a real-worker test with a generated tone.
+
+**Notes and limitations:** The real-worker test uses test doubles for timbre and recommendation. T09 covers the runnable full real flow. Two fake-worker tests fail on Windows because they launch a Unix script directly.
+
 ## T04
 
 **Task name:** E6 Real Timbre Feature Adapter
@@ -369,7 +401,9 @@ repository delivery; they do not establish the author's original completion date
 
 **Evidence:** [Adapter](../main_pipeline/src/suara/timbre.py), [tests](../main_pipeline/tests/test_timbre.py), [parameters, commands and results](../docs/T04_T05_TIMBRE_VALIDATION.md): 78 pipeline tests passed, including 9 new timbre tests; all 42 authorized E6 source recordings passed standalone and integrated checks.
 
-**Notes and limitations:** No model checkpoint or new dependencies; no schema change. Recording authorization was confirmed by the user in this session. Private audio and per-recording features remain outside Git. Feature correctness does not establish perceptual similarity or song suitability. Changes are local on feature/t04-t05-real-timbre; no push or merge performed.
+**Notes and limitations:** The adapter uses the existing dependencies and schema. The user confirmed authorization for the validation recordings. Private audio and per-recording features remain outside Git. The validation covers feature extraction.
+
+**Merge record:** [PR #9](https://github.com/Jeminana/SUARA-System/pull/9) merged on 2026-11-15 (`61bf89d`).
 
 ## T05
 
@@ -385,7 +419,9 @@ repository delivery; they do not establish the author's original completion date
 
 **Evidence:** [CLI wiring](../main_pipeline/src/suara/cli.py), [integration tests](../main_pipeline/tests/test_timbre.py), [local recording validator](../main_pipeline/tools/validate_timbre_recordings.py), [validation evidence](../docs/T04_T05_TIMBRE_VALIDATION.md): 78 tests and all 42 authorized recordings passed.
 
-**Notes and limitations:** Default mock behavior is preserved. Timbre is measured, but CLI pitch/ranking and overall result remain mock. The unvoiced assembly test uses a clearly named test-only pitch stub. Fully real pitch/recommendation integration and demonstration remain T03/T09/T10/T11 work; no success is claimed for those tasks. No commit, push or merge performed.
+**Notes and limitations:** The CLI can select measured timbre while using mock pitch and ranking. The unvoiced assembly test uses a pitch stub. Full real dependency wiring and demonstration are covered by T09–T11.
+
+**Merge record:** [PR #9](https://github.com/Jeminana/SUARA-System/pull/9) merged on 2026-11-15 (`61bf89d`). T03 subsequently merged the pitch integration through the Python API.
 
 ## T06
 
@@ -418,6 +454,38 @@ repository delivery; they do not establish the author's original completion date
 **Evidence:** [PR #8](https://github.com/Jeminana/SUARA-System/pull/8) (`7d805ed`, implementation `40174b4`), [loader](../main_pipeline/src/suara/catalog.py), [CLI](../main_pipeline/src/suara/cli.py), [7 passing catalog tests](../main_pipeline/tests/test_catalog.py), [usage](../main_pipeline/README.md#song-catalog-file). Verified on 2026-11-15 with `main_pipeline/.venv/Scripts/python.exe -m unittest discover -s main_pipeline/tests -p test_catalog.py -v` and PYTHONPATH set to main_pipeline/src.
 
 **Notes and limitations:** No E3 model stack is imported into the Python 3.12 application. The loader validates numeric range structure; MIDI-to-Hz conversion and source interpretation are upstream responsibilities. Real-mode wiring tests use test-only adapters and do not prove real recommendation behavior. The production CLI ranker remains mock.
+
+## T08
+
+**Task name:** Implement Basic Recommendation Algorithm
+
+**Responsible member:** Recommendation Member (assignment pending).
+
+**Original expected deadline:** 2026-11-19
+
+**Actual completion date:** Unknown (not verified). PR #10 merged on 2026-11-17.
+
+**Deliverables:** A versioned pitch-range and median-pitch scoring rule, deterministic ranking with explanations, documented handling of unvoiced input and missing or unverified song ranges, and a comparison with the T12 baseline on the E3 catalog.
+
+**Evidence:** [PR #10](https://github.com/Jeminana/SUARA-System/pull/10) (`c2f510a`), [implementation](../main_pipeline/src/suara/recommender.py), [tests](../main_pipeline/tests/test_recommender.py) and [validation report](../docs/T08_RECOMMENDER_VALIDATION.md). On 2026-11-18, all 13 tests passed and the comparison ran on the five-song catalog.
+
+**Notes and limitations:** The comparison used synthetic profiles. T09 covers entry-point wiring and T10 covers evaluation on real pipeline outputs.
+
+## T09
+
+**Task name:** Integrate Recommendation Algorithm
+
+**Responsible member:** Main Pipeline Lead + Recommendation Member (roles).
+
+**Original expected deadline:** 2026-11-22
+
+**Actual completion date:** 2026-11-20 (local implementation and validation).
+
+**Deliverables:** The real-mode CLI wires WAV preprocessing, the CREPE pitch adapter, measured timbre, and the pitch-range recommender through PipelineDependencies. It loads an explicit SongFeatures catalog and returns the voice profile and ranked results as JSON.
+
+**Evidence:** The [CLI](../main_pipeline/src/suara/cli.py), [run instructions](../main_pipeline/README.md#real-pipeline-t09), and [integration tests](../main_pipeline/tests/test_pitch_pipeline.py) cover the entry point and the worker boundary. Actual CREPE inference on Ubuntu returned a 220.883 Hz median and 99.01% voiced frames for a generated 220 Hz stereo WAV. Measured timbre yielded 20 MFCC means, and the E3 catalog returned two ranked recommendations with real provenance. All 108 pipeline tests passed on Ubuntu with actual CREPE enabled. See [T09 on the task board](TASK_BOARD.md#t09) for the recorded scores.
+
+**Notes and limitations:** Windows application control blocked a TensorFlow DLL on the validation host, so actual inference was verified in Ubuntu. The documented run uses an editable install. Authorized recordings, recommendation quality, and latency evaluation are T10 deliverables.
 
 ## T12
 

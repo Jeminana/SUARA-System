@@ -2,14 +2,13 @@
 
 Role assignments below are planning placeholders. **Unassigned** means the person's responsibility has not been confirmed. Member 5 and Member 6 are assigned member identifiers, not actual names. Replace placeholders with actual names after agreement; keep role labels stable. One person may fill several roles. Do not invent names.
 
-The user confirmed T01 complete and T02-T09, T12 and T13 distributed in the update recorded on 2026-11-04. No actual names or revised role mappings were supplied, so existing assignment rows are retained. Unassigned name cells remain missing identity details; they do not negate the reported distribution. T10 and T11 have not started.
+The user confirmed T01 complete and T02–T09, T12 and T13 distributed in the update recorded on 2026-11-04. Individual names and role assignments are subject to team confirmation.
 
 Current task status lives only in [TASK_BOARD.md](TASK_BOARD.md). The Progress column links there so this file does not create conflicting status counts. F01-F15 evidence remains in [COMPLETED_TASKS.md](COMPLETED_TASKS.md).
 
-The 2026-11-15 PR review reconciled T06/T07/T12 with merged PRs #7/#8/#6 and
-recorded acceptance evidence in the board/history. T04/T05 work is prepared on
-feature/t04-t05-real-timbre for PR review, pending merge. No member names or role changes were inferred from commit authorship;
-the user's PR-manager role does not by itself assign other implementation roles.
+The [completion history](COMPLETED_TASKS.md) records the merged deliverables and
+available evidence. Confirm individual responsibilities with the team before
+updating the role assignments below.
 
 | Role | Member Name | Assigned Tasks | Responsibilities | Progress |
 | --- | --- | --- | --- | --- |

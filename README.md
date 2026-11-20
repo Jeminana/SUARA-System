@@ -2,7 +2,7 @@
 
 SUARA (from *Sesuai Suara*, “suitable for the voice”) is a proposed AI-powered vocal profile and music recommendation service. It analyzes a short singing sample and aims to recommend songs, artists, and song keys that fit the singer. The primary product direction is an analysis and recommendation engine that can integrate with a music streaming service; a web demonstration will validate the idea first. This project is a capstone feasibility prototype, not a complete streaming platform.
 
-The proposal describes intended capabilities, not validated product claims. The local pipeline has real WAV preprocessing and optional measured timbre (`--timbre real`), with synthetic pitch and recommendations by default. See [T04/T05 implementation and validation](docs/T04_T05_TIMBRE_VALIDATION.md); real pitch and recommendation integration remain pending.
+The local pipeline defaults to synthetic pitch and recommendations and offers optional measured timbre (`--timbre real`). Real mode combines CREPE pitch, measured timbre, and pitch-range recommendations for a supplied song catalog. See the [real-mode setup](main_pipeline/README.md#real-pipeline-t09).
 
 ## Project goals
 
@@ -68,23 +68,19 @@ preparation. The catalog uses team-approved written melody excerpts; E3's separa
 real-singer annotation re-check remains pending. T12's illustrative results are
 synthetic, and its range baseline is not the production recommender for T08.
 
-T04/T05 are implemented and tested on `feature/t04-t05-real-timbre`, with
-78 pipeline tests and 42 authorized E6 recording checks passing; the branch is
-prepared for PR review and merge. [Run instructions and evidence](docs/T04_T05_TIMBRE_VALIDATION.md)
-include the optional `--timbre real` switch. T02/T03 (real pitch), T08/T09
-(recommendation), T10/T11 (end-to-end evaluation/demo) and T13 (interface) have no
-completion evidence in fetched main. Real pitch, ranking and the complete real
-demo remain pending.
+The pitch adapter (T02/T03), measured timbre (T04/T05), and pitch-range
+recommender (T08) are merged. T09 combines them in the local CLI with
+the E3 catalog. See the [task board](tasks/TASK_BOARD.md#t09) for integration
+evidence and the status of the evaluation, demo, and interface work.
 
-To select the merged E3 catalog in the local CLI:
+After [setting up the CREPE worker](main_pipeline/README.md#real-pipeline-t09),
+run the local CLI with the E3 catalog:
 
 ```powershell
-main_pipeline/.venv/Scripts/python.exe -m suara.cli --audio main_pipeline/.smoke/tone.wav --catalog experiments/E3/handoff/song_features.json
+main_pipeline/.venv/Scripts/python.exe -m suara.cli --audio main_pipeline/.smoke/tone.wav --mode real --catalog experiments/E3/handoff/song_features.json
 ```
 
-This changes catalog metadata; ranking remains synthetic. See the
-[pipeline README](main_pipeline/README.md) for setup and the
-[evaluation README](evaluation/README.md) for T12 commands.
+See the [evaluation README](evaluation/README.md) for T12 commands.
 
 ### E1: Pitch detection (complete)
 
@@ -121,7 +117,7 @@ These are open follow-ups identified so far. They are candidates, not commitment
 
 **Programme**
 - Start E2 (vocal profile extraction), then E4 and E5, using E1's detector choice and E3's verified song profiles.
-- Complete real pitch and recommendation integration with the delivered timbre adapter and E3 catalog, then run T10 using the merged evaluation framework.
+- Run T10 on the integrated pitch, timbre, and recommendation pipeline using the merged evaluation framework.
 - Add continuous integration to run each experiment's tests on pull requests.
 
 ## Repository layout

@@ -6,9 +6,9 @@ Implementation and validation date: 2026-11-15 (Asia/Seoul).
 
 [`suara.recommender.recommend_songs`](../main_pipeline/src/suara/recommender.py) implements
 `recommend_songs(voice_profile, song_catalog, top_k=5) -> list[Recommendation]`, the same
-signature as the mock ranker, so T09 can inject it through `PipelineDependencies`. It uses only
+signature as the mock ranker, so T09 injects it through `PipelineDependencies`. It uses only
 the standard library, treats its inputs as read-only and declares `suara_mode = "real"`.
-It is not yet wired into the CLI or the default pipeline; that is T09.
+The [real-mode CLI](../main_pipeline/README.md#real-pipeline-t09) selects this ranker.
 
 ## Scoring formula (`pitch-range-fit-v1`)
 
@@ -122,8 +122,7 @@ own recommendation validator for four profiles and every `top_k`, real- and mock
 runs, the unvoiced pipeline path and the T12 fixtures. Run on Python 3.12.14, NumPy 2.5.4,
 SciPy 1.18.1: the full suite is 91 tests (78 existing + 13 new), all passing.
 
-## Not done here
+## Follow-up evaluation
 
-- Wiring into the CLI and a real-mode entry point (T09).
-- Real pitch input: the pipeline's pitch analyzer is still mock until T02/T03.
-- Tuning the weights or scale, and any listener study to judge suitability.
+T09 records [real-mode integration evidence](../tasks/TASK_BOARD.md#t09).
+Tuning the weights and evaluating suitability with listeners remain future work.

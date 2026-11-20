@@ -45,7 +45,7 @@ experiments/E1/.venv-crepe/bin/python -m pip install --upgrade pip
 experiments/E1/.venv-crepe/bin/python -m pip install -r experiments/E1/environment/requirements-crepe.txt
 PYTHONPATH="$PWD/experiments/E1/environment/compat" \
   experiments/E1/.venv-crepe/bin/python -m pip install --no-build-isolation \
-  -r experiments/E1/environment/requirements-crepe-algorithm.txt
+  --no-deps crepe==0.0.12
 ```
 
 TensorFlow 2.16.2 has CPU macOS wheels for Python 3.12 on Apple Silicon and
@@ -81,8 +81,7 @@ result = run_pipeline(
 )
 ```
 
-The existing CLI does not select a real pitch adapter. This implementation
-exposes it through the documented dependency injection interface.
+T09 uses the same adapter in the [real-mode CLI](../main_pipeline/README.md#real-pipeline-t09).
 
 ## Process boundary and errors
 

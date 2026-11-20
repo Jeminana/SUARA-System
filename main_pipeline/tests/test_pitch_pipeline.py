@@ -1,4 +1,6 @@
-"""Pipeline wiring tests for the real E1 pitch adapter."""
+"""Pipeline and CLI integration tests across the CREPE worker boundary."""
+from contextlib import redirect_stderr, redirect_stdout
+from io import StringIO
 import json
 import os
 import sys
@@ -7,13 +9,43 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from helpers import SyntheticTestCase
+from helpers import ROOT, SyntheticTestCase
 from suara.audio.preprocessing import preprocess_audio
+from suara.cli import main
 from suara.contracts import (
     AudioData, PipelineDependencies, TimbreFeatures,
 )
 from suara.pitch import MODEL_VERSION, WORKER_PROTOCOL, analyze_pitch
 from suara.pipeline import run_pipeline
+from suara.recommender import SCORING_VERSION
+
+
+E3_CATALOG = ROOT.parent / "experiments" / "E3" / "handoff" / "song_features.json"
+
+
+def run_real_cli(audio_path):
+    stdout, stderr = StringIO(), StringIO()
+    with redirect_stdout(stdout), redirect_stderr(stderr):
+        code = main(["--audio", str(audio_path), "--mode", "real",
+                     "--catalog", str(E3_CATALOG), "--top-k", "2"])
+    return code, stdout.getvalue(), stderr.getvalue()
+
+
+def assert_real_ranking(test, result):
+    profile = result["voice_profile"]
+    test.assertEqual(result["analysis_mode"], "real")
+    test.assertEqual(profile["pitch"]["mode"], "real")
+    test.assertEqual(profile["timbre"]["mode"], "real")
+    test.assertEqual(len(profile["timbre"]["mfcc_mean"]), 20)
+    recommendations = result["recommendations"]
+    test.assertEqual(len(recommendations), 2)
+    keys = [(-rec["score"], rec["song_id"]) for rec in recommendations]
+    test.assertEqual(keys, sorted(keys))
+    for rec in recommendations:
+        test.assertTrue(rec["song_id"].startswith("E3-"))
+        test.assertEqual(rec["mode"], "real")
+        test.assertEqual(rec["scoring_version"], SCORING_VERSION)
+        test.assertTrue(rec["explanation"])
 
 
 def response(frames):
@@ -30,9 +62,8 @@ class PitchPipelineIntegrationTests(SyntheticTestCase):
 
     def setUp(self):
         super().setUp()
-        self.fake_python = self.folder / "fake_crepe_python"
-        self.fake_python.write_text(textwrap.dedent(f"""\
-            #!{sys.executable}
+        worker = self.folder / "fake_crepe_worker.py"
+        worker.write_text(textwrap.dedent(f"""\
             import json, os, struct, sys, time
             payload = sys.stdin.buffer.read()
             if len(payload) < 12 or payload[:8] != b"SUARAP01":
@@ -60,9 +91,10 @@ class PitchPipelineIntegrationTests(SyntheticTestCase):
                 output = json.dumps({{"protocol": {WORKER_PROTOCOL!r}, "frames": []}})
             sys.stdout.write(output + "\\n")
         """))
-        self.fake_python.chmod(0o755)
+        command = patch("suara.pitch._worker_command", return_value=[sys.executable, str(worker)])
+        command.start()
+        self.addCleanup(command.stop)
         self.env = patch.dict(os.environ, {
-            "SUARA_CREPE_PYTHON": str(self.fake_python),
             "SUARA_CREPE_TIMEOUT_S": "2",
             "SUARA_TEST_CREPE_DELAY": "0",
             "SUARA_TEST_CREPE_EXIT": "0",
@@ -180,11 +212,45 @@ class PitchPipelineIntegrationTests(SyntheticTestCase):
             self.assert_error("module_failure", lambda: self._run(
                 self.wav(), self._dependencies(response([]), capture={})), "pitch")
 
+    def test_real_cli_ranks_e3_catalog_or_reports_safe_failure(self):
+        audio = self.wav(duration=1.0)
+        with patch.dict(os.environ, {"SUARA_TEST_CREPE_RESPONSE": response([frame(220, 0.9)])}):
+            code, stdout, stderr = run_real_cli(audio)
+        self.assertEqual(code, 0, stderr)
+        self.assertEqual(stderr, "")
+        assert_real_ranking(self, json.loads(stdout))
+
+        with patch.dict(os.environ, {"SUARA_TEST_CREPE_RESPONSE": response([frame(220, 0.1)])}):
+            code, stdout, stderr = run_real_cli(audio)
+        self.assertEqual(code, 0, stderr)
+        self.assertEqual(stderr, "")
+        result = json.loads(stdout)
+        self.assertEqual(result["voice_profile"]["status"], "no_voiced_pitch")
+        self.assertEqual(result["recommendations"], [])
+
+        with patch.dict(os.environ, {"SUARA_TEST_CREPE_EXIT": "7"}):
+            code, stdout, stderr = run_real_cli(audio)
+        self.assertEqual(code, 2)
+        self.assertEqual(stdout, "")
+        error = json.loads(stderr)
+        self.assertEqual((error["code"], error["stage"]), ("module_failure", "pitch"))
+        self.assertNotIn("private", stderr)
+
 
 @unittest.skipUnless(os.environ.get("SUARA_CREPE_INTEGRATION") == "1",
                      "set SUARA_CREPE_INTEGRATION=1 to run actual CREPE end to end")
 class RealCrepePipelineIntegrationTests(SyntheticTestCase):
     """Opt-in preprocess -> actual CREPE adapter -> pipeline -> profile check."""
+
+    def test_generated_220_hz_wav_runs_through_real_cli(self):
+        code, stdout, stderr = run_real_cli(self.wav(duration=1.0, frequency=220))
+        self.assertEqual(code, 0, stderr)
+        self.assertEqual(stderr, "")
+        result = json.loads(stdout)
+        assert_real_ranking(self, result)
+        pitch = result["voice_profile"]["pitch"]
+        self.assertEqual(pitch["model_version"], MODEL_VERSION)
+        self.assertAlmostEqual(pitch["median_pitch_hz"], 220.0, delta=8.0)
 
     def test_generated_220_hz_wav_runs_through_real_pipeline(self):
         def test_timbre(audio_data):

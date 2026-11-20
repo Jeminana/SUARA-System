@@ -100,7 +100,9 @@ class CatalogLoadingTests(SyntheticTestCase):
         bad = self.catalog_file('{"not": "a list"}')
         for args, code in ((['--catalog', str(bad)], 'invalid_catalog'),
                            (['--catalog', str(self.folder / 'private-secret-none.json')], 'invalid_catalog'),
-                           (['--catalog', str(E3_EXPORT), '--mode', 'real'], 'invalid_configuration')):
+                           (['--mode', 'real', '--catalog', str(bad)], 'invalid_catalog'),
+                           (['--mode', 'real', '--catalog', str(E3_EXPORT), '--timbre', 'mock'],
+                            'invalid_configuration')):
             with self.subTest(args):
                 result = subprocess.run([sys.executable, '-m', 'suara.cli', '--audio', str(audio), *args],
                                         capture_output=True, text=True)

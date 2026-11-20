@@ -8,7 +8,7 @@ Phase Start Date: 2026-11-04
 
 Proposed Phase Deadline: 2026-11-29 (tentative, subject to team confirmation)
 
-Last Updated: 2026-11-15 (actual edit date; see [CHANGELOG.md](CHANGELOG.md))
+Last Updated: 2026-11-20 (actual edit date; see [CHANGELOG.md](CHANGELOG.md))
 
 Tracker created: 2026-11-02 (actual edit date; see [CHANGELOG.md](CHANGELOG.md)).
 
@@ -16,7 +16,7 @@ Tracker created: 2026-11-02 (actual edit date; see [CHANGELOG.md](CHANGELOG.md))
 
 ## PHASE 0 — Main Pipeline Foundation (Completed)
 
-All 15 foundation tasks are supported by repository evidence. These cover the three-day foundation effort; real AI integration remains pending. See [completed-task records](COMPLETED_TASKS.md) for deliverables, evidence and limitations. Older planning snapshots are superseded for foundation completion by the Day 3 report and existing implementation.
+All 15 foundation tasks are supported by the Day 3 report and existing implementation. See [completed-task records](COMPLETED_TASKS.md) for deliverables, evidence and limitations.
 
 | Task ID | Task Name | Description | Why We Need It | Responsible Member | Start Date | Expected Deadline | Status | Dependencies |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -38,7 +38,7 @@ All 15 foundation tasks are supported by repository evidence. These cover the th
 
 ## PHASE 1 — Real AI Module Integration
 
-All start dates and deadlines below are proposed. T01's handoff is complete per the user's update recorded on 2026-11-04; its original planned dates are retained. T04/T05 were implemented and validated on 2026-11-15 and are prepared for PR review on feature/t04-t05-real-timbre, pending merge. A repository review on 2026-11-15 also verified merged T06 (PR #7), T07 (PR #8) and T12 (PR #6); evidence and limitations are recorded below. Other task statuses retain their previously recorded values; distribution alone does not establish progress. T10 and T11 have not started. Existing downstream dependencies still apply.
+All start dates and deadlines below are proposed. The 2026-11-18 review used `main` at `774e403`. T01–T09 and T12 are complete. The T09 local changes integrate the merged pitch and timbre adapters, E3 catalog and pitch-range recommender in one CLI command. See the acceptance criteria below for merge and validation evidence.
 
 | Task ID | Task Name | Description | Why We Need It | Responsible Member | Start Date | Expected Deadline | Status | Dependencies |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -49,12 +49,20 @@ All start dates and deadlines below are proposed. T01's handoff is complete per 
 | T05 | [Integrate E6 Timbre Adapter](#t05) | Connect the real timbre analyzer, verify feature consistency and run integration tests. | Combines actual pitch and timbre measurements in one consistent voice profile. | Main Pipeline Lead + E6 Member | 2026-11-13 | 2026-11-15 | Completed | T04 |
 | T06 | [E3 Song Analysis and Catalog Export](#t06) | Convert existing E3 song and melody analysis outputs into a catalog of SongFeatures. | Provides structured song information to compare with the user's vocal characteristics. | E3 Member | 2026-11-04 | 2026-11-14 | Completed | T01 |
 | T07 | [Integrate Song Catalog](#t07) | Load the E3 catalog, validate SongFeatures records and test catalog access. | Gives the recommendation algorithm a reliable collection of songs and analyzed features. | Main Pipeline Lead + E3 Member | 2026-11-15 | 2026-11-17 | Completed | T06 |
-| T08 | [Implement Basic Recommendation Algorithm](#t08) | Replace fixed mock rankings with an initial rule-based recommendation algorithm. | Makes recommendations respond to the user's measured vocal characteristics. | Recommendation Member (assignment pending) | 2026-11-11 | 2026-11-19 | Not Started | T01; T06 for evaluated integration (implementation may start earlier with contract-compatible sample data) |
-| T09 | [Integrate Recommendation Algorithm](#t09) | Connect the real ranking function through PipelineDependencies and test recording-to-recommendation behavior. | Enables actual feature-based recommendations in place of fictional fixed rankings. | Main Pipeline Lead + Recommendation Member | 2026-11-20 | 2026-11-22 | Not Started | T03, T05, T07, T08 |
+| T08 | [Implement Basic Recommendation Algorithm](#t08) | Implement an initial rule-based recommendation algorithm. | Makes recommendations respond to the user's measured vocal characteristics. | Recommendation Member (assignment pending) | 2026-11-11 | 2026-11-19 | Completed | T01; T06 for evaluated integration (implementation may start earlier with contract-compatible sample data) |
+| T09 | [Integrate Recommendation Algorithm](#t09) | Connect the real ranking function through PipelineDependencies and test recording-to-recommendation behavior. | Enables actual feature-based recommendations in place of fictional fixed rankings. | Main Pipeline Lead + Recommendation Member | 2026-11-20 | 2026-11-22 | Completed | T03, T05, T07, T08 |
 | T10 | [End-to-End Integration Testing](#t10) | Test real adapters, authorized recordings and the validated song catalog as a complete system. | Finds failures between modules and checks whether outputs support an initial demonstration. | Main Pipeline Lead + All Team Members | 2026-11-23 | 2026-11-26 | Not Started | T09 |
 | T11 | [Final Prototype Demonstration](#t11) | Prepare a local end-to-end SUARA demo with real analyzers and the rule-based recommender. | Demonstrates that the individual experiments form one integrated system. | Main Pipeline Lead + All Team Members | 2026-11-27 | 2026-11-29 | Not Started | T10 |
 | T12 | [Evaluation Framework & Test Preparation](#t12) | Prepare a reusable evaluation framework before real AI modules are fully integrated. | Provides consistent evaluation of pitch extraction, voice features, recommendation behavior and processing performance. | Member 5 (Evaluation & Testing) | 2026-11-04 | 2026-11-20 | Completed | T01; integration contract and existing pipeline schemas (F03, F05) |
 | T13 | [Minimal SUARA Demo Interface](#t13) | Develop a simple local interface using the mock pipeline first, with support for later real integration. | Lets users, teammates and professors demonstrate the workflow without terminal commands or raw JSON. | Member 6 (Demo Interface Development) | 2026-11-04 | 2026-11-22 | Not Started | Main pipeline foundation (completed); T01 |
+
+## Remaining Phase 1 work
+
+| Task | Remaining deliverable | Proposed deadline |
+| --- | --- | --- |
+| [T13](#t13) | Build a local WAV-upload interface with profile and recommendation displays, synthetic-result labels and clear errors. | 2026-11-22 |
+| [T10](#t10) | After T09, evaluate the integrated pipeline with authorized recordings, measure latency, and compare rankings with the baseline. | 2026-11-26 |
+| [T11](#t11) | After T10, prepare and run a reproducible demonstration with actual adapters and summarize the evaluation. | 2026-11-29 |
 
 ## Acceptance criteria
 
@@ -78,9 +86,12 @@ Check off individual deliverables here as evidence becomes available. Read curre
 - [x] Select a suitable method from [E1 results](../experiments/E1/README.md) and adapt the code to the application interface.
 - [x] Extract measured pitch from real audio and calculate minimum, maximum, median pitch and voiced ratio.
 - [x] Return validated PitchFeatures, with null pitch statistics when no voiced frames exist.
-- [x] Add tests using synthetic tones and suitable authorized recordings; keep private recordings out of Git.
+- [x] Add automated and real-worker checks using synthetic tones. See the [T02 validation results](../docs/T02_PITCH_ADAPTER.md#verified-t02-results).
+- [ ] Run the documented pitch check on suitable authorized human recordings during T10. Keep private recordings out of Git. See the [authorized recording procedure](../docs/T02_PITCH_ADAPTER.md#optional-authorized-recording-check).
 - [x] Document extraction parameters, detector/model version, voicing policy and known limitations.
 - [x] Submit a pull request for review.
+
+**Completion evidence (reviewed 2026-11-18):** [PR #11](https://github.com/Jeminana/SUARA-System/pull/11) merged on 2026-11-17 (`adcd30e`). The documented macOS run verified actual CREPE inference on a generated 220 Hz tone. Human-recording validation remains open under T10. See the [completion record](COMPLETED_TASKS.md#t02).
 
 ### T03
 
@@ -89,6 +100,8 @@ Check off individual deliverables here as evidence becomes available. Read curre
 - [x] Review the E1 PR and connect the adapter through PipelineDependencies.
 - [x] Verify compatibility with actual preprocessing and voice profile assembly.
 - [x] Run integration tests for voiced/unvoiced inputs, validated outputs, provenance and safe errors; record evidence.
+
+**Completion evidence (reviewed 2026-11-18):** [PR #13](https://github.com/Jeminana/SUARA-System/pull/13) merged on 2026-11-17 (`774e403`). The documented real-worker test exercises WAV preprocessing, pitch and profile assembly through the Python API, with test doubles for timbre and ranking. See the [completion record](COMPLETED_TASKS.md#t03).
 
 ### T04
 
@@ -100,7 +113,7 @@ Check off individual deliverables here as evidence becomes available. Read curre
 - [x] Test with synthetic and authorized real audio. See [9 new tests](../main_pipeline/tests/test_timbre.py) and [42-recording validation](../docs/T04_T05_TIMBRE_VALIDATION.md#reproducible-validation).
 - [x] Document extraction parameters, model version and processing version; keep ECAPA embeddings separate from MFCCs. See [implementation and version documentation](../docs/T04_T05_TIMBRE_VALIDATION.md).
 
-**Completion evidence (2026-11-15):** 78 pipeline tests passed; independent numerical reference comparisons passed; all 42 authorized E6 source recordings passed standalone and integrated checks. Locked E6 assets and schema 1.0.0 are preserved. See the [historical record](COMPLETED_TASKS.md#t04).
+**Completion evidence:** 78 pipeline tests, numerical reference comparisons and all 42 authorized E6 recording checks passed on 2026-11-15. [PR #9](https://github.com/Jeminana/SUARA-System/pull/9) merged that day (`61bf89d`). See the [historical record](COMPLETED_TASKS.md#t04).
 
 ### T05
 
@@ -110,7 +123,7 @@ Check off individual deliverables here as evidence becomes available. Read curre
 - [x] Verify MFCC dimension, convention, finite values and processing-version consistency. See [numerical and integration tests](../main_pipeline/tests/test_timbre.py).
 - [x] Run integration tests with preprocessing and profile assembly, including mixed-mode provenance; record evidence. See [78-test and 42-recording results](../docs/T04_T05_TIMBRE_VALIDATION.md#reproducible-validation).
 
-**Completion evidence (2026-11-15):** Actual preprocessing and timbre are integrated; mock pitch/ranking remain truthfully labeled and default mock behavior is preserved. Unvoiced assembly uses an explicitly test-only pitch stub. Fully real pitch/recommendation execution still requires T03/T09; this completion does not claim those tasks. See the [historical record](COMPLETED_TASKS.md#t05).
+**Completion evidence:** [PR #9](https://github.com/Jeminana/SUARA-System/pull/9) merged on 2026-11-15 (`61bf89d`). The CLI combines actual preprocessing and optional measured timbre with labeled mock pitch and ranking. The unvoiced test uses a pitch stub. T09 covers wiring the full real flow. See the [historical record](COMPLETED_TASKS.md#t05).
 
 ### T06
 
@@ -139,26 +152,31 @@ Check off individual deliverables here as evidence becomes available. Read curre
 
 **Implement Basic Recommendation Algorithm**
 
-- [ ] Use pitch-range compatibility as the primary baseline signal.
-- [ ] Define and document a transparent scoring formula and safe missing-pitch/missing-song-range policy.
-- [ ] Return validated, ranked Recommendation records with bounded scores, deterministic ordering and a reason for each ranking.
-- [ ] Compare results with a simple naive baseline using the E3 catalog for evaluated integration.
-- [ ] Do not assume MFCC similarity proves song suitability.
+- [x] Use pitch-range compatibility as the primary signal. See the [scoring formula](../docs/T08_RECOMMENDER_VALIDATION.md#scoring-formula-pitch-range-fit-v1).
+- [x] Document the scoring formula and how missing pitch and missing or unverified song ranges are handled. See the [missing-data policy](../docs/T08_RECOMMENDER_VALIDATION.md#missing-data-provenance-and-ordering).
+- [x] Return ranked Recommendation records with bounded scores, deterministic ordering and explanations. See the [recommender tests](../main_pipeline/tests/test_recommender.py).
+- [x] Compare ranking results with the T12 naive baseline on the five-song E3 pilot catalog. See the [comparison](../docs/T08_RECOMMENDER_VALIDATION.md#comparison-with-the-t12-naive-baseline).
+- [x] Use pitch range and median pitch only. The score describes pitch-range fit. See the [comparison findings](../docs/T08_RECOMMENDER_VALIDATION.md#what-the-comparison-shows).
+
+**Completion evidence (reviewed 2026-11-18):** [PR #10](https://github.com/Jeminana/SUARA-System/pull/10) merged on 2026-11-17 (`c2f510a`). All 13 recommender tests passed on Windows, and the baseline comparison ran on the committed E3 catalog. T09 covers wiring the ranker into the real entry point. See the [completion record](COMPLETED_TASKS.md#t08).
 
 ### T09
 
 **Integrate Recommendation Algorithm**
 
-- [ ] Inject the rule-based ranker with the real pitch/timbre adapters and validated E3 catalog.
-- [ ] Test the complete recording-to-profile-to-recommendation flow, real provenance and safe failure behavior.
-- [ ] Provide an explicit local entry point for selecting real dependencies/catalog: update CLI wiring or supply a documented Python runner for T11. The current CLI rejects real mode.
-- [ ] Record integration test results and run instructions.
+- [x] Inject the rule-based ranker with the real pitch/timbre adapters and validated E3 catalog. See the [CLI wiring](../main_pipeline/src/suara/cli.py).
+- [x] Test the complete recording-to-profile-to-recommendation flow, real provenance and safe failure behavior. See [CLI integration tests](../main_pipeline/tests/test_pitch_pipeline.py) and [catalog error tests](../main_pipeline/tests/test_catalog.py).
+- [x] Provide an explicit local entry point for selecting real dependencies and catalog. Run the CLI with `--mode real --catalog experiments/E3/handoff/song_features.json`. See the [setup and run instructions](../main_pipeline/README.md#real-pipeline-t09).
+- [x] Record integration test results and run instructions. See the [completion record](COMPLETED_TASKS.md#t09) and [real-mode guide](../main_pipeline/README.md#real-pipeline-t09).
+
+**Completion evidence (2026-11-20):** On Ubuntu, the CLI analyzed a generated 1-second, 220 Hz stereo WAV using actual CREPE 0.0.12 and measured timbre. It reported a 220.883 Hz median, 99.01% voiced frames and 20 MFCC means. It ranked E3-S01 (0.4753) and E3-S03 (0.1915) with real provenance and scoring version `pitch-range-fit-v1`. All 108 pipeline tests passed on Ubuntu with actual CREPE enabled. On Windows, 105 pipeline tests and all 23 evaluation-framework tests passed. Windows application control blocked TensorFlow's native DLL on this host. T10 covers authorized recordings, recommendation quality and latency.
 
 ### T10
 
 **End-to-End Integration Testing**
 
 - [ ] Test normal, invalid and unvoiced inputs.
+- [ ] Run the T02 pitch check on suitable authorized human recordings and record qualitative observations. Use annotated reference F0 for any quantitative pitch-accuracy claim.
 - [ ] Verify module compatibility and recommendation validity.
 - [ ] Measure real-runtime latency with a documented method and team-agreed demonstration budget.
 - [ ] Compare recommendations with a naive baseline.
@@ -275,15 +293,16 @@ Check off individual deliverables here as evidence becomes available. Read curre
 | 2026-11-23 to 2026-11-26 | Real end-to-end testing and evaluation (T10) |
 | 2026-11-27 to 2026-11-29 | Local prototype demonstration (T11) |
 
-- **Converging dependencies:** T09 waits for T03, T05, T07 and T08; T10 then waits for T09 and T11 for T10. T08 finishes last in the proposed predecessor schedule, with no full spare day before T09.
+- **Converging dependencies:** T09 is complete. T10 can use the integrated CLI, and T11 waits for T10.
 - **Contract handoff:** T01 is complete per user confirmation recorded on 2026-11-04. Its original planned 2026-11-05 deadline is retained; the handoff no longer blocks successor preparation.
 - **T12/T13 preparation:** T12's framework is merged and verified; T13 still has no implementation evidence in fetched main. T13 should label initial mock outputs as synthetic and wait for T03/T05/T07/T09 before demonstrating real results. T12 completion does not complete T10.
-- **T08 evaluation:** T06's five-song pilot catalog and T07's loader are available. T08 can use these for baseline comparison; no production rule-based recommender was found in fetched main.
-- **E6 representation:** T04 now re-extracts the agreed 20 unscaled c0..c19 means from AudioData. Existing development-scaled, c0-excluded pooled features remain separate and cannot be relabeled. T05 supplies mixed-mode integration; fully real execution still waits for actual pitch/ranking.
+- **T08 evaluation:** The five-song comparison used synthetic voice profiles. T10 evaluates real pipeline outputs.
+- **E6 representation:** T04 extracts the 20 unscaled c0..c19 means from AudioData. T05 supplies optional measured timbre in mock mode, and the T09 real CLI includes measured timbre by default.
 - **E3 readiness:** T06/T07 are merged: five written-melody pilot ranges are exported with excerpt/provenance information and loaded without E3's experiment stack. Real-singer annotation re-checks and broader model evaluation remain pending; catalog delivery does not resolve them.
-- **Demo entry point:** The current CLI rejects real mode. T09 must provide explicit real dependency/catalog wiring through the CLI or a documented local Python runner before T11.
+- **Demo entry point:** The [real-mode CLI](../main_pipeline/README.md#real-pipeline-t09) uses an explicit catalog and an isolated CREPE interpreter.
+- **Pitch portability:** The [pitch integration tests](../main_pipeline/tests/test_pitch_pipeline.py) launch the protocol fixture through Python on Windows and Unix. Real mode uses an editable install from the checkout to locate the [CREPE worker](../main_pipeline/tools/crepe_pitch_worker.py).
 - **Owners and data:** The user confirms task distribution, but actual member names and any revised role mappings were not supplied. Existing assignments, including Member 5 for T12 and Member 6 for T13, are retained. Record confirmed names when available; authorized recordings, dataset access and model/runtime compatibility still need recorded evidence.
-- **Evaluation and latency:** Prior measurements concern mocks only. Agree real-runtime budgets and a naive comparison before T10; feature validity does not prove recommendation usefulness.
+- **Evaluation and latency:** T02/T03 measured actual CREPE on generated tones. T10 still needs a budget and integrated timing from real runs, plus an evaluation of recommendation quality.
 - **Deadline:** 2026-11-29 remains tentative. Later gates have no full spare day between them; escalate predecessor delays promptly and record any revised dates.
 
 ## Maintenance

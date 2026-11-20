@@ -2,12 +2,12 @@
 
 The local pipeline provides real WAV preprocessing followed
 by synthetic pitch/timbre features and fictional song recommendations by default.
-T04/T05 add optional measured timbre via `--timbre real`. Pitch and recommendation
-modules remain synthetic. The mock scores do not measure voice suitability.
+Use `--timbre real` for measured timbre with synthetic pitch and recommendations,
+or `--mode real` for measured pitch and timbre with pitch-range rankings.
 
 The MVP accepts one local WAV and returns a structured voice profile and up to
-five ranked recommendations as JSON. No cloud services, API keys, or downloaded
-models are required. The runtime does not import experiment code.
+five ranked recommendations as JSON. Analysis runs locally. Real mode uses
+locally installed CREPE model weights.
 
 ## Install and run
 
@@ -29,8 +29,39 @@ library only. Keep this environment separate from all experiment environments.
 
 Success writes PipelineResult JSON to stdout and exits 0. Expected failures write
 ErrorInfo JSON to stderr and exit 2. Invalid arguments also return JSON; `--help`
-prints usage. The CLI accepts `--mode real` but rejects it because real adapters
-can currently be supplied only through the Python API. It never falls back.
+prints usage.
+
+## Real pipeline (T09)
+
+Use the editable installation above so the pitch adapter can find its worker in
+the source checkout. Set up the separate Python 3.12 CREPE environment with the
+[T02 instructions](../docs/T02_PITCH_ADAPTER.md#environment-setup-macos).
+For PowerShell, use the worker's `Scripts/python.exe` in place of `bin/python` and
+set `$env:PYTHONPATH = (Resolve-Path experiments/E1/environment/compat).Path` for
+the legacy CREPE installation step. Restore your previous `PYTHONPATH` afterward.
+
+From the repository root in PowerShell, using the generated smoke WAV:
+
+```powershell
+$env:SUARA_CREPE_PYTHON = (Resolve-Path experiments/E1/.venv-crepe/Scripts/python.exe).Path
+main_pipeline/.venv/Scripts/python.exe -m suara.cli --audio main_pipeline/.smoke/tone.wav --mode real --catalog experiments/E3/handoff/song_features.json --top-k 2
+```
+
+On macOS/Linux, use the T02 `export SUARA_CREPE_PYTHON=...` command and the application
+environment's `bin/python`. Real mode requires an explicit catalog and uses measured
+timbre automatically. Set `SUARA_CREPE_TIMEOUT_S` if first-use model startup needs
+longer than the default 120 seconds. Invalid input or worker failure returns an
+error. A valid recording without voiced pitch returns a real profile and an empty
+recommendation list.
+
+The Windows validation host's application-control policy blocked TensorFlow's
+`_pywrap_tfe` native library. Real mode requires a worker environment where
+TensorFlow can load its native libraries.
+
+To run the opt-in tests with actual CREPE, set `SUARA_CREPE_INTEGRATION=1` in the
+same shell and run the unittest command under [Validation](#validation). The
+T09 CLI test uses a generated 220 Hz WAV and checks pitch, measured timbre,
+and two ranked E3 results. See the [task board](../tasks/TASK_BOARD.md#t09) for run evidence.
 
 ## Measured timbre (T04/T05)
 
@@ -41,9 +72,7 @@ main_pipeline/.venv/Scripts/python.exe -m suara.cli --audio main_pipeline/.smoke
 This selects `suara.timbre.analyze_timbre` through `PipelineDependencies`. The
 20 MFCC means and centroid are measured from the preprocessed recording. The
 nested timbre mode is `real`; pitch, recommendations and the overall result
-remain `mock`. Default runs still use synthetic timbre. Fully real mode requires
-the remaining actual adapters through the Python API; this option does not supply
-E1 pitch or a real ranker.
+remain `mock`. Default runs use synthetic timbre.
 
 The extractor uses the existing NumPy/SciPy dependencies, needs no checkpoint,
 and implements `mfcc-20-v1` without changing contracts or locked E6 assets.
@@ -65,8 +94,8 @@ fields in every record (including `schema_version`, which the constructor would 
 and it rejects NaN/Infinity, repeated fields within a record, and duplicate song IDs. Any problem,
 including a missing or unreadable file, is an `invalid_catalog` error whose message has no path.
 `[]` is a valid empty catalog. The loader cannot tell Hz from MIDI numbers; the exporter
-converts units (E3's `tools/export_song_features.py` and its tests). The CLI still ranks
-these songs with the fixed mock scores until T09 wires in the recommender below.
+converts units (E3's `tools/export_song_features.py` and its tests). The command
+above uses mock scores. Add `--mode real` to use pitch-range scoring.
 
 ## Pitch-range recommender (T08)
 
@@ -76,8 +105,8 @@ singer's observed pitch range, using rule `pitch-range-fit-v1`. In semitones,
 `outside` is how far the melody goes above the highest or below the lowest observed pitch.
 Timbre is not used. Songs with no range or with `unverified` provenance are left out, and a
 profile with no voiced pitch gets no recommendations. Each recommendation explains its score.
-The weights are unvalidated starting values and the score does not measure suitability. It has
-the same signature as the mock ranker but is not yet selected by the CLI (T09). Use it in Python:
+The weights are unvalidated starting values and the score describes observed pitch-range fit.
+The CLI selects this ranker in real mode. To inject it through the Python API:
 
 ```python
 from suara.contracts import PipelineDependencies
@@ -117,8 +146,8 @@ main_pipeline/.venv/Scripts/python.exe main_pipeline/tools/validate_day3.py
 Tests use temporary generated WAVs under ignored `.smoke/`. Day 3 adds PCM width,
 rate/channel matrices, duration endpoints, malformed containers, silence/clipping,
 anti-aliasing checks, all eight contracts, mutable nested data, injected adapters,
-ranking references/order/limits, provenance and safe error JSON. No AI model or
-participant recording is used. Test-only real-labeled adapters verify wiring only.
+ranking references/order/limits, provenance and safe error JSON. Standard tests use
+generated input and protocol fixtures. The opt-in tests also exercise CREPE inference.
 
 `validate_day3.py` also records ten CLI transcripts, environment/dependency checks,
 three cold and three warm timing samples per duration/input configuration, OS peak
@@ -146,5 +175,5 @@ python -c "from suara.contracts import SCHEMA_VERSION; print(SCHEMA_VERSION)"
 
 Real replacements use `PipelineDependencies` as shown in the teammate guide.
 Schema fields remain at 1.0.0. Day 3 hardens runtime boundaries without changing
-the callable interfaces. Beyond the optional measured timbre adapter, real analysis, database,
-GUI, evaluated recommendation rules and streaming integration remain out of scope.
+the callable interfaces. User-recording evaluation and demonstration are tracked under
+T10 and T11.
