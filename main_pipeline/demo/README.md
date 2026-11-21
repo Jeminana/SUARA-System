@@ -1,108 +1,33 @@
+# SUARA System · Capstone Prototype
 
-# SUARA Minimal Demo Interface (T13)
+SUARA is a local Streamlit demo for exploring a singing recording, vocal profile, timbre features, and ranked song recommendations. The interface uses the T13 mock pipeline.
 
-## Overview
+> Synthetic demonstration. Vocal values and song rankings are not measured from the uploaded recording.
 
-This is a local Streamlit interface for the SUARA System
-capstone prototype.
+Ranking scores use a 0–1 scale and do not represent probabilities of vocal suitability. Any measured pitch range in a future integration would describe the uploaded clip only.
 
-It allows users to upload a WAV recording, run the existing
-SUARA pipeline, and view vocal profile information and
-ranked song recommendations.
+## Install and launch
 
-## Implemented Features
-
-- WAV file upload
-- Existing SUARA pipeline integration
-- Minimum, maximum and median pitch display
-- Voiced ratio and analysis status
-- Timbre features (MFCC and spectral centroid)
-- Ranked song recommendations
-- Song titles, artists, scores and explanations
-- Clear mock/synthetic result labels
-- User-friendly pipeline error messages
-- Temporary audio file cleanup
-
-## Current Limitations
-
-The initial interface uses the mock pipeline.
-
-Pitch and timbre values are synthetic fixtures, not
-measurements from the uploaded voice.
-
-Recommendation scores are fixed mock rankings and do
-not indicate actual singing suitability.
-
-Real AI integration and recommendation validation are
-separate project tasks.
-
-## Requirements
-
-- Python 3.12
-- SUARA main pipeline
-- Streamlit
-- NumPy and SciPy (installed with the pipeline)
-
-## Installation
-
-From the SUARA-System repository root:
+From the repository root, use Python 3.12:
 
 ```bash
 python3.12 -m venv main_pipeline/.venv
 main_pipeline/.venv/bin/python -m pip install -e main_pipeline
 main_pipeline/.venv/bin/python -m pip install -r main_pipeline/demo/requirements.txt
-```
-
-## Running the Interface
-
-From the repository root:
-
-```bash
 main_pipeline/.venv/bin/python -m streamlit run main_pipeline/demo/app.py
 ```
 
-Open the local URL displayed by Streamlit, normally:
+Open the URL printed by Streamlit, usually http://localhost:8501. On Windows, use `py -3.12` to create the environment and `main_pipeline/.venv/Scripts/python.exe` for the remaining commands.
 
-http://localhost:8501
+## Use the demo
 
-## Usage
+1. Upload an integer PCM WAV file. Record 10–30 seconds of singing for the demo. The pipeline accepts mono or stereo audio at 8–192 kHz, 0.5–60 seconds long.
+2. Choose 1–5 recommendations and select **Analyze My Voice**.
+3. Review the vocal profile and ranked songs. Open **Technical details** for all 20 MFCC coefficients and **Analysis warnings** for pipeline warnings.
+4. Open **Preview your uploaded recording** to hear the original WAV after successful analysis. Playback depends on which WAV encodings your browser supports.
 
-1. Open the local SUARA interface.
-2. Upload a supported WAV recording.
-3. Select the number of recommendations (1–5).
-4. Click Analyze My Voice.
-5. View the vocal profile, timbre features and recommended songs.
+Changing the WAV or recommendation count clears the previous result. The pipeline validates malformed or unsupported WAV files, silence, and duration limits. The app displays the pipeline's public error message, code, and stage.
 
-## Supported Audio
+The demo uses a private temporary directory for processing and deletes it when the analysis attempt ends. The uploaded recording remains available in the active browser session for preview. Keep private participant recordings out of Git.
 
-- WAV files containing supported integer PCM audio
-- Mono or stereo
-- Source sample rates: 8,000–192,000 Hz
-- Duration: 0.5–60 seconds
-
-Not all WAV encodings are supported.
-
-## Error Handling
-
-The interface displays errors returned by the existing
-SUARA pipeline.
-
-Examples include:
-- Invalid WAV files
-- Unsupported audio formats
-- Audio that is too short or too long
-- Silent recordings
-- Pipeline module errors
-
-## Privacy
-
-Uploaded files are temporarily stored for local analysis
-and deleted afterward.
-
-Do not commit private participant recordings to GitHub.
-
-## Scope
-
-T13 implements the minimal local interface only.
-It does not modify the existing SUARA integration contracts
-or AI algorithms.
+For the separate measured CLI workflow, see the [main pipeline guide](../README.md#real-pipeline-t09).
