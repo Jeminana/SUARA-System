@@ -101,6 +101,11 @@ and deleted afterward.
 
 Do not commit private participant recordings to GitHub.
 
+## Redesign options
+
+Two alternative designs of this interface, running the same mock pipeline, are in
+[redesigns/](redesigns/README.md).
+
 ## Scope
 
 T13 implements the minimal local interface only.
